@@ -274,6 +274,10 @@ angular.module('ng').directive('bsNavbar', function($rootScope, $location) {
             }
           } else if($link.data("prefix") === true && newValue.indexOf(href) == 0) {
             $link.parent().addClass('active');
+            var $treeview = $link.parent().parent().parent();
+            if($treeview.hasClass("treeview")) {
+              $treeview.addClass("active");
+            }
           } else {
             $link.parent().removeClass('active');
           }
