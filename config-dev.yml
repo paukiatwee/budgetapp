@@ -16,7 +16,7 @@ database:
   # any properties specific to JDBC driver:
   properties:
     charSet: UTF-8
-    hibernate.dialect: com.example.hibernate.dialect.CustomHSQLDialect
+    hibernate.dialect: io.budgetapp.hibernate.dialect.CustomHSQLDialect
     hibernate.format_sql: true
 
   validationQuery: SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS
