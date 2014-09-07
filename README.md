@@ -4,6 +4,8 @@ Budget App is open source personal budgeting application.
 
 #### Demo is available [here](https://budgetapp-demo.herokuapp.com/)
 
+**Note:** The demo app is using in-memory DB so data will wipe up from time to time.
+
 ### Getting Started
 
 #### Prerequisite
