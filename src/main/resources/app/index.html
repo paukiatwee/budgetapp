@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="financeApp" ng-cloak>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Budget App</title>
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
+  <link href="//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="//cdn.jsdelivr.net/fontawesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" />
+  <!--TODO move to jsdeliv-->
+  <link href="//cdnjs.cloudflare.com/ajax/libs/ionicons/1.5.2/css/ionicons.min.css" rel="stylesheet" />
+  <link href="//cdn.jsdelivr.net/jquery.footable/2.0.1/css/footable.core.min.css" rel="stylesheet" />
+  <link href="/app/assets/css/loading-bar.css" rel="stylesheet" />
+  <link href="/app/assets/css/style.css" rel="stylesheet" />
+
+  <script src="//cdn.jsdelivr.net/g/jquery@2.1.1,angularjs@1.2.20(angular.min.js+angular-resource.min.js+angular-route.min.js+angular-cookies.min.js+angular-animate.min.js),momentjs@2.8.1,lodash@2.4.1,angular.bootstrap@0.11.0(ui-bootstrap-tpls.min.js),angular.moment@0.8.0,jquery.footable@2.0.1(footable.min.js+footable.sort.min.js),jquery.flot@0.8.3(jquery.flot.min.js+jquery.flot.time.min.js+jquery.flot.categories.min.js+jquery.flot.pie.min.js+jquery.flot.resize.min.js),masonry@3.1.5"></script>
+  <script src="/app/assets/js/jquery.flot.orderBars.js"></script>
+  <script src="/app/assets/js/angular-masonry.min.js"></script>
+  <script src="/app/assets/js/angular-google-analytics.min.js"></script>
+  <script src="/app/assets/js/loading-bar.min.js"></script>
+  <script src="/app/assets/js/app.js"></script>
+  <script src="/app/assets/js/services.js"></script>
+  <script src="/app/assets/js/controllers.js"></script>
+  <script src="/app/assets/js/menu.js"></script>
+</head>
+<body class="skin-blue" ng-class="{'not-authenticated': !$root.user}">
+
+<header class="header">
+  <a href="/dashboard" class="logo">
+    Budget App
+  </a>
+  <nav class="navbar navbar-static-top" role="navigation">
+    <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </a>
+    <div class="navbar-right">
+      <ul class="nav navbar-nav">
+        <li class="dropdown user user-menu">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-user"></i>
+            <span>{{$root.user.name || $root.user.username}} <i class="caret"></i></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="user-header bg-light-blue">
+              <img src="{{$root.user.avatar}}" class="img-circle" alt="User Image">
+              <div>Member since {{$root.user.createdAt | date}}</div>
+            </li>
+            <li class="user-footer">
+              <div class="pull-left">
+                <a href="/profile" class="btn btn-default btn-flat">Profile</a>
+              </div>
+              <div class="pull-right">
+                <a href="/logout" class="btn btn-default btn-flat">Sign out</a>
+              </div>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<div class="wrapper">
+  <aside class="left-side" ng-show="$root.user">
+    <section class="sidebar">
+      <div class="user-panel">
+        <div class="image">
+          <img src="{{$root.user.avatar}}" class="img-circle" alt="User Image">
+        </div>
+      </div>
+      <ul class="sidebar-menu" bs-navbar>
+        <li>
+          <a href="/dashboard" title="Show my budget overview">
+            <span class="fa fa-dashboard"></span> Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="/manage" title="Manage my budget" data-prefix="true">
+            <span class="fa fa-edit"></span> Manage
+          </a>
+        </li>
+        <li>
+          <a href="/recurrings" title="Manage my recurrings">
+            <span class="fa fa-repeat"></span> Recurring
+          </a>
+        </li>
+        <li class="treeview">
+          <a href="#" title="Manage my configuration">
+            <span class="fa fa-cogs"></span> Configuration
+            <span class="fa fa-angle-left pull-right"></span>
+          </a>
+          <ul class="treeview-menu">
+            <li>
+              <a href="/categories" title="Manage my categories">
+                <span class="fa fa-angle-double-right"></span> Categories
+              </a>
+            </li>
+            <li>
+              <a href="/ledgers" title="Manage my ledgers">
+                <span class="fa fa-angle-double-right"></span> Ledgers
+              </a>
+            </li>
+          </ul>
+        <li>
+          <a href="/reports" title="My budget reports">
+            <span class="fa fa-file-text"></span> Reports
+          </a>
+        </li>
+        <!--<li>-->
+          <!--<a href="/help" title="Help">-->
+            <!--<span class="fa fa-question"></span> Help-->
+          <!--</a>-->
+        <!--</li>-->
+      </ul>
+    </section>
+  </aside>
+  <aside class="right-side">
+    <div ng-view></div>
+
+  </aside>
+</div>
+</body>
+</html>

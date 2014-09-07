@@ -1,0 +1,5 @@
+.idea/
+*.iml
+target/
+.gradle/
+node_modules

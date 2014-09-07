@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-lg-4 col-xs-12">
+    <div class="small-box bg-red">
+      <div class="inner">
+        <h3 ng-hide="usageLoaded" class="loading-icon"><span class="ion ion-refreshing"></span></h3>
+        <h3 ng-show="usageLoaded">{{usage.spent | currency}}</h3>
+        <p>Spent</p>
+      </div>
+      <div class="icon">
+        <i class="ion ion-bag"></i>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-xs-12">
+    <div class="small-box bg-aqua">
+      <div class="inner">
+        <h3 ng-hide="usageLoaded" class="loading-icon"><span class="ion ion-refreshing"></span></h3>
+        <h3 ng-show="usageLoaded">{{usage.budget | currency}}</h3>
+        <p>Budget</p>
+      </div>
+      <div class="icon">
+        <i class="ion ion-pie-graph"></i>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-xs-12">
+    <div class="small-box bg-green">
+      <div class="inner">
+        <h3 ng-hide="usageLoaded" class="loading-icon"><span class="ion ion-refreshing"></span></h3>
+        <h3 ng-show="usageLoaded">{{usage.remaining | currency}}</h3>
+        <p>Remaining</p>
+      </div>
+      <div class="icon">
+        <i class="ion ion-stats-bars"></i>
+      </div>
+    </div>
+  </div>
+</div>

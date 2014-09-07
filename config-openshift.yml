@@ -1,0 +1,148 @@
+# Database settings.
+database:
+
+  # the name of your JDBC driver
+  driverClass: org.hsqldb.jdbcDriver
+
+  # the username
+  user: sa
+
+  # the password
+  password:
+
+  # the JDBC URL
+  url: jdbc:hsqldb:mem:test;sql.syntax_pgs=true
+
+  # any properties specific to JDBC driver:
+  properties:
+    charSet: UTF-8
+    hibernate.dialect: com.example.hibernate.dialect.CustomHSQLDialect
+    hibernate.format_sql: true
+
+  validationQuery: SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS
+
+server:
+  applicationConnectors:
+    - type: http
+      bindHost: @OPENSHIFT_DIY_IP@
+      port: @OPENSHIFT_DIY_PORT@
+
+# Logging settings.
+logging:
+
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+  level: INFO
+
+  # Logger-specific levels.
+  loggers:
+
+    # Sets the level for 'com.example' to DEBUG.
+    com.example: DEBUG
+
+    org.hibernate.SQL: ALL
+
+  appenders:
+    - type: console
+
+categories:
+  - name: Income
+    type: INCOME
+  - name: Home
+    type: EXPENSE
+  - name: Transportation
+    type: EXPENSE
+  - name: Health
+    type: EXPENSE
+  - name: Charity/Gifts
+    type: EXPENSE
+  - name: Daily Living
+    type: EXPENSE
+  - name: Entertainment
+    type: EXPENSE
+  - name: Savings
+    type: EXPENSE
+  - name: Obligations
+    type: EXPENSE
+  - name: Miscellaneous
+    type: EXPENSE
+
+ledgers:
+  Income:
+    - name: Wages & Tips
+    - name: Interest Income
+    - name: Dividends
+    - name: Gifts Received
+    - name: Refunds/Reimbursements
+    - name: Transfer From Savings
+  Home:
+    - name: Mortgage/Rent
+    - name: Home/Rental Insurance
+    - name: Electricity
+    - name: Gas/Oil
+    - name: Water/Sewer/Trash
+    - name: Phone
+    - name: Cable/Satellite
+    - name: Internet
+    - name: Furnishings/Appliances
+    - name: Maintenance/Supplies
+  Transportation:
+    - name: Vehicle Payments
+    - name: Auto Insurance
+    - name: Fuel
+    - name: Bus/Taxi/Train Fare
+    - name: Repairs
+    - name: Registration/License
+  Health:
+    - name: Health Insurance
+    - name: Doctor/Dentist
+    - name: Medicine/Drugs
+    - name: Health Club Dues
+    - name: Life Insurance
+    - name: Veterinarian/Pet Care
+  Charity/Gifts:
+    - name: Gifts Given
+    - name: Charitable Donations
+    - name: Religious Donations
+  Subscription:
+    - name: Newspaper
+    - name: Magazines
+    - name: Dues/Memberships
+  Daily Living:
+    - name: Groceries
+    - name: Personal Supplies
+    - name: Clothing
+    - name: Cleaning
+    - name: Education/Lessons
+    - name: Dining/Eating Out
+    - name: Salon/Barber
+    - name: Pet Food
+  Entertainment:
+    - name: Videos/DVDs
+    - name: Music
+    - name: Games
+    - name: Rentals
+    - name: Movies/Theater
+    - name: Concerts/Plays
+    - name: Books
+    - name: Hobbies
+    - name: Film/Photos
+    - name: Sports
+    - name: Outdoor Recreation
+    - name: Toys/Gadgets
+    - name: Vacation/Travel
+  Savings:
+    - name: Emergency Fund
+    - name: Transfer to Savings
+    - name: Retirement (401k, IRA)
+    - name: Investments
+    - name: Education
+  Obligations:
+    - name: Student Loan
+    - name: Other Loan
+    - name: Credit Cards
+    - name: Alimony/Child Care
+    - name: Federal Taxes
+    - name: State/Local Taxes
+  Miscellaneous:
+    - name: Bank Fees
+    - name: Postage

@@ -1,0 +1,52 @@
+<section class="content-header">
+  <h2>Manage Category</h2>
+</section>
+
+<section class="content">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="openAddCategoryForm()"><span class="fa fa-plus"></span> Add Category</button>
+        <button class="btn btn-primary" ng-click="openAddLedgerForm()"><span class="fa fa-plus"></span> Add Ledger</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="space"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Categories</h3>
+        </div>
+        <div class="panel-body">
+          <div ng-hide="loaded" class="loading"></div>
+          <table class="table" ng-show="categories.length">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Created Date</th>
+              <th class="actions">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="category in categories">
+              <td>{{category.name}}</td>
+              <td>{{category.type}}</td>
+              <td>{{category.createdAt | date}}</td>
+              <td class="actions">
+                <button type="button" class="btn btn-primary" ng-click="openLedgersModal(category)" title="View ledgers"><span class="fa fa-list-ul"></span> Ledgers</button>
+                <button type="button" class="btn btn-danger" ng-click="confirmDelete(category)"><span class="fa fa-trash-o"></span> Delete</button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

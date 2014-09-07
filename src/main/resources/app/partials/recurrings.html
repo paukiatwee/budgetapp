@@ -1,0 +1,61 @@
+<section class="content-header">
+  <h2>Manage Recurring</h2>
+</section>
+
+<section class="content">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="openAddCategoryForm()"><span class="fa fa-plus"></span> Add Recurring</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="space"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Recurrings</h3>
+        </div>
+        <div class="panel-body">
+          <div ng-hide="loaded" class="loading"></div>
+          <div ng-hide="recurrings.length || !loaded" class="no-result">
+            <h2>No Recurring</h2>
+            <p>
+              You can create recurring via <strong>Manage &#10137; add transaction</strong>.
+            </p>
+          </div>
+          <table class="table" ng-show="recurrings.length">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Amount</th>
+              <th>Type</th>
+              <th>Last Run Date</th>
+              <th>Created Date</th>
+              <th class="actions">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="recurring in recurrings">
+              <td>{{recurring.name}}</td>
+              <td>{{recurring.amount | currency}}</td>
+              <td>{{recurring.recurringTypeDisplay}}</td>
+              <td>{{recurring.lastRunAt | datetime}}</td>
+              <td>{{recurring.createdAt | date}}</td>
+              <td class="actions">
+                <button type="button" class="btn btn-primary" ng-click="openRecurringModal(recurring)" title="View transactions"><span class="fa fa-list-ul"></span> Transactions</button>
+                <button type="button" class="btn btn-danger" ng-click="confirmDelete(recurring)"><span class="fa fa-trash-o"></span> Delete</button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

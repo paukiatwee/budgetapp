@@ -1,0 +1,61 @@
+<section class="content-header">
+  <h2>Manage Ledger</h2>
+</section>
+
+<section class="content">
+  <div class="row">
+    <div class="col-lg-10 col-lg-offset-1">
+      <section ng-include src="'/app/partials/message.html'"></section>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="box box-primary">
+        <div class="box-header">
+          <h3 class="box-title">Add Ledger</h3>
+        </div>
+        <div class="box-body">
+          <form name="form" novalidate role="form" class="form-horizontal">
+            <div class="form-group has-feedback" ng-class="errorClass('name')">
+              <label for="name" class="col-sm-3 control-label">Name</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" name="name" id="name" placeholder="Enter name" ng-model="ledger.name">
+                <span class="help-block" ng-show="form.name.$invalid && form.name.$dirty">
+                  {{errorMessage('name')}}
+                </span>
+              </div>
+            </div>
+            <div class="form-group has-feedback" ng-class="errorClass('budget')">
+              <label for="name" class="col-sm-3 control-label">Budget</label>
+              <div class="col-sm-7">
+                <input type="budget" class="form-control" name="budget" id="budget" placeholder="Enter budget" ng-model="ledger.budget">
+                <span class="help-block" ng-show="form.budget.$invalid && form.budget.$dirty">
+                  {{errorMessage('budget')}}
+                </span>
+              </div>
+            </div>
+            <div class="form-group has-feedback" ng-class="errorClass('categoryId')">
+              <label for="categoryId" class="col-sm-3 control-label">Category</label>
+              <div class="col-sm-7">
+                <div class="form-control-static" ng-hide="loaded">
+                  <div class="loading"></div>
+                </div>
+                <select class="form-control" id="categoryId" name="categoryId" ng-model="ledger.category" ng-show="loaded" ng-options="category.name for category in categories"></select>
+                <span class="help-block" ng-show="form.categoryId.$invalid && form.categoryId.$dirty">
+                  {{errorMessage('categoryId')}}
+                </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-3 col-sm-7">
+                <a class="btn btn-default" href="/categories">Back</a>
+                <button type="submit" class="btn btn-primary" ng-click="createLedger()"><span class="fa fa-save"></span> Submit</button>
+              </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

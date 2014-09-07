@@ -1,0 +1,74 @@
+<section class="content-header">
+  <h2>Reports</h2>
+</section>
+
+<section class="content">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="box box-primary">
+        <div class="box-header">
+          <h3 class="box-title">Search Form</h3>
+        </div>
+        <div class="box-body">
+          <form class="form-horizontal" role="form">
+            <div class="form-group">
+              <label for="minAmount" class="col-sm-2 control-label">Min Amount</label>
+              <div class="col-sm-4">
+                <input type="number" class="form-control" id="minAmount" placeholder="Transaction Min Amount" ng-model="search.minAmount">
+              </div>
+              <label for="maxAmount" class="col-sm-2 control-label">Max Amount</label>
+              <div class="col-sm-4">
+                <input type="number" class="form-control" id="maxAmount" placeholder="Transaction Max Amount" ng-model="search.maxAmount">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="startOn" class="col-sm-2 control-label">Start Date</label>
+              <div class="col-sm-4">
+                <input type="date" class="form-control" id="startOn" placeholder="Transaction Start Date (yyyy-mm-dd)" ng-model="search.startOn">
+              </div>
+              <label for="endOn" class="col-sm-2 control-label">End Date</label>
+              <div class="col-sm-4">
+                <input type="date" class="form-control" id="endOn" placeholder="Transaction End Date (yyyy-mm-dd)" ng-model="search.endOn">
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn btn-primary" ng-click="doSearch()" ng-disabled="!transactionsLoaded"><span class="fa fa-search"></span> Search</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="box box-primary">
+        <div class="box-body">
+          <div ng-hide="transactionsLoaded" class="loading"></div>
+
+          <div ng-hide="transactions.length || !transactionsLoaded" class="no-result">
+            <h2>No transaction found</h2>
+          </div>
+          <table foo-table class="table footable" data-page-size="5" ng-model="transactions" ng-show="transactions.length && transactionsLoaded">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Amount</th>
+              <th>Remark</th>
+              <th>Transaction Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="transaction in transactions">
+              <td>{{transaction.name}}</td>
+              <td data-type="numeric" data-value="{{transaction.amount}}" ng-class="{true: 'overspend'}[transaction.amount < 0]">{{transaction.amount | currency}}</td>
+              <td><span title="{{transaction.remark | na }}">{{transaction.remark | na | truncate:true:50 }}</span></td>
+              <td data-type="numeric" data-value="{{transaction.transactionOn}}">{{transaction.transactionOn | date}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

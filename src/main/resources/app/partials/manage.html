@@ -1,0 +1,218 @@
+<section class="content-header">
+  <h2>Manage Budget</h2>
+</section>
+
+<section class="content">
+  <script type="text/ng-template" id="ledgerModal.html">
+    <div class="modal-header">
+      <h3 class="modal-title">Edit: {{selected.name}}</h3>
+    </div>
+    <form name="updateLedgerForm" novalidate class="form-horizontal" role="form">
+      <div class="modal-body">
+        <div class="form-group" ng-class="{true: 'has-error'}[updateLedgerForm.name.$dirty && updateLedgerForm.name.$invalid]">
+          <label for="name" class="col-sm-3 control-label">Name</label>
+          <div class="col-sm-7">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Name" ng-model="selected.name" required>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{true: 'has-error'}[updateLedgerForm.budget.$dirty && updateLedgerForm.budget.$invalid]">
+          <label for="budget" class="col-sm-3 control-label">Budget</label>
+          <div class="col-sm-7">
+            <input type="number" step="1" min="0" ng-min="0" class="form-control" id="budget" name="budget" placeholder="Budget" ng-model="selected.budget">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Spent</label>
+          <div class="col-sm-7">
+            <p class="form-control-static">{{selected.spent | currency}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" ng-click="ok()" ng-disabled="updateLedgerForm.$invalid"><span class="fa fa-save"></span> Save</button>
+      </div>
+    </form>
+  </script>
+
+  <script type="text/ng-template" id="transactionModal.html">
+    <div class="modal-header">
+      <h3 class="modal-title">Add Transaction: {{selected.name}}</h3>
+    </div>
+    <form name="form" novalidate class="form-horizontal" role="form">
+      <div class="modal-body">
+        <div class="form-group" ng-class="{true: 'has-error'}[form.amount.$dirty && form.amount.$invalid]">
+          <label for="amount" class="col-sm-3 control-label">Amount</label>
+          <div class="col-sm-7">
+            <input type="number" step="1" class="form-control" id="amount" name="amount" placeholder="Amount" ng-model="transaction.amount" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="remark" class="col-sm-3 control-label">Remark</label>
+          <div class="col-sm-7">
+            <textarea class="form-control" id="remark" name="remark" rows="3" placeholder="Remark" ng-model="transaction.remark"></textarea>
+          </div>
+        </div>
+        <div class="form-group has-feedback" ng-class="errorClass('transactionOn')">
+          <label for="transactionOn" class="col-sm-3 control-label">Transaction Date</label>
+          <div class="col-sm-7">
+            <input type="date" class="form-control" id="transactionOn" name="transactionOn" placeholder="Transaction Date" ng-model="transaction.transactionOn">
+            <span class="help-block" ng-show="form.transactionOn.$invalid && form.transactionOn.$dirty">
+              {{errorMessage('transactionOn')}}
+            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-10 col-sm-offset-2">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" id="recurring" value="true" ng-model="transaction.recurring"> Recurring?
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group has-feedback"  ng-class="errorClass('recurringType')" ng-show="transaction.recurring">
+          <label for="recurringType" class="col-sm-3 control-label">Recurring</label>
+          <div class="col-sm-7">
+            <select id="recurringType" name="recurringType" class="form-control" ng-model="transaction.recurringType">
+              <option value="DAILY">Daily</option>
+              <option value="WEEKLY">Weekly</option>
+              <option value="MONTHLY">Monthly</option>
+              <option value="YEARLY">Yearly</option>
+            </select>
+            <span class="help-block" ng-show="form.recurringType.$invalid && form.recurringType.$dirty">
+              {{errorMessage('recurringType')}}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" ng-click="ok(form)"><span class="fa fa-save"></span> Submit</button>
+      </div>
+    </form>
+  </script>
+
+
+  <section ng-include src="'/app/partials/usage.html'"></section>
+
+  <div class="row">
+    <div class="col-lg-12 calendar-nav">
+      <div class="previous">
+        <span class="fa fa-arrow-left"></span>
+      </div>
+      <div class="next">
+        <span class="fa fa-arrow-right"></span>
+      </div>
+      <div class="btn-group btn-group-justified">
+        <div class="btn-group" ng-repeat="group in groups">
+          <a href="/manage/{{group.path}}" class="btn btn-primary btn-lg" ng-class="{true: 'active'}[group.active]">{{group.display}} <sup ng-if="group.current"><span class="fa fa-star"></span></sup></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="space"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div ng-hide="loaded" class="loading"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 category-{{group.id}}" ng-repeat="group in summary.groups | filter: {type: 'INCOME'}">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{group.name}}</h3>
+        </div>
+        <div class="panel-body ledgers">
+          <ul class="list-unstyled list-ledgers">
+            <li class="ledger-header">
+              <span class="name">Name</span>
+              <div class="pull-right">
+                <div class="budget">Budget</div>
+                <div class="spent">Spent</div>
+                <div class="remaining">Remaining</div>
+              </div>
+              <div class="clearfix"></div>
+            </li>
+            <li class="ledger" ng-repeat="ledger in group.ledgers">
+              <span class="fa fa-pencil icon-edit" title="Edit ledger" ng-click="openLedgerModal(ledger)"></span> <span class="name" ng-click="openLedgerModal(ledger)">{{ledger.name}}</span>
+              <div class="pull-right">
+                <div class="budget">{{ledger.budget | currency}}</div>
+                <div class="spent">
+                  {{ledger.spent | currency}}
+                </div>
+                <div class="remaining" ng-class="{overspend: ledger.remaining < 0}">
+                  {{ledger.remaining | currency}}
+                </div>
+                <div class="actions">
+                  <span class="fa fa-plus-square-o icon-plus" ng-click="openTransactionModal(ledger)" title="Add transaction"></span> <span class="fa fa-list-ul icon-list" ng-click="openTransactionsModal(ledger)" title="View transactions"></span>
+                </div>
+              </div>
+            </li>
+            <li class="ledger-footer">
+              <span class="total">Total: </span>
+              <div class="pull-right">
+                <div class="budget">{{group.budget | currency}}</div>
+                <div class="spent">{{group.spent | currency}}</div>
+                <div class="remaining" ng-class="{overspend: group.remaining < 0}">{{group.remaining | currency}}</div>
+              </div>
+              <div class="clearfix"></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div masonry load-images="false" reload-on-show>
+      <div class="masonry-brick col-xs-12 col-sm-12 col-md-12 col-lg-6 category-{{group.id}}" ng-repeat="group in summary.groups | filter: {type: 'EXPENSE'}">
+        <div class="panel panel-primary" ng-class="{'INCOME': 'panel-info', 'EXPENSE': 'panel-primary'}[group.type]">
+          <div class="panel-heading">
+            <h3 class="panel-title">{{group.name}}</h3>
+          </div>
+          <div class="panel-body ledgers">
+            <ul class="list-unstyled list-ledgers">
+              <li class="ledger-header">
+                <span class="name">Name</span>
+                <div class="pull-right">
+                  <div class="budget">Budget</div>
+                  <div class="spent">Spent</div>
+                  <div class="remaining">Remaining</div>
+                </div>
+                <div class="clearfix"></div>
+              </li>
+              <li class="ledger" ng-repeat="ledger in group.ledgers">
+                <span class="fa fa-pencil icon-edit" title="Edit ledger" ng-click="openLedgerModal(ledger)"></span> <span class="name" ng-click="openLedgerModal(ledger)">{{ledger.name}}</span>
+                <div class="pull-right">
+                  <div class="budget">{{ledger.budget | currency}}</div>
+                  <div class="spent">
+                    {{ledger.spent | currency}}
+                  </div>
+                  <div class="remaining" ng-class="{overspend: ledger.remaining < 0}">
+                    {{ledger.remaining | currency}}
+                  </div>
+                  <div class="actions">
+                    <span class="fa fa-plus-square-o icon-plus" ng-click="openTransactionModal(ledger)" title="Add transaction"></span> <span class="fa fa-list-ul icon-list" ng-click="openTransactionsModal(ledger)" title="View transactions"></span>
+                  </div>
+                </div>
+              </li>
+              <li class="ledger-footer">
+                <span class="total">Total: </span>
+                <div class="pull-right">
+                  <div class="budget">{{group.budget | currency}}</div>
+                  <div class="spent">{{group.spent | currency}}</div>
+                  <div class="remaining" ng-class="{overspend: group.remaining < 0}">{{group.remaining | currency}}</div>
+                </div>
+                <div class="clearfix"></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

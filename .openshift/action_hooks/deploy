@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd $OPENSHIFT_REPO_DIR
+
+sed -i 's/@OPENSHIFT_DIY_IP@/'"$OPENSHIFT_DIY_IP"'/g' config-openshift.yml
+sed -i 's/@OPENSHIFT_DIY_PORT@/'"$OPENSHIFT_DIY_PORT"'/g' config-openshift.yml

@@ -1,0 +1,30 @@
+<section class="content anonymous">
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="panel-title">Sign Up</h3></div>
+        <div class="panel-body">
+          <form name="form" novalidate role="form">
+            <div class="form-group has-feedback" ng-class="errorClass('username')">
+              <label for="username" class="control-label">Email</label>
+              <input type="email" class="form-control" id="username" name="username" placeholder="Enter email" ng-model="user.username">
+              <span class="help-block" ng-show="form.username.$invalid && form.username.$dirty">
+                {{errorMessage('username')}}
+              </span>
+            </div>
+            <div class="form-group has-feedback" ng-class="errorClass('password')">
+              <label for="password" class="control-label">Password</label>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Password" ng-model="user.password">
+              <span class="help-block" ng-show="form.password.$invalid && form.password.$dirty">
+                {{errorMessage('password')}}
+              </span>
+            </div>
+            <button type="submit" class="btn btn-primary" ng-click="register()"><span class="fa fa-heart-o"></span> Sign Up</button>
+            or
+            <a href="/">Log In</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
