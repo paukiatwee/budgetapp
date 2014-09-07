@@ -531,10 +531,6 @@ financeControllers.controller('CategoriesController', function ($scope, $locatio
     $scope.loaded = true;
   });
 
-  $scope.openAddLedgerForm = function() {
-    $location.path("/ledgers/new");
-  };
-
   $scope.openAddCategoryForm = function() {
     $location.path("/categories/new");
   };
