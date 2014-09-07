@@ -1,6 +1,6 @@
 ## Budget App
 
-Budget App is open source personal budgeting application. Demo app is available [here](https://simple-finance.herokuapp.com/).
+Budget App is open source personal budgeting application. Demo app is available [here](https://budgetapp-demo.herokuapp.com/).
 
 ### Getting Started
 
