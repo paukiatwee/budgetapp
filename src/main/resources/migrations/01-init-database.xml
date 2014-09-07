@@ -127,9 +127,7 @@
       <column name="type" type="varchar(256)">
         <constraints nullable="false" />
       </column>
-      <column name="last_run_at" type="timestamp" defaultValueDate="current_timestamp">
-        <constraints nullable="false" />
-      </column>
+      <column name="last_run_at" type="timestamp" />
       <column name="created_at" type="timestamp" defaultValueDate="current_timestamp">
         <constraints nullable="false" />
       </column>

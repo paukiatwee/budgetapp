@@ -72,6 +72,10 @@ financeApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'Anal
             }).
             when('/recurrings', {
               templateUrl: '/app/partials/recurrings.html?' + financeAppConfig.version,
+              controller: 'RecurringsController'
+            }).
+            when('/recurrings/new', {
+              templateUrl: '/app/partials/recurring.html?' + financeAppConfig.version,
               controller: 'RecurringController'
             }).
             when('/categories', {

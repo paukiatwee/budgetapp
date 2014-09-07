@@ -2,13 +2,16 @@ package io.budgetapp.resource;
 
 import io.budgetapp.model.Recurring;
 import io.budgetapp.model.User;
+import io.budgetapp.model.form.recurring.AddRecurringForm;
 import io.budgetapp.service.FinanceService;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -34,6 +37,13 @@ public class RecurringResource extends AbstractResource {
     @UnitOfWork
     public List<Recurring> getLedgers(@Auth User user) {
         return financeService.findRecurrings(user);
+    }
+
+    @POST
+    @UnitOfWork
+    public Response add(@Auth User user, @Valid AddRecurringForm recurringForm) {
+        Recurring recurring = financeService.addRecurring(user, recurringForm);
+        return created(recurring, recurring.getId());
     }
 
     @GET

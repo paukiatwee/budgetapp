@@ -416,7 +416,6 @@ financeControllers.controller('LedgerController', function ($scope, $location, $
   var categories = null;
   $scope.loaded = false;
   $scope.ledger = {};
-  $scope.data = {};
 
   $scope.errorMessage = errorMessage;
   $scope.errorClass = errorClass;
@@ -446,12 +445,13 @@ financeControllers.controller('LedgerController', function ($scope, $location, $
       $scope.categories = categories;
     }, function(response) {
       failure($scope, response);
+      // repopulate categories
       $scope.categories = categories;
     });
   }
 });
 
-financeControllers.controller('CategoryController', function ($scope, $location, $http, CategoryService) {
+financeControllers.controller('CategoryController', function ($scope, CategoryService) {
 
   $scope.errorMessage = errorMessage;
   $scope.errorClass = errorClass;
@@ -471,7 +471,7 @@ financeControllers.controller('CategoryController', function ($scope, $location,
   }
 });
 
-financeControllers.controller('RecurringController', function ($scope, $modal, RecurringService) {
+financeControllers.controller('RecurringsController', function ($scope, $modal, RecurringService) {
 
   $scope.loaded = false;
   $scope.recurrings = RecurringService.query(function() {
@@ -523,8 +523,50 @@ financeControllers.controller('RecurringController', function ($scope, $modal, R
 
 });
 
+financeControllers.controller('RecurringController', function ($scope, RecurringService, LedgerService) {
 
-financeControllers.controller('CategoriesController', function ($scope, $location, $modal, CategoryService, LedgerService) {
+
+  // cache ledgers, reuse when validation failed.
+  var ledgers = null;
+  $scope.loaded = false;
+  $scope.recurring = {};
+
+  $scope.errorMessage = errorMessage;
+  $scope.errorClass = errorClass;
+
+  LedgerService.query(function(response) {
+    ledgers = response;
+    $scope.ledgers = response;
+    $scope.loaded = true;
+  });
+
+  $scope.createRecurring = function() {
+    $scope.success = false;
+    $scope.error = false;
+    $scope.message = null;
+    var recurring = $scope.recurring;
+    if(recurring.ledger) {
+      recurring.ledgerId = recurring.ledger.id;
+    } else {
+      recurring.ledgerId = null;
+    }
+    RecurringService.save($scope.recurring).$promise.then(function() {
+      $scope.success = true;
+      $scope.message = "Successfully created Recurring";
+      $scope.recurring = {};
+      clearErrors($scope);
+      // repopulate ledgers
+      $scope.ledgers = ledgers;
+    }, function(response) {
+      failure($scope, response)
+      // repopulate ledgers
+      $scope.ledgers = ledgers;
+    });
+  }
+});
+
+
+financeControllers.controller('CategoriesController', function ($scope, $location, $modal, CategoryService) {
 
   $scope.loaded = false;
   $scope.categories = CategoryService.query(function() {

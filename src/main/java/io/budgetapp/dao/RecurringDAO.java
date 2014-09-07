@@ -56,7 +56,8 @@ public class RecurringDAO extends AbstractDAO<Recurring> {
                         "(r.recurringType = :daily AND DAY(r.lastRunAt) = :yesterday) OR " +
                         "(r.recurringType = :weekly AND WEEK(r.lastRunAt) = :lastWeek) OR " +
                         "(r.recurringType = :monthly AND MONTH(r.lastRunAt) = :lastMonth) OR " +
-                        "(r.recurringType = :yearly AND YEAR(r.lastRunAt) = :lastYear)")
+                        "(r.recurringType = :yearly AND YEAR(r.lastRunAt) = :lastYear) OR " +
+                        "r.lastRunAt IS NULL")
                 .setParameter("daily", RecurringType.DAILY)
                 .setParameter("yesterday", now.minusDays(1).getDayOfMonth())
                 .setParameter("weekly", RecurringType.WEEKLY)

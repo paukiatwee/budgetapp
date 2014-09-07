@@ -1,48 +1,26 @@
 package io.budgetapp.service;
 
-import io.budgetapp.crypto.PasswordEncoder;
-import io.budgetapp.dao.AuthTokenDAO;
-import io.budgetapp.dao.LedgerDAO;
-import io.budgetapp.dao.RecurringDAO;
-import io.budgetapp.model.AuthToken;
-import io.budgetapp.model.LedgerType;
-import io.budgetapp.model.Point;
-import io.budgetapp.model.Transaction;
-import io.budgetapp.model.form.report.SearchFilter;
-import io.budgetapp.util.Util;
-import io.budgetapp.application.DataConstraintException;
-import io.budgetapp.dao.CategoryDAO;
-import io.budgetapp.dao.LedgerTypeDAO;
-import io.budgetapp.dao.TransactionDAO;
-import io.budgetapp.dao.UserDAO;
-import io.budgetapp.model.AccountSummary;
-import io.budgetapp.model.Category;
-import io.budgetapp.model.CategoryType;
-import io.budgetapp.model.Group;
-import io.budgetapp.model.Ledger;
-import io.budgetapp.model.PointType;
-import io.budgetapp.model.Recurring;
-import io.budgetapp.model.UsageSummary;
-import io.budgetapp.model.User;
-import io.budgetapp.model.form.ledger.AddLedgerForm;
-import io.budgetapp.model.form.LoginForm;
-import io.budgetapp.model.form.SignUpForm;
-import io.budgetapp.model.form.TransactionForm;
-import io.budgetapp.model.form.ledger.UpdateLedgerForm;
-import io.budgetapp.model.form.user.Profile;
 import com.google.common.base.Optional;
 import io.budgetapp.application.DataConstraintException;
+import io.budgetapp.crypto.PasswordEncoder;
+import io.budgetapp.dao.AuthTokenDAO;
 import io.budgetapp.dao.CategoryDAO;
+import io.budgetapp.dao.LedgerDAO;
 import io.budgetapp.dao.LedgerTypeDAO;
+import io.budgetapp.dao.RecurringDAO;
 import io.budgetapp.dao.TransactionDAO;
 import io.budgetapp.dao.UserDAO;
 import io.budgetapp.model.AccountSummary;
+import io.budgetapp.model.AuthToken;
 import io.budgetapp.model.Category;
 import io.budgetapp.model.CategoryType;
 import io.budgetapp.model.Group;
 import io.budgetapp.model.Ledger;
+import io.budgetapp.model.LedgerType;
+import io.budgetapp.model.Point;
 import io.budgetapp.model.PointType;
 import io.budgetapp.model.Recurring;
+import io.budgetapp.model.Transaction;
 import io.budgetapp.model.UsageSummary;
 import io.budgetapp.model.User;
 import io.budgetapp.model.form.LoginForm;
@@ -50,6 +28,8 @@ import io.budgetapp.model.form.SignUpForm;
 import io.budgetapp.model.form.TransactionForm;
 import io.budgetapp.model.form.ledger.AddLedgerForm;
 import io.budgetapp.model.form.ledger.UpdateLedgerForm;
+import io.budgetapp.model.form.recurring.AddRecurringForm;
+import io.budgetapp.model.form.report.SearchFilter;
 import io.budgetapp.model.form.user.Profile;
 import io.budgetapp.util.Util;
 import org.hibernate.SessionFactory;
@@ -310,6 +290,17 @@ public class FinanceService {
     //==================================================================
     // RECURRING
     //==================================================================
+
+    public Recurring addRecurring(User user, AddRecurringForm recurringForm) {
+        Ledger ledger = findLedgerById(user, recurringForm.getLedgerId());
+
+        Recurring recurring = new Recurring();
+        recurring.setAmount(recurringForm.getAmount());
+        recurring.setRecurringType(recurringForm.getRecurringType());
+        recurring.setLedgerType(ledger.getLedgerType());
+        return recurringDAO.addRecurring(recurring);
+    }
+
     public List<Recurring> findRecurrings(User user) {
         List<Recurring> results = recurringDAO.findRecurrings(user);
         // TODO: fix N + 1 query but now still OK
@@ -394,6 +385,7 @@ public class FinanceService {
             recurring.setAmount(transactionForm.getAmount());
             recurring.setRecurringType(transactionForm.getRecurringType());
             recurring.setLedgerType(ledger.getLedgerType());
+            recurring.setLastRunAt(new Date());
             recurringDAO.addRecurring(recurring);
         }
 

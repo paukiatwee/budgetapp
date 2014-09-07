@@ -6,7 +6,7 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="pull-right">
-        <button class="btn btn-primary" onclick="alert('Not implemented yet.')"><span class="fa fa-plus"></span> Add Recurring</button>
+        <a href="/recurrings/new" class="btn btn-primary" ><span class="fa fa-plus"></span> Add Recurring</a>
       </div>
     </div>
   </div>
@@ -25,9 +25,6 @@
           <div ng-hide="loaded" class="loading"></div>
           <div ng-hide="recurrings.length || !loaded" class="no-result">
             <h2>No Recurring</h2>
-            <p>
-              You can create recurring via <strong>Manage &#10137; add transaction</strong>.
-            </p>
           </div>
           <table class="table" ng-show="recurrings.length">
             <thead>
