@@ -11,7 +11,7 @@ database:
   password:
 
   # the JDBC URL
-  url: jdbc:hsqldb:mem:test
+  url: jdbc:hsqldb:mem:test;sql.syntax_pgs=true
 
   # any properties specific to JDBC driver:
   properties:
