@@ -6,6 +6,7 @@ import io.budgetapp.BudgetApplication;
 import io.budgetapp.configuration.AppConfiguration;
 import io.budgetapp.model.Category;
 import io.budgetapp.model.CategoryType;
+import io.budgetapp.model.form.ledger.AddLedgerForm;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -56,5 +57,26 @@ public class CategoryResourceIT extends ResourceIT {
         // then
         ClientResponse newReponse = get(response.getLocation().getPath());
         assertOk(newReponse);
+    }
+
+
+    @Test
+    public void shouldNotAbleDeleteCategoryWithChild() {
+
+        // give
+        Category category = new Category();
+        category.setName(randomAlphabets());
+        category.setType(CategoryType.EXPENSE);
+
+        // when
+        ClientResponse response = post("/api/categories", category);
+        AddLedgerForm ledger = new AddLedgerForm();
+        ledger.setName(randomAlphabets());
+        ledger.setCategoryId(identityResponse(response).getId());
+        post("/api/ledgers", ledger);
+
+        // then
+        ClientResponse newReponse = delete(response.getLocation().getPath());
+        assertBadRequest(newReponse);
     }
 }

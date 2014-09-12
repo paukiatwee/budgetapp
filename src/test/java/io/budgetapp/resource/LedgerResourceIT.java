@@ -4,6 +4,8 @@ import com.sun.jersey.api.client.ClientResponse;
 import io.budgetapp.BudgetApplication;
 import io.budgetapp.configuration.AppConfiguration;
 import io.budgetapp.modal.IdentityResponse;
+import io.budgetapp.model.Ledger;
+import io.budgetapp.model.form.TransactionForm;
 import io.budgetapp.model.form.ledger.AddLedgerForm;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.Assert;
@@ -70,6 +72,28 @@ public class LedgerResourceIT extends ResourceIT {
         // then
         ClientResponse newReponse = get(response.getLocation().getPath());
         assertOk(newReponse);
+    }
+
+    @Test
+    public void shouldNotAbleDeleteLedgerWithChild() {
+
+        // give
+        AddLedgerForm addLedgerForm = new AddLedgerForm();
+        addLedgerForm.setName(randomAlphabets());
+        addLedgerForm.setCategoryId(1L);
+
+        // when
+        ClientResponse response = post("/api/ledgers", addLedgerForm);
+        TransactionForm transactionForm = new TransactionForm();
+        transactionForm.setAmount(10.00);
+        Ledger ledger = new Ledger();
+        ledger.setId(identityResponse(response).getId());
+        transactionForm.setLedger(ledger);
+        post("/api/transactions", transactionForm);
+
+        // then
+        ClientResponse newReponse = delete(response.getLocation().getPath());
+        assertBadRequest(newReponse);
     }
 
 }

@@ -79,6 +79,13 @@ public abstract class ResourceIT {
                 .post(ClientResponse.class, entity);
     }
 
+    protected static ClientResponse delete(String path) {
+        return client
+                .resource(getUrl(path))
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .delete(ClientResponse.class);
+    }
+
     protected ClientResponse get(String path) {
         return client
                 .resource(getUrl(path))
@@ -100,6 +107,10 @@ public abstract class ResourceIT {
 
     protected void assertOk(ClientResponse response) {
         assertThat(response.getStatus(), is(200));
+    }
+
+    protected void assertBadRequest(ClientResponse response) {
+        assertThat(response.getStatus(), is(400));
     }
 
     protected static String randomAlphabets() {
