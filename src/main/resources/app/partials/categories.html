@@ -5,8 +5,15 @@
 <section class="content">
   <div class="row">
     <div class="col-lg-12">
-      <div class="pull-right">
-        <button class="btn btn-primary" ng-click="openAddCategoryForm()"><span class="fa fa-plus"></span> Add Category</button>
+      <div class="row">
+        <div class="col-sm-3">
+          <input class="form-control" type="text" placeholder="Search categories..." ng-model="filter"/>
+        </div>
+        <div class="col-sm-9">
+          <div class="pull-right">
+            <button class="btn btn-primary"  href="/categories/new"><span class="fa fa-plus"></span> Add Category</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -33,7 +40,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="category in categories">
+            <tr ng-repeat="category in categories | filter: filter">
               <td>{{category.name}}</td>
               <td>{{category.type}}</td>
               <td>{{category.createdAt | date}}</td>

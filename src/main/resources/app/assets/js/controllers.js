@@ -30,14 +30,6 @@ financeControllers.controller('LoginController', function ($scope, $rootScope, $
         }
     );
   };
-
-  $scope.register = function() {
-    $location.path("/register");
-  };
-
-  $scope.showNav = function() {
-    return false;
-  }
 });
 
 financeControllers.controller('SignupController', function ($scope, $rootScope, $location, UserService) {
@@ -57,7 +49,7 @@ financeControllers.controller('SignupController', function ($scope, $rootScope, 
   };
 });
 
-financeControllers.controller('DashboardController', function ($scope, $location, $modal, LedgerService,
+financeControllers.controller('DashboardController', function ($scope, $modal, LedgerService,
                                                                CategoryService, TransactionService, UserService) {
   $scope.usageLoaded = false;
   $scope.usage = UserService.usage(function() {
@@ -201,7 +193,7 @@ function labelFormatter(label, series) {
   return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + Math.round(series.percent) + "%</div>";
 }
 
-financeControllers.controller('ManageController', function ($scope, $routeParams, $location, $modal, LedgerService, TransactionService, UserService) {
+financeControllers.controller('ManageController', function ($scope, $routeParams, $modal, LedgerService, TransactionService, UserService) {
 
   $scope.loaded = false;
   $scope.errorMessage = errorMessage;
@@ -410,7 +402,7 @@ var TransactionsModalController = function ($scope, $modalInstance, ledger, tran
   };
 };
 
-financeControllers.controller('LedgerController', function ($scope, $location, $http, CategoryService, LedgerService) {
+financeControllers.controller('LedgerController', function ($scope, CategoryService, LedgerService) {
 
   // cache categories, reuse when validation failed.
   var categories = null;
@@ -566,16 +558,12 @@ financeControllers.controller('RecurringController', function ($scope, Recurring
 });
 
 
-financeControllers.controller('CategoriesController', function ($scope, $location, $modal, CategoryService) {
+financeControllers.controller('CategoriesController', function ($scope, $modal, CategoryService) {
 
   $scope.loaded = false;
   $scope.categories = CategoryService.query(function() {
     $scope.loaded = true;
   });
-
-  $scope.openAddCategoryForm = function() {
-    $location.path("/categories/new");
-  };
 
   $scope.confirmDelete = function (category) {
     var modalInstance = $modal.open({
@@ -622,16 +610,12 @@ financeControllers.controller('CategoriesController', function ($scope, $locatio
   };
 });
 
-financeControllers.controller('LedgersController', function ($scope, $location, $modal, LedgerService) {
+financeControllers.controller('LedgersController', function ($scope, $modal, LedgerService) {
 
   $scope.loaded = false;
   $scope.ledgers = LedgerService.query(function() {
     $scope.loaded = true;
   });
-
-  $scope.openAddLedgerForm = function() {
-    $location.path("/ledgers/new");
-  };
 
   $scope.confirmDelete = function (ledger) {
     var modalInstance = $modal.open({
@@ -717,10 +701,6 @@ financeControllers.controller('LogoutController', function ($scope, $rootScope, 
     delete $rootScope.username;
     $location.path("/");
   }
-});
-
-financeControllers.controller('NavController', function ($rootScope) {
-  $rootScope.nav = false;
 });
 
 

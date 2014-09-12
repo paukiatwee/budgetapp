@@ -5,8 +5,15 @@
 <section class="content">
   <div class="row">
     <div class="col-lg-12">
-      <div class="pull-right">
-        <a href="/recurrings/new" class="btn btn-primary" ><span class="fa fa-plus"></span> Add Recurring</a>
+      <div class="row">
+        <div class="col-sm-3">
+          <input class="form-control" type="text" placeholder="Search recurrings..." ng-model="filter"/>
+        </div>
+        <div class="col-sm-9">
+          <div class="pull-right">
+            <a href="/recurrings/new" class="btn btn-primary" ><span class="fa fa-plus"></span> Add Recurring</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -38,7 +45,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="recurring in recurrings">
+            <tr ng-repeat="recurring in recurrings | filter: filter">
               <td>{{recurring.name}}</td>
               <td>{{recurring.amount | currency}}</td>
               <td>{{recurring.recurringTypeDisplay}}</td>
