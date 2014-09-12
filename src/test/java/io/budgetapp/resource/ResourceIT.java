@@ -4,7 +4,6 @@ import com.google.common.io.Resources;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 import com.sun.jersey.api.client.filter.LoggingFilter;
 import io.budgetapp.client.HTTPTokenClientFilter;
 import io.budgetapp.modal.IdentityResponse;
@@ -38,7 +37,6 @@ public abstract class ResourceIT {
     public static void before() {
         client = new Client();
         client.addFilter(new LoggingFilter(System.out));
-        client.addFilter(new HTTPBasicAuthFilter("user@example.com", "password"));
 
         SignUpForm signUp = new SignUpForm();
 

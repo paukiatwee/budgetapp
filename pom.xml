@@ -161,7 +161,7 @@
     <profile>
       <id>openshift</id>
       <build>
-        <finalName>simple-finance</finalName>
+        <finalName>budgetapp</finalName>
       </build>
     </profile>
     <profile>
@@ -172,7 +172,7 @@
         </property>
       </activation>
       <build>
-        <finalName>simple-finance</finalName>
+        <finalName>budgetapp</finalName>
       </build>
     </profile>
   </profiles>

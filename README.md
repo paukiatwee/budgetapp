@@ -20,10 +20,10 @@ Budget App is open source personal budgeting application.
 ## Configuration
 Configuration file separate by environment:
 
-* `config-dev.yml` - Local Development
+* `config/config-dev.yml` - Local Development
 * `src/test/resources/config-test.yml` - Integration Test
-* `config-heroku.yml` - [Heroku][]
-* `config-openshift.yml` - [OpenShift][] (WIP since JDK 8 is not support yet)
+* `config/config-heroku.yml` - [Heroku][]
+* `config/config-openshift.yml` - [OpenShift][] (WIP since JDK 8 is not support yet)
 
 
 ## Database Configuration
