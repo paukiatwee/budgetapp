@@ -17,6 +17,7 @@ public class Transaction implements Serializable {
     private String name;
     private double amount;
     private String remark;
+    private boolean auto;
     private Date transactionOn;
     private Date createdAt;
     private Ledger ledger;
@@ -57,6 +58,14 @@ public class Transaction implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public boolean isAuto() {
+        return auto;
+    }
+
+    public void setAuto(boolean auto) {
+        this.auto = auto;
     }
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -104,11 +113,6 @@ public class Transaction implements Serializable {
         if (transactionOn == null) {
             transactionOn = new Date();
         }
-    }
-
-    @Transient
-    public boolean isAuto() {
-        return recurring != null && recurring.getId() > 0L;
     }
 
     @Override

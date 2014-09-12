@@ -334,6 +334,7 @@ public class FinanceService {
             transaction.setAmount(recurring.getAmount());
             transaction.setRecurring(recurring);
             transaction.setRemark(recurring.getRecurringTypeDisplay() + " recurring for " + ledger.getName());
+            transaction.setAuto(true);
             transaction.setLedger(ledger);
             transaction.setTransactionOn(new Date());
             transactionDAO.addTransaction(transaction);
@@ -393,6 +394,7 @@ public class FinanceService {
         transaction.setName(ledger.getName());
         transaction.setAmount(transactionForm.getAmount());
         transaction.setRemark(transactionForm.getRemark());
+        transaction.setAuto(Boolean.TRUE.equals(transactionForm.getRecurring()));
         transaction.setTransactionOn(transactionForm.getTransactionOn());
         transaction.setLedger(transactionForm.getLedger());
         return transactionDAO.addTransaction(transaction);

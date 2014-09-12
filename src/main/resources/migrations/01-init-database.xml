@@ -87,6 +87,9 @@
         <constraints nullable="false" />
       </column>
       <column name="remark" type="text" />
+      <column name="auto" type="boolean">
+        <constraints nullable="false" />
+      </column>
       <column name="transaction_on" type="date" defaultValueDate="current_timestamp">
         <constraints nullable="false" />
       </column>
@@ -164,6 +167,7 @@
                              referencedColumnNames="id" />
 
     <addForeignKeyConstraint baseTableName="transactions" baseColumnNames="recurring_id"
+                             onDelete="SET NULL"
                              constraintName="fk_transactions_recurrings"
                              referencedTableName="recurrings"
                              referencedColumnNames="id" />
