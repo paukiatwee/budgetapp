@@ -1,6 +1,5 @@
 package io.budgetapp.dao;
 
-import com.google.common.base.Optional;
 import io.budgetapp.application.NotFoundException;
 import io.budgetapp.model.User;
 import io.budgetapp.model.form.SignUpForm;
@@ -12,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -53,7 +53,7 @@ public class UserDAO extends AbstractDAO<User> {
         if(users.size() == 1) {
             return Optional.of(users.get(0));
         } else {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 }

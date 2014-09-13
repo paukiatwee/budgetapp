@@ -1,6 +1,5 @@
 package io.budgetapp.dao;
 
-import com.google.common.base.Optional;
 import io.budgetapp.model.AuthToken;
 import io.budgetapp.model.User;
 import io.dropwizard.hibernate.AbstractDAO;
@@ -9,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -30,7 +30,7 @@ public class AuthTokenDAO extends AbstractDAO<AuthToken> {
     public Optional<AuthToken> find(String token) {
         Criteria criteria = currentSession().createCriteria(AuthToken.class);
         criteria.add(Restrictions.eq("token", token));
-        return Optional.fromNullable(uniqueResult(criteria));
+        return Optional.ofNullable(uniqueResult(criteria));
     }
 
     public List<AuthToken> findByUser(User user) {

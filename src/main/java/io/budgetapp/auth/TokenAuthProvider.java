@@ -1,7 +1,5 @@
 package io.budgetapp.auth;
 
-import io.budgetapp.model.ValidationMessage;
-import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.sun.jersey.api.core.HttpContext;
 import com.sun.jersey.api.model.Parameter;
@@ -13,13 +11,13 @@ import com.sun.jersey.spi.inject.InjectableProvider;
 import io.budgetapp.model.ValidationMessage;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.auth.AuthenticationException;
-import io.dropwizard.auth.Authenticator;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Collections;
+import java.util.Optional;
 
 /**
  *

@@ -1,10 +1,10 @@
 package io.budgetapp.auth;
 
-import com.google.common.base.Optional;
 import io.budgetapp.model.User;
 import io.budgetapp.service.FinanceService;
 import io.dropwizard.auth.AuthenticationException;
-import io.dropwizard.auth.Authenticator;
+
+import java.util.Optional;
 
 /**
  *

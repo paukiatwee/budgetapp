@@ -1,6 +1,5 @@
 package io.budgetapp.resource;
 
-import com.google.common.base.Optional;
 import io.budgetapp.model.AccountSummary;
 import io.budgetapp.model.UsageSummary;
 import io.budgetapp.model.User;
@@ -21,6 +20,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Optional;
 
 /**
  *

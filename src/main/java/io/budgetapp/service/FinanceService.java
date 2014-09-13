@@ -1,6 +1,5 @@
 package io.budgetapp.service;
 
-import com.google.common.base.Optional;
 import io.budgetapp.application.DataConstraintException;
 import io.budgetapp.crypto.PasswordEncoder;
 import io.budgetapp.dao.AuthTokenDAO;
@@ -46,6 +45,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -104,14 +104,14 @@ public class FinanceService {
         return user;
     }
 
-    public com.google.common.base.Optional<User> findUserByToken(String token) {
+    public Optional<User> findUserByToken(String token) {
 
-        com.google.common.base.Optional<AuthToken> authToken = authTokenDAO.find(token);
+        Optional<AuthToken> authToken = authTokenDAO.find(token);
 
         if(authToken.isPresent()) {
-            return com.google.common.base.Optional.of(authToken.get().getUser());
+            return Optional.of(authToken.get().getUser());
         } else {
-            return com.google.common.base.Optional.absent();
+            return Optional.empty();
         }
     }
 
@@ -132,7 +132,7 @@ public class FinanceService {
             }
         }
 
-        return Optional.absent();
+        return Optional.empty();
     }
     //==================================================================
     // END USER
