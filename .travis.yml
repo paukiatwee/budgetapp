@@ -1,5 +1,9 @@
 language: java
 jdk:
- - oraclejdk8
-
+- oraclejdk8
 script: mvn verify
+deploy:
+  provider: heroku
+  app: budgetapp-demo
+  api_key:
+    secure: DKMjOxi9lYocG88eLGqUgxttcW/CgBMUBJeb4RO3qgXhBXwZif6lh5/qBzX4wL9M1vHaQ+Dmx5JYBwzLYmFmjX0gThpVc91AVgr4rlWl4bDVl3Ou+wN6c5qt4jElaXatwx0egqPcSAQzhWOaVCPXZFrlfOtY1VcTW9ePWqC2ByE=
