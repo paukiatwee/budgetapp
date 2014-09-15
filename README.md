@@ -10,7 +10,13 @@ Budget App is open source personal budgeting application.
 
 ![](screenshot.png)
 
-# Running Locally
+
+## Prerequisite
+
++ [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
++ [Maven 3](http://maven.apache.org/)
+
+## Run Locally
 
 + Clone this repository.
 + Run `mvn package` to package budget app as single fat jar.
@@ -28,7 +34,7 @@ Configuration file separate by environment:
 
 ## Database Configuration
 
-**Supported Datanase**
+**Supported Database**
 
 * PostgreSQL 9.x
 * HSQL
