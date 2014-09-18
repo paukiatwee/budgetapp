@@ -1,7 +1,12 @@
 
 var financeControllers = angular.module('financeControllers', []);
 
-financeControllers.controller('LoginController', function ($scope, $rootScope, $window, AuthenticationService, $http, $location, auth) {
+financeControllers.controller('LoginController', function ($scope, $rootScope, $window, $routeParams, AuthenticationService, $http, $location, auth) {
+
+  $scope.success = $routeParams.signup || false;
+  if($scope.success) {
+    $scope.message = "Sign Up success. You can Login now.";
+  }
 
   $scope.login = function() {
     if(!$scope.user || !$scope.user.username || !$scope.user.password) {
@@ -42,7 +47,7 @@ financeControllers.controller('SignupController', function ($scope, $rootScope, 
     $scope.error = false;
     $scope.message = null;
     UserService.signup($scope.user || {}).$promise.then(function() {
-      $location.path("/");
+      $location.search('signup', 'true').path("/");
     }, function(response) {
       failure($scope, response)
     });
