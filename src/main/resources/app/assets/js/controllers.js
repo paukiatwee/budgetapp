@@ -22,7 +22,7 @@ financeControllers.controller('LoginController', function ($scope, $rootScope, $
           AuthenticationService.isLogged = true;
           $window.sessionStorage.token = response.data.token;
           $rootScope.user = response.data;
-          $location.path("/dashboard");
+          $location.url("/dashboard");
         },
         function(response) { // optional
           // failed
@@ -695,7 +695,7 @@ financeControllers.controller('NotFoundController', function ($scope) {
 financeControllers.controller('LogoutController', function ($scope, $rootScope, $location, $window, AuthenticationService, auth) {
 
   auth.clearCredentials();
-  $location.path("/");
+  $location.url("/");
 
   $scope.logout = function() {
     auth.clearCredentials();
@@ -704,7 +704,7 @@ financeControllers.controller('LogoutController', function ($scope, $rootScope, 
     delete $rootScope.nav;
     delete $rootScope.user;
     delete $rootScope.username;
-    $location.path("/");
+    $location.url("/");
   }
 });
 

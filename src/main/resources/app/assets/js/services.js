@@ -81,7 +81,7 @@ financeServices.factory('TokenInterceptor', function ($rootScope, $q, $window, $
         delete $window.sessionStorage.token;
         delete $rootScope.user;
         AuthenticationService.isAuthenticated = false;
-        $location.path("/");
+        $location.url("/");
       }
 
       return $q.reject(rejection);

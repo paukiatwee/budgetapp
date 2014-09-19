@@ -133,7 +133,7 @@ financeApp.run(function($rootScope, $location, $window, Analytics, Authenticatio
       if(AuthenticationService.anonymous.indexOf(nextRoute.originalPath) == -1
           && !$window.sessionStorage.token) {
         delete $rootScope.user;
-        $location.path("/");
+        $location.url("/");
       }
     }
   });
@@ -260,7 +260,7 @@ angular.module('ng').directive('bsNavbar', function($rootScope, $location) {
     link: function postLink(scope, element, attrs, controller) {
       // Watch for the $location
       scope.$watch(function() {
-        return $location.path();
+        return $location.url();
       }, function(newValue, oldValue) {
 
         // show hide main nav
