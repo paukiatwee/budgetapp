@@ -40,7 +40,7 @@
             <div class="form-group has-feedback" ng-class="errorClass('budget')">
               <label for="budget" class="col-sm-3 control-label">Budget</label>
               <div class="col-sm-7">
-                <input type="budget" class="form-control" name="budget" id="budget" placeholder="Enter budget" ng-model="ledger.budget">
+                <input type="number" class="form-control" name="budget" id="budget" placeholder="Enter budget" ng-model="ledger.budget">
                 <span class="help-block" ng-show="form.budget.$invalid && form.budget.$dirty">
                   {{errorMessage('budget')}}
                 </span>
