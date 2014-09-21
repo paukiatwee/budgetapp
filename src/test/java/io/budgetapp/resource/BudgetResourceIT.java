@@ -4,9 +4,9 @@ import com.sun.jersey.api.client.ClientResponse;
 import io.budgetapp.BudgetApplication;
 import io.budgetapp.configuration.AppConfiguration;
 import io.budgetapp.modal.IdentityResponse;
-import io.budgetapp.model.Ledger;
+import io.budgetapp.model.Budget;
 import io.budgetapp.model.form.TransactionForm;
-import io.budgetapp.model.form.ledger.AddLedgerForm;
+import io.budgetapp.model.form.budget.AddBudgetForm;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  *
  */
-public class LedgerResourceIT extends ResourceIT {
+public class BudgetResourceIT extends ResourceIT {
 
     @ClassRule
     public static final DropwizardAppRule<AppConfiguration> RULE =
@@ -29,12 +29,12 @@ public class LedgerResourceIT extends ResourceIT {
     }
 
     @Test
-    public void shouldAbleToListLedgers() {
+    public void shouldAbleToListBudgets() {
 
         // give user (created from ResourceIT)
 
         // when
-        ClientResponse response = get("/api/ledgers");
+        ClientResponse response = get("/api/budgets");
         assertOk(response);
         List<IdentityResponse> identityResponses = identityResponses(response);
 
@@ -43,15 +43,15 @@ public class LedgerResourceIT extends ResourceIT {
     }
 
     @Test
-    public void shouldAbleCreateLedger() {
+    public void shouldAbleCreateBudget() {
 
         // give
-        AddLedgerForm ledger = new AddLedgerForm();
-        ledger.setName(randomAlphabets());
-        ledger.setCategoryId(defaultCategory.getId());
+        AddBudgetForm budget = new AddBudgetForm();
+        budget.setName(randomAlphabets());
+        budget.setCategoryId(defaultCategory.getId());
 
         // when
-        ClientResponse response = post("/api/ledgers", ledger);
+        ClientResponse response = post("/api/budgets", budget);
 
         // then
         assertCreated(response);
@@ -59,15 +59,15 @@ public class LedgerResourceIT extends ResourceIT {
     }
 
     @Test
-    public void shouldAbleFindValidLedger() {
+    public void shouldAbleFindValidBudget() {
 
         // give
-        AddLedgerForm ledger = new AddLedgerForm();
-        ledger.setName(randomAlphabets());
-        ledger.setCategoryId(1L);
+        AddBudgetForm budget = new AddBudgetForm();
+        budget.setName(randomAlphabets());
+        budget.setCategoryId(1L);
 
         // when
-        ClientResponse response = post("/api/ledgers", ledger);
+        ClientResponse response = post("/api/budgets", budget);
 
         // then
         ClientResponse newReponse = get(response.getLocation().getPath());
@@ -75,20 +75,20 @@ public class LedgerResourceIT extends ResourceIT {
     }
 
     @Test
-    public void shouldNotAbleDeleteLedgerWithChild() {
+    public void shouldNotAbleDeleteBudgetWithChild() {
 
         // give
-        AddLedgerForm addLedgerForm = new AddLedgerForm();
-        addLedgerForm.setName(randomAlphabets());
-        addLedgerForm.setCategoryId(1L);
+        AddBudgetForm addBudgetForm = new AddBudgetForm();
+        addBudgetForm.setName(randomAlphabets());
+        addBudgetForm.setCategoryId(1L);
 
         // when
-        ClientResponse response = post("/api/ledgers", addLedgerForm);
+        ClientResponse response = post("/api/budgets", addBudgetForm);
         TransactionForm transactionForm = new TransactionForm();
         transactionForm.setAmount(10.00);
-        Ledger ledger = new Ledger();
-        ledger.setId(identityResponse(response).getId());
-        transactionForm.setLedger(ledger);
+        Budget budget = new Budget();
+        budget.setId(identityResponse(response).getId());
+        transactionForm.setBudget(budget);
         post("/api/transactions", transactionForm);
 
         // then

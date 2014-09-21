@@ -74,7 +74,7 @@ categories:
   - name: Miscellaneous
     type: EXPENSE
 
-ledgers:
+budgets:
   Income:
     - name: Wages & Tips
     - name: Interest Income

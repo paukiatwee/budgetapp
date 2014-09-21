@@ -15,7 +15,7 @@ public class Group implements Serializable {
     private CategoryType type;
     private double budget;
     private double spent;
-    private List<Ledger> ledgers;
+    private List<Budget> budgets;
 
     public Group(Long id, String name) {
         setId(id);
@@ -62,11 +62,11 @@ public class Group implements Serializable {
         this.spent = spent;
     }
 
-    public List<Ledger> getLedgers() {
-        return ledgers;
+    public List<Budget> getBudgets() {
+        return budgets;
     }
 
-    public void setLedgers(List<Ledger> ledgers) {
-        this.ledgers = ledgers;
+    public void setBudgets(List<Budget> budgets) {
+        this.budgets = budgets;
     }
 }

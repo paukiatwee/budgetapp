@@ -37,7 +37,7 @@ public class RecurringResourceIT extends ResourceIT {
         TransactionForm transaction = new TransactionForm();
         transaction.setRecurring(Boolean.TRUE);
         transaction.setRecurringType(RecurringType.MONTHLY);
-        transaction.setLedger(defaultLedger);
+        transaction.setBudget(defaultBudget);
 
         // when
         ClientResponse response = post("/api/transactions", transaction);

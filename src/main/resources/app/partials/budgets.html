@@ -1,5 +1,5 @@
 <section class="content-header">
-  <h2>Manage Ledger</h2>
+  <h2>Manage Budget</h2>
 </section>
 
 <section class="content">
@@ -7,11 +7,11 @@
     <div class="col-lg-12">
       <div class="row">
         <div class="col-sm-3">
-          <input class="form-control" type="text" placeholder="Search ledgers..." ng-model="filter"/>
+          <input class="form-control" type="text" placeholder="Search budgets..." ng-model="filter"/>
         </div>
         <div class="col-sm-9">
           <div class="pull-right">
-            <a href="/ledgers/new" class="btn btn-primary"><span class="fa fa-plus"></span> Add Ledger</a>
+            <a href="/budgets/new" class="btn btn-primary"><span class="fa fa-plus"></span> Add Budget</a>
           </div>
         </div>
       </div>
@@ -26,11 +26,11 @@
     <div class="col-lg-12">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <h3 class="panel-title">Ledgers</h3>
+          <h3 class="panel-title">Budgets</h3>
         </div>
         <div class="panel-body">
           <div ng-hide="loaded" class="loading"></div>
-          <table class="table" ng-show="ledgers.length">
+          <table class="table" ng-show="budgets.length">
             <thead>
             <tr>
               <th>Name</th>
@@ -42,14 +42,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="ledger in ledgers | filter: filter">
-              <td>{{ledger.name}}</td>
-              <td>{{ledger.budget | currency}}</td>
-              <td>{{ledger.spent | currency}}</td>
-              <td>{{ledger.spent | currency}}</td>
-              <td>{{ledger.period | yearMonth}}</td>
+            <tr ng-repeat="budget in budgets | filter: filter">
+              <td>{{budget.name}}</td>
+              <td>{{budget.budget | currency}}</td>
+              <td>{{budget.spent | currency}}</td>
+              <td>{{budget.spent | currency}}</td>
+              <td>{{budget.period | yearMonth}}</td>
               <td class="actions">
-                <button type="button" class="btn btn-danger" ng-click="confirmDelete(ledger)"><span class="fa fa-trash-o"></span> Delete</button>
+                <button type="button" class="btn btn-danger" ng-click="confirmDelete(budget)"><span class="fa fa-trash-o"></span> Delete</button>
               </td>
             </tr>
             </tbody>

@@ -7,12 +7,12 @@ import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.filter.LoggingFilter;
 import io.budgetapp.client.HTTPTokenClientFilter;
 import io.budgetapp.modal.IdentityResponse;
+import io.budgetapp.model.Budget;
 import io.budgetapp.model.Category;
 import io.budgetapp.model.CategoryType;
-import io.budgetapp.model.Ledger;
 import io.budgetapp.model.User;
 import io.budgetapp.model.form.SignUpForm;
-import io.budgetapp.model.form.ledger.AddLedgerForm;
+import io.budgetapp.model.form.budget.AddBudgetForm;
 import org.junit.BeforeClass;
 
 import javax.ws.rs.core.MediaType;
@@ -31,7 +31,7 @@ public abstract class ResourceIT {
     protected static Client client;
     protected static User user;
     protected static Category defaultCategory;
-    protected static Ledger defaultLedger;
+    protected static Budget defaultBudget;
 
     @BeforeClass
     public static void before() {
@@ -57,16 +57,16 @@ public abstract class ResourceIT {
         String[] raw = location.split("/");
         defaultCategory.setId(Long.valueOf(raw[raw.length - 1]));
 
-        defaultLedger = new Ledger();
-        defaultLedger.setName(randomAlphabets());
-        defaultLedger.setCategory(defaultCategory);
-        AddLedgerForm addLedgerForm = new AddLedgerForm();
-        addLedgerForm.setName(defaultLedger.getName());
-        addLedgerForm.setCategoryId(defaultCategory.getId());
-        response = post("/api/ledgers", addLedgerForm);
+        defaultBudget = new Budget();
+        defaultBudget.setName(randomAlphabets());
+        defaultBudget.setCategory(defaultCategory);
+        AddBudgetForm addBudgetForm = new AddBudgetForm();
+        addBudgetForm.setName(defaultBudget.getName());
+        addBudgetForm.setCategoryId(defaultCategory.getId());
+        response = post("/api/budgets", addBudgetForm);
         location = response.getLocation().toString();
         raw = location.split("/");
-        defaultLedger.setId(Long.valueOf(raw[raw.length - 1]));
+        defaultBudget.setId(Long.valueOf(raw[raw.length - 1]));
 
     }
 

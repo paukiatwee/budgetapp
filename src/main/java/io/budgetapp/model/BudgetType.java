@@ -9,14 +9,14 @@ import java.util.List;
  *
  */
 @Entity
-@Table(name = "ledger_types")
-public class LedgerType implements Serializable {
+@Table(name = "budget_types")
+public class BudgetType implements Serializable {
 
     private static final long serialVersionUID = -7580231307267509312L;
 
     private Long id;
     private Date createdAt;
-    private List<Ledger> ledgers;
+    private List<Budget> budgets;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,20 +40,20 @@ public class LedgerType implements Serializable {
 
     @JoinColumn(updatable = false)
     @OneToMany()
-    public List<Ledger> getLedgers() {
-        return ledgers;
+    public List<Budget> getBudgets() {
+        return budgets;
     }
 
-    public void setLedgers(List<Ledger> ledgers) {
-        this.ledgers = ledgers;
+    public void setBudgets(List<Budget> budgets) {
+        this.budgets = budgets;
     }
 
     @Override
     public String toString() {
-        return "LedgerType{" +
+        return "BudgetType{" +
                 "id=" + id +
                 ", createdAt=" + createdAt +
-                ", ledgers=" + ledgers +
+                ", budgets=" + budgets +
                 '}';
     }
 }

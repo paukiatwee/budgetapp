@@ -11,14 +11,14 @@ public class AccountSummary implements Serializable {
 
     private static final long serialVersionUID = 5319703962527161534L;
 
-    private List<Ledger> income;
+    private List<Budget> income;
     private List<Group> groups = new ArrayList<>();
 
-    public List<Ledger> getIncome() {
+    public List<Budget> getIncome() {
         return income;
     }
 
-    public void setIncome(List<Ledger> income) {
+    public void setIncome(List<Budget> income) {
         this.income = income;
     }
 

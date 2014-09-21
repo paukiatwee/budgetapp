@@ -86,13 +86,13 @@ financeApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'Anal
               templateUrl: '/app/partials/category.html?' + financeAppConfig.version,
               controller: 'CategoryController'
             }).
-            when('/ledgers', {
-              templateUrl: '/app/partials/ledgers.html?' + financeAppConfig.version,
-              controller: 'LedgersController'
+            when('/budgets', {
+              templateUrl: '/app/partials/budgets.html?' + financeAppConfig.version,
+              controller: 'BudgetsController'
             }).
-            when('/ledgers/new', {
-              templateUrl: '/app/partials/ledger.html?' + financeAppConfig.version,
-              controller: 'LedgerController'
+            when('/budgets/new', {
+              templateUrl: '/app/partials/budget.html?' + financeAppConfig.version,
+              controller: 'BudgetController'
             }).
             when('/profile', {
               templateUrl: '/app/partials/profile.html?' + financeAppConfig.version,

@@ -1,4 +1,4 @@
-package io.budgetapp.model.form.ledger;
+package io.budgetapp.model.form.budget;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -9,7 +9,7 @@ import java.io.Serializable;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UpdateLedgerForm extends LedgerForm implements Serializable {
+public class UpdateBudgetForm extends BudgetForm implements Serializable {
 
     private static final long serialVersionUID = 7677505567308081026L;
 

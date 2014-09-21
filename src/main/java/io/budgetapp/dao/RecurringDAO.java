@@ -27,7 +27,7 @@ public class RecurringDAO extends AbstractDAO<Recurring> {
     }
 
     public List<Recurring> findRecurrings(User user) {
-        return currentSession().createQuery("SELECT r FROM Recurring r JOIN r.ledgerType ledgerType WHERE ledgerType IN (FROM Ledger ledger WHERE ledger.user = :user)")
+        return currentSession().createQuery("SELECT r FROM Recurring r JOIN r.budgetType budgetType WHERE budgetType IN (FROM Budget budget WHERE budget.user = :user)")
                 .setParameter("user", user)
                 .list();
     }
@@ -37,14 +37,14 @@ public class RecurringDAO extends AbstractDAO<Recurring> {
     }
 
     public Recurring find(User user, long recurringId) {
-        return (Recurring)currentSession().createQuery("SELECT r FROM Recurring r JOIN r.ledgerType ledgerType WHERE ledgerType IN (FROM Ledger ledger WHERE ledger.user = :user and r.id = :id)")
+        return (Recurring)currentSession().createQuery("SELECT r FROM Recurring r JOIN r.budgetType budgetType WHERE budgetType IN (FROM Budget budget WHERE budget.user = :user and r.id = :id)")
                 .setParameter("user", user)
                 .setParameter("id", recurringId).uniqueResult();
     }
 
-    public List<Recurring> findByLedgerTypeId(long ledgerTypeId) {
-        return currentSession().createQuery("SELECT r FROM Recurring r WHERE r.ledgerType.id = :ledgerTypeId")
-                .setParameter("ledgerTypeId", ledgerTypeId)
+    public List<Recurring> findByBudgetTypeId(long budgetTypeId) {
+        return currentSession().createQuery("SELECT r FROM Recurring r WHERE r.budgetType.id = :budgetTypeId")
+                .setParameter("budgetTypeId", budgetTypeId)
                 .list();
     }
 

@@ -3,19 +3,19 @@
 </section>
 
 <section class="content">
-  <script type="text/ng-template" id="ledgerModal.html">
+  <script type="text/ng-template" id="budgetModal.html">
     <div class="modal-header">
       <h3 class="modal-title">Edit: {{selected.name}}</h3>
     </div>
-    <form name="updateLedgerForm" novalidate class="form-horizontal" role="form">
+    <form name="updateBudgetForm" novalidate class="form-horizontal" role="form">
       <div class="modal-body">
-        <div class="form-group" ng-class="{true: 'has-error'}[updateLedgerForm.name.$dirty && updateLedgerForm.name.$invalid]">
+        <div class="form-group" ng-class="{true: 'has-error'}[updateBudgetForm.name.$dirty && updateBudgetForm.name.$invalid]">
           <label for="name" class="col-sm-3 control-label">Name</label>
           <div class="col-sm-7">
             <input type="text" class="form-control" id="name" name="name" placeholder="Name" ng-model="selected.name" required>
           </div>
         </div>
-        <div class="form-group" ng-class="{true: 'has-error'}[updateLedgerForm.budget.$dirty && updateLedgerForm.budget.$invalid]">
+        <div class="form-group" ng-class="{true: 'has-error'}[updateBudgetForm.budget.$dirty && updateBudgetForm.budget.$invalid]">
           <label for="budget" class="col-sm-3 control-label">Budget</label>
           <div class="col-sm-7">
             <input type="number" step="1" min="0" ng-min="0" class="form-control" id="budget" name="budget" placeholder="Budget" ng-model="selected.budget">
@@ -30,7 +30,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
-        <button type="submit" class="btn btn-primary" ng-click="ok()" ng-disabled="updateLedgerForm.$invalid"><span class="fa fa-save"></span> Save</button>
+        <button type="submit" class="btn btn-primary" ng-click="ok()" ng-disabled="updateBudgetForm.$invalid"><span class="fa fa-save"></span> Save</button>
       </div>
     </form>
   </script>
@@ -127,9 +127,9 @@
         <div class="panel-heading">
           <h3 class="panel-title">{{group.name}}</h3>
         </div>
-        <div class="panel-body ledgers">
-          <ul class="list-unstyled list-ledgers">
-            <li class="ledger-header">
+        <div class="panel-body budgets">
+          <ul class="list-unstyled list-budgets">
+            <li class="budget-header">
               <span class="name">Name</span>
               <div class="pull-right">
                 <div class="projected">Projected</div>
@@ -137,19 +137,18 @@
               </div>
               <div class="clearfix"></div>
             </li>
-            <li class="ledger" ng-repeat="ledger in group.ledgers">
-              <span class="fa fa-pencil icon-edit" title="Edit ledger" ng-click="openLedgerModal(ledger)"></span> <span class="name" ng-click="openLedgerModal(ledger)">{{ledger.name}}</span>
+            <li class="budget" ng-repeat="budget in group.budgets">
+              <span class="fa fa-pencil icon-edit" title="Edit budget" ng-click="openBudgetModal(budget)"></span> <span class="name" ng-click="openBudgetModal(budget)">{{budget.name}}</span>
               <div class="pull-right">
-                <div class="projected">{{ledger.budget | currency}}</div>
-                <div class="actual">{{ledger.spent | currency}}</div>
+                <div class="projected">{{budget.budget | currency}}</div>
+                <div class="actual">{{budget.spent | currency}}</div>
               </div>
             </li>
-            <li class="ledger-footer">
+            <li class="budget-footer">
               <span class="total">Total: </span>
               <div class="pull-right">
                 <div class="projected">{{group.budget | currency}}</div>
                 <div class="spent">{{group.spent | currency}}</div>
-                <div class="actual" ng-class="{overspend: group.remaining < 0}">{{group.remaining | currency}}</div>
               </div>
               <div class="clearfix"></div>
             </li>
@@ -165,33 +164,33 @@
           <div class="panel-heading">
             <h3 class="panel-title">{{group.name}}</h3>
           </div>
-          <div class="panel-body ledgers">
-            <ul class="list-unstyled list-ledgers">
-              <li class="ledger-header">
+          <div class="panel-body budgets">
+            <ul class="list-unstyled list-budgets">
+              <li class="budget-header">
                 <span class="name">Name</span>
                 <div class="pull-right">
-                  <div class="budget">Budget</div>
+                  <div class="projected">Budget</div>
                   <div class="spent">Spent</div>
                   <div class="remaining">Remaining</div>
                 </div>
                 <div class="clearfix"></div>
               </li>
-              <li class="ledger" ng-repeat="ledger in group.ledgers">
-                <span class="fa fa-pencil icon-edit" title="Edit ledger" ng-click="openLedgerModal(ledger)"></span> <span class="name" ng-click="openLedgerModal(ledger)">{{ledger.name}}</span>
+              <li class="budget" ng-repeat="budget in group.budgets">
+                <span class="fa fa-pencil icon-edit" title="Edit budget" ng-click="openBudgetModal(budget)"></span> <span class="name" ng-click="openBudgetModal(budget)">{{budget.name}}</span>
                 <div class="pull-right">
-                  <div class="budget">{{ledger.budget | currency}}</div>
+                  <div class="projected">{{budget.budget | currency}}</div>
                   <div class="spent">
-                    {{ledger.spent | currency}}
+                    {{budget.spent | currency}}
                   </div>
-                  <div class="remaining" ng-class="{overspend: ledger.remaining < 0}">
-                    {{ledger.remaining | currency}}
+                  <div class="remaining" ng-class="{overspend: budget.remaining < 0}">
+                    {{budget.remaining | currency}}
                   </div>
                   <div class="actions">
-                    <span class="fa fa-plus-square-o icon-plus" ng-click="openTransactionModal(ledger)" title="Add transaction"></span> <span class="fa fa-list-ul icon-list" ng-click="openTransactionsModal(ledger)" title="View transactions"></span>
+                    <span class="fa fa-plus-square-o icon-plus" ng-click="openTransactionModal(budget)" title="Add transaction"></span> <span class="fa fa-list-ul icon-list" ng-click="openTransactionsModal(budget)" title="View transactions"></span>
                   </div>
                 </div>
               </li>
-              <li class="ledger-footer">
+              <li class="budget-footer">
                 <span class="total">Total: </span>
                 <div class="pull-right">
                   <div class="budget">{{group.budget | currency}}</div>

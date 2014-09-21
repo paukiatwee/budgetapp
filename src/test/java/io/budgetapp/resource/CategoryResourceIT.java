@@ -6,7 +6,7 @@ import io.budgetapp.BudgetApplication;
 import io.budgetapp.configuration.AppConfiguration;
 import io.budgetapp.model.Category;
 import io.budgetapp.model.CategoryType;
-import io.budgetapp.model.form.ledger.AddLedgerForm;
+import io.budgetapp.model.form.budget.AddBudgetForm;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -70,10 +70,10 @@ public class CategoryResourceIT extends ResourceIT {
 
         // when
         ClientResponse response = post("/api/categories", category);
-        AddLedgerForm ledger = new AddLedgerForm();
-        ledger.setName(randomAlphabets());
-        ledger.setCategoryId(identityResponse(response).getId());
-        post("/api/ledgers", ledger);
+        AddBudgetForm budget = new AddBudgetForm();
+        budget.setName(randomAlphabets());
+        budget.setCategoryId(identityResponse(response).getId());
+        post("/api/budgets", budget);
 
         // then
         ClientResponse newReponse = delete(response.getLocation().getPath());

@@ -1,6 +1,6 @@
 package io.budgetapp.model.form;
 
-import io.budgetapp.model.Ledger;
+import io.budgetapp.model.Budget;
 import io.budgetapp.model.RecurringType;
 
 import java.io.Serializable;
@@ -18,7 +18,7 @@ public class TransactionForm implements Serializable {
     private Date transactionOn;
     private Boolean recurring;
     private RecurringType recurringType;
-    private Ledger ledger;
+    private Budget budget;
 
     public double getAmount() {
         return amount;
@@ -64,12 +64,12 @@ public class TransactionForm implements Serializable {
         this.recurringType = recurringType;
     }
 
-    public Ledger getLedger() {
-        return ledger;
+    public Budget getBudget() {
+        return budget;
     }
 
-    public void setLedger(Ledger ledger) {
-        this.ledger = ledger;
+    public void setBudget(Budget budget) {
+        this.budget = budget;
     }
 
     @Override
@@ -80,7 +80,7 @@ public class TransactionForm implements Serializable {
                 ", transactionOn=" + transactionOn +
                 ", recurring=" + recurring +
                 ", recurringType=" + recurringType +
-                ", ledger=" + ledger +
+                ", budget=" + budget +
                 '}';
     }
 }

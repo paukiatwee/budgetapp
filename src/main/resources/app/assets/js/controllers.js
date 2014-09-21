@@ -54,7 +54,7 @@ financeControllers.controller('SignupController', function ($scope, $rootScope, 
   };
 });
 
-financeControllers.controller('DashboardController', function ($scope, $modal, LedgerService,
+financeControllers.controller('DashboardController', function ($scope, $modal, BudgetService,
                                                                CategoryService, TransactionService, UserService) {
   $scope.usageLoaded = false;
   $scope.usage = UserService.usage(function() {
@@ -198,7 +198,7 @@ function labelFormatter(label, series) {
   return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + Math.round(series.percent) + "%</div>";
 }
 
-financeControllers.controller('ManageController', function ($scope, $routeParams, $modal, LedgerService, TransactionService, UserService) {
+financeControllers.controller('ManageController', function ($scope, $routeParams, $modal, BudgetService, TransactionService, UserService) {
 
   $scope.loaded = false;
   $scope.errorMessage = errorMessage;
@@ -245,12 +245,12 @@ financeControllers.controller('ManageController', function ($scope, $routeParams
         var totalBudget = 0.0;
         var  changed = false;
         _.forEach(summary.groups, function(group) {
-          var spent = _.reduce(group.ledgers, function(sum, ledger) {
+          var spent = _.reduce(group.budgets, function(sum, budget) {
             changed = true;
-            ledger.remaining = ledger.budget - ledger.spent;
+            budget.remaining = budget.budget - budget.spent;
 
             if(group.type == 'EXPENSE') {
-              return sum + ledger.spent;
+              return sum + budget.spent;
             } else {
               return sum;
             }
@@ -261,11 +261,11 @@ financeControllers.controller('ManageController', function ($scope, $routeParams
         });
 
         _.forEach(summary.groups, function(group) {
-          var budget = _.reduce(group.ledgers, function(sum, ledger) {
+          var budget = _.reduce(group.budgets, function(sum, budget) {
             changed = true;
 
             if(group.type == 'EXPENSE') {
-              return sum + ledger.budget;
+              return sum + budget.budget;
             } else {
               return sum;
             }
@@ -284,37 +284,37 @@ financeControllers.controller('ManageController', function ($scope, $routeParams
       true
   );
 
-  $scope.openLedgerModal = function (ledger) {
+  $scope.openBudgetModal = function (budget) {
     var modalInstance = $modal.open({
-      templateUrl: 'ledgerModal.html',
-      controller: LedgerModalController,
+      templateUrl: 'budgetModal.html',
+      controller: BudgetModalController,
       resolve: {
-        ledger: function() {
-          return ledger;
+        budget: function() {
+          return budget;
         }
       }
     });
 
     modalInstance.result.then(function (selected) {
-      LedgerService.update(selected);
+      BudgetService.update(selected);
     }, function () {
 
     });
   };
 
-  $scope.openTransactionModal = function (ledger) {
+  $scope.openTransactionModal = function (budget) {
     var modalInstance = $modal.open({
       templateUrl: 'transactionModal.html',
       controller: TransactionModalController,
       resolve: {
-        ledger: function() {
-          return ledger;
+        budget: function() {
+          return budget;
         }
       }
     });
   };
 
-  $scope.openTransactionsModal = function (ledger) {
+  $scope.openTransactionsModal = function (budget) {
     $scope.transactionsLoaded = false;
     $modal.open({
       templateUrl: '/app/partials/transactions.html',
@@ -323,12 +323,12 @@ financeControllers.controller('ManageController', function ($scope, $routeParams
       size: 'lg',
       resolve: {
         transactions: function() {
-          return LedgerService.query({id: ledger.id, transactions: 'transactions'}, function() {
+          return BudgetService.query({id: budget.id, transactions: 'transactions'}, function() {
             $scope.transactionsLoaded = true;
           });
         },
-        ledger: function() {
-          return ledger;
+        budget: function() {
+          return budget;
         }
       }
     });
@@ -351,11 +351,11 @@ financeControllers.controller('ManageController', function ($scope, $routeParams
 });
 
 
-var LedgerModalController = function ($scope, $modalInstance, ledger) {
+var BudgetModalController = function ($scope, $modalInstance, budget) {
 
   $scope.data = {};
-  $scope.selected = ledger;
-  $scope.original = angular.copy(ledger);
+  $scope.selected = budget;
+  $scope.original = angular.copy(budget);
 
   $scope.ok = function () {
     if(!$scope.selected.budget) {
@@ -371,11 +371,11 @@ var LedgerModalController = function ($scope, $modalInstance, ledger) {
   };
 };
 
-var TransactionModalController = function ($scope, $modalInstance, ledger, TransactionService) {
+var TransactionModalController = function ($scope, $modalInstance, budget, TransactionService) {
 
-  $scope.selected = ledger;
-  $scope.original = angular.copy(ledger);
-  $scope.transaction = {ledger: {id: ledger.id}, recurringType: 'DAILY'};
+  $scope.selected = budget;
+  $scope.original = angular.copy(budget);
+  $scope.transaction = {budget: {id: budget.id}, recurringType: 'DAILY'};
 
   $scope.errorMessage = errorMessage;
   $scope.errorClass = errorClass;
@@ -383,7 +383,7 @@ var TransactionModalController = function ($scope, $modalInstance, ledger, Trans
   // TODO https://github.com/angular-ui/bootstrap/issues/969
   $scope.ok = function (form) {
     TransactionService.save($scope.transaction).$promise.then(function() {
-      ledger.spent += $scope.transaction.amount;
+      budget.spent += $scope.transaction.amount;
       $modalInstance.close();
     }, function(response) {
       $scope.form = form;
@@ -398,21 +398,21 @@ var TransactionModalController = function ($scope, $modalInstance, ledger, Trans
   };
 };
 
-var TransactionsModalController = function ($scope, $modalInstance, ledger, transactions) {
+var TransactionsModalController = function ($scope, $modalInstance, budget, transactions) {
 
-  $scope.selected = ledger;
+  $scope.selected = budget;
   $scope.transactions = transactions;
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');
   };
 };
 
-financeControllers.controller('LedgerController', function ($scope, CategoryService, LedgerService) {
+financeControllers.controller('BudgetController', function ($scope, CategoryService, BudgetService) {
 
   // cache categories, reuse when validation failed.
   var categories = null;
   $scope.loaded = false;
-  $scope.ledger = {};
+  $scope.budget = {};
 
   $scope.errorMessage = errorMessage;
   $scope.errorClass = errorClass;
@@ -423,20 +423,20 @@ financeControllers.controller('LedgerController', function ($scope, CategoryServ
     $scope.loaded = true;
   });
 
-  $scope.createLedger = function() {
+  $scope.createBudget = function() {
     $scope.success = false;
     $scope.error = false;
     $scope.message = null;
-    var ledger = $scope.ledger;
-    if(ledger.category) {
-      ledger.categoryId = ledger.category.id;
+    var budget = $scope.budget;
+    if(budget.category) {
+      budget.categoryId = budget.category.id;
     } else {
-      ledger.categoryId = null;
+      budget.categoryId = null;
     }
-    LedgerService.save($scope.ledger).$promise.then(function() {
+    BudgetService.save($scope.budget).$promise.then(function() {
       $scope.success = true;
-      $scope.message = "Successfully created Ledger";
-      $scope.ledger = {};
+      $scope.message = "Successfully created Budget";
+      $scope.budget = {};
       success($scope);
       // repopulate categories
       $scope.categories = categories;
@@ -520,20 +520,20 @@ financeControllers.controller('RecurringsController', function ($scope, $modal, 
 
 });
 
-financeControllers.controller('RecurringController', function ($scope, RecurringService, LedgerService) {
+financeControllers.controller('RecurringController', function ($scope, RecurringService, BudgetService) {
 
 
-  // cache ledgers, reuse when validation failed.
-  var ledgers = null;
+  // cache budgets, reuse when validation failed.
+  var budgets = null;
   $scope.loaded = false;
   $scope.recurring = {};
 
   $scope.errorMessage = errorMessage;
   $scope.errorClass = errorClass;
 
-  LedgerService.query(function(response) {
-    ledgers = response;
-    $scope.ledgers = response;
+  BudgetService.query(function(response) {
+    budgets = response;
+    $scope.budgets = response;
     $scope.loaded = true;
   });
 
@@ -542,22 +542,22 @@ financeControllers.controller('RecurringController', function ($scope, Recurring
     $scope.error = false;
     $scope.message = null;
     var recurring = $scope.recurring;
-    if(recurring.ledger) {
-      recurring.ledgerId = recurring.ledger.id;
+    if(recurring.budget) {
+      recurring.budgetId = recurring.budget.id;
     } else {
-      recurring.ledgerId = null;
+      recurring.budgetId = null;
     }
     RecurringService.save($scope.recurring).$promise.then(function() {
       $scope.success = true;
       $scope.message = "Successfully created Recurring";
       $scope.recurring = {};
       clearErrors($scope);
-      // repopulate ledgers
-      $scope.ledgers = ledgers;
+      // repopulate budgets
+      $scope.budgets = budgets;
     }, function(response) {
       failure($scope, response)
-      // repopulate ledgers
-      $scope.ledgers = ledgers;
+      // repopulate budgets
+      $scope.budgets = budgets;
     });
   }
 });
@@ -593,21 +593,21 @@ financeControllers.controller('CategoriesController', function ($scope, $modal, 
     });
   };
 
-  $scope.openLedgersModal = function (category) {
-    $scope.ledgersLoaded = false;
+  $scope.openBudgetsModal = function (category) {
+    $scope.budgetsLoaded = false;
 
     $modal.open({
-      templateUrl: '/app/partials/ledgers.html',
+      templateUrl: '/app/partials/budgets.html',
       scope: $scope,
-      controller: LedgersModalController,
+      controller: BudgetsModalController,
       size: 'lg',
       resolve: {
         category: function() {
           return category;
         },
-        ledgers: function() {
-          return CategoryService.ledgers(category, function() {
-            $scope.ledgersLoaded = true;
+        budgets: function() {
+          return CategoryService.budgets(category, function() {
+            $scope.budgetsLoaded = true;
           });
         }
       }
@@ -615,30 +615,30 @@ financeControllers.controller('CategoriesController', function ($scope, $modal, 
   };
 });
 
-financeControllers.controller('LedgersController', function ($scope, $modal, LedgerService) {
+financeControllers.controller('BudgetsController', function ($scope, $modal, BudgetService) {
 
   $scope.loaded = false;
-  $scope.ledgers = LedgerService.query(function() {
+  $scope.budgets = BudgetService.query(function() {
     $scope.loaded = true;
   });
 
-  $scope.confirmDelete = function (ledger) {
+  $scope.confirmDelete = function (budget) {
     var modalInstance = $modal.open({
       templateUrl: '/app/partials/confirmDeleteModal.html',
       controller: ConfirmDeleteModalController,
       resolve: {
         modal: function() {
-          return ledger;
+          return budget;
         },
         message: function() {
-          return ' this ledger';
+          return ' this budget';
         }
       }
     });
 
     modalInstance.result.then(function (selected) {
       selected.$delete({id: selected.id}, function() {
-        $scope.ledgers.splice($scope.ledgers.indexOf(selected), 1);
+        $scope.budgets.splice($scope.budgets.indexOf(selected), 1);
       }, function(response) {
         errorModal($modal, response.data.errors);
       });
@@ -646,9 +646,9 @@ financeControllers.controller('LedgersController', function ($scope, $modal, Led
   };
 });
 
-var LedgersModalController = function ($scope, $modalInstance, category, ledgers) {
+var BudgetsModalController = function ($scope, $modalInstance, category, budgets) {
   $scope.selected = category;
-  $scope.ledgers = ledgers;
+  $scope.budgets = budgets;
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');
   };

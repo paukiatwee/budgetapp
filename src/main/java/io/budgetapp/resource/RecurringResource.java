@@ -35,7 +35,7 @@ public class RecurringResource extends AbstractResource {
 
     @GET
     @UnitOfWork
-    public List<Recurring> getLedgers(@Auth User user) {
+    public List<Recurring> getRecurrings(@Auth User user) {
         return financeService.findRecurrings(user);
     }
 

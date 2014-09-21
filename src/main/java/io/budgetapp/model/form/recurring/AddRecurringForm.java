@@ -14,17 +14,17 @@ public class AddRecurringForm implements Serializable {
 
     private static final long serialVersionUID = -3317443535487916735L;
 
-    private Long ledgerId;
+    private Long budgetId;
     private Double amount;
     private RecurringType recurringType;
 
-    @NotNull(message = "{validation.ledger.required}")
-    public Long getLedgerId() {
-        return ledgerId;
+    @NotNull(message = "{validation.budget.required}")
+    public Long getBudgetId() {
+        return budgetId;
     }
 
-    public void setLedgerId(Long ledgerId) {
-        this.ledgerId = ledgerId;
+    public void setBudgetId(Long budgetId) {
+        this.budgetId = budgetId;
     }
 
     @NotNull(message = "{validation.amount.required}")

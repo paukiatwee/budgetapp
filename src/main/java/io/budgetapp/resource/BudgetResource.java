@@ -1,10 +1,10 @@
 package io.budgetapp.resource;
 
-import io.budgetapp.model.Ledger;
+import io.budgetapp.model.Budget;
 import io.budgetapp.model.Transaction;
 import io.budgetapp.model.User;
-import io.budgetapp.model.form.ledger.AddLedgerForm;
-import io.budgetapp.model.form.ledger.UpdateLedgerForm;
+import io.budgetapp.model.form.budget.AddBudgetForm;
+import io.budgetapp.model.form.budget.UpdateBudgetForm;
 import io.budgetapp.service.FinanceService;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -26,65 +26,65 @@ import java.util.List;
 /**
  *
  */
-@Path("/api/ledgers")
+@Path("/api/budgets")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class LedgerResource extends AbstractResource {
+public class BudgetResource extends AbstractResource {
 
     private final FinanceService financeService;
 
-    public LedgerResource(FinanceService financeService) {
+    public BudgetResource(FinanceService financeService) {
         this.financeService = financeService;
     }
 
     @GET
     @UnitOfWork
-    public List<Ledger> getLedgers(@Auth User user) {
-        return financeService.findLedgersByUser(user);
+    public List<Budget> getBudgets(@Auth User user) {
+        return financeService.findBudgetsByUser(user);
     }
 
     @POST
     @UnitOfWork
-    public Response add(@Auth User user, @Valid AddLedgerForm ledgerForm) {
-        Ledger ledger = financeService.addLedger(user, ledgerForm);
-        return created(ledger, ledger.getId());
+    public Response add(@Auth User user, @Valid AddBudgetForm budgetForm) {
+        Budget budget = financeService.addBudget(user, budgetForm);
+        return created(budget, budget.getId());
     }
 
     @PUT
     @UnitOfWork
     @Path("/{id}")
-    public Response update(@Auth User user, @PathParam("id") long id, @Valid UpdateLedgerForm ledgerForm) {
-        ledgerForm.setId(id);
-        Ledger ledger = financeService.updateLedger(user, ledgerForm);
-        return ok(ledger);
+    public Response update(@Auth User user, @PathParam("id") long id, @Valid UpdateBudgetForm budgetForm) {
+        budgetForm.setId(id);
+        Budget budget = financeService.updateBudget(user, budgetForm);
+        return ok(budget);
     }
 
     @DELETE
     @UnitOfWork
     @Path("/{id}")
     public Response delete(@Auth User user, @PathParam("id") long id) {
-        financeService.deleteLedger(user, id);
+        financeService.deleteBudget(user, id);
         return deleted();
     }
 
     @GET
     @UnitOfWork
     @Path("/{id}")
-    public Ledger findById(@Auth User user, @PathParam("id") long id) {
-        return financeService.findLedgerById(user, id);
+    public Budget findById(@Auth User user, @PathParam("id") long id) {
+        return financeService.findBudgetById(user, id);
     }
 
     @GET
     @UnitOfWork
     @Path("/{id}/transactions")
     public List<Transaction> findTransactions(@Auth User user, @PathParam("id") long id) {
-        return financeService.findTransactionsByLedger(user, id);
+        return financeService.findTransactionsByBudget(user, id);
     }
 
     @GET
     @UnitOfWork
     @Path("/suggests")
     public List<String> findSuggestion(@Auth User user, @QueryParam("q") String q) {
-        return financeService.findLedgerSuggestions(user, q);
+        return financeService.findBudgetSuggestions(user, q);
     }
 }

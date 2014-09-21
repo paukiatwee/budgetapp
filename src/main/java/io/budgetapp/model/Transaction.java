@@ -20,7 +20,7 @@ public class Transaction implements Serializable {
     private boolean auto;
     private Date transactionOn;
     private Date createdAt;
-    private Ledger ledger;
+    private Budget budget;
     private Recurring recurring;
 
     @Id
@@ -90,12 +90,12 @@ public class Transaction implements Serializable {
 
     @JoinColumn(updatable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    public Ledger getLedger() {
-        return ledger;
+    public Budget getBudget() {
+        return budget;
     }
 
-    public void setLedger(Ledger ledger) {
-        this.ledger = ledger;
+    public void setBudget(Budget budget) {
+        this.budget = budget;
     }
 
     @JoinColumn(updatable = false)
@@ -123,7 +123,7 @@ public class Transaction implements Serializable {
         sb.append(", remark='").append(remark).append('\'');
         sb.append(", transactionOn=").append(transactionOn);
         sb.append(", createdAt=").append(createdAt);
-        sb.append(", ledger=").append(ledger);
+        sb.append(", budget=").append(budget);
         sb.append('}');
         return sb.toString();
     }

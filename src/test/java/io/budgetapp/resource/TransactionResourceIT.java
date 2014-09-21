@@ -4,11 +4,11 @@ package io.budgetapp.resource;
 import io.budgetapp.BudgetApplication;
 import io.budgetapp.configuration.AppConfiguration;
 import io.budgetapp.modal.IdentityResponse;
+import io.budgetapp.model.Budget;
 import io.budgetapp.model.Category;
 import io.budgetapp.model.CategoryType;
-import io.budgetapp.model.Ledger;
 import io.budgetapp.model.form.TransactionForm;
-import io.budgetapp.model.form.ledger.AddLedgerForm;
+import io.budgetapp.model.form.budget.AddBudgetForm;
 import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.Assert;
@@ -37,7 +37,7 @@ public class TransactionResourceIT extends ResourceIT {
 
         // give
         TransactionForm transaction = new TransactionForm();
-        transaction.setLedger(defaultLedger);
+        transaction.setBudget(defaultBudget);
 
         // when
         ClientResponse response = post("/api/transactions", transaction);
@@ -52,7 +52,7 @@ public class TransactionResourceIT extends ResourceIT {
 
         // give
         TransactionForm transaction = new TransactionForm();
-        transaction.setLedger(defaultLedger);
+        transaction.setBudget(defaultBudget);
 
         // when
         ClientResponse response = post("/api/transactions", transaction);
@@ -63,30 +63,30 @@ public class TransactionResourceIT extends ResourceIT {
     }
 
     @Test
-    public void shouldAbleFindTransactionsByLedger() {
+    public void shouldAbleFindTransactionsByBudget() {
         // give
         Category category = new Category();
         category.setName(randomAlphabets());
         category.setType(CategoryType.EXPENSE);
 
-        AddLedgerForm ledger = new AddLedgerForm();
-        ledger.setName(randomAlphabets());
+        AddBudgetForm budget = new AddBudgetForm();
+        budget.setName(randomAlphabets());
 
         TransactionForm transaction = new TransactionForm();
 
         // when
         ClientResponse categoryResponse = post("/api/categories", category);
         Long categoryId = identityResponse(categoryResponse).getId();
-        ledger.setCategoryId(categoryId);
+        budget.setCategoryId(categoryId);
 
-        ClientResponse ledgerResponse = post("/api/ledgers", ledger);
-        Long ledgerId = identityResponse(ledgerResponse).getId();
+        ClientResponse budgetResponse = post("/api/budgets", budget);
+        Long budgetId = identityResponse(budgetResponse).getId();
 
-        transaction.setLedger(new Ledger(ledgerId));
+        transaction.setBudget(new Budget(budgetId));
         post("/api/transactions", transaction);
 
         // then
-        ClientResponse newResponse = get("/api/ledgers/" + ledgerId + "/transactions");
+        ClientResponse newResponse = get("/api/budgets/" + budgetId + "/transactions");
         List<IdentityResponse> ids = identityResponses(newResponse);
         assertOk(newResponse);
         Assert.assertEquals(1, ids.size());

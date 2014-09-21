@@ -3,8 +3,8 @@ package io.budgetapp.configuration;
 import com.bazaarvoice.dropwizard.assets.AssetsBundleConfiguration;
 import com.bazaarvoice.dropwizard.assets.AssetsConfiguration;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.budgetapp.model.Budget;
 import io.budgetapp.model.Category;
-import io.budgetapp.model.Ledger;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 
@@ -37,8 +37,8 @@ public class AppConfiguration extends Configuration implements AssetsBundleConfi
 
     @Valid
     @NotNull
-    @JsonProperty("ledgers")
-    private Map<String, List<Ledger>> ledgers = new LinkedHashMap<>();
+    @JsonProperty("budgets")
+    private Map<String, List<Budget>> budgets = new LinkedHashMap<>();
 
     public DataSourceFactory getDataSourceFactory() {
         return database;
@@ -53,7 +53,7 @@ public class AppConfiguration extends Configuration implements AssetsBundleConfi
         return categories;
     }
 
-    public Map<String, List<Ledger>> getLedgers() {
-        return ledgers;
+    public Map<String, List<Budget>> getBudgets() {
+        return budgets;
     }
 }

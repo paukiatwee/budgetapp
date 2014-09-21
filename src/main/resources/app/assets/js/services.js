@@ -4,12 +4,12 @@ var financeServices = angular.module('financeServices', ['ngResource', 'ngCookie
 financeServices.factory('CategoryService', function($resource) {
   return $resource("/api/categories/:id/:path", {}, {
     summary: {method: 'GET', params: {path: 'summary'}, isArray: true},
-    ledgers: {method: 'GET', params: {id: '@id', path: 'ledgers'}, isArray: true}
+    budgets: {method: 'GET', params: {id: '@id', path: 'budgets'}, isArray: true}
   });
 });
 
-financeServices.factory('LedgerService', function($resource) {
-  return $resource("/api/ledgers/:id/:transactions", {}, {
+financeServices.factory('BudgetService', function($resource) {
+  return $resource("/api/budgets/:id/:transactions", {}, {
     update: {method: 'PUT', params: {id: '@id'}}
   });
 });

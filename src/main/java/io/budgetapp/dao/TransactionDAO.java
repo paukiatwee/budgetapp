@@ -33,7 +33,7 @@ public class TransactionDAO extends AbstractDAO<Transaction> {
     }
 
     public List<Transaction> find(User user, Integer limit) {
-        Query query = currentSession().createQuery("FROM Transaction t WHERE t.ledger.user = :user ORDER BY t.transactionOn DESC, t.id ASC");
+        Query query = currentSession().createQuery("FROM Transaction t WHERE t.budget.user = :user ORDER BY t.transactionOn DESC, t.id ASC");
         query.setParameter("user", user);
         query.setMaxResults(limit);
         return list(query);
@@ -48,17 +48,17 @@ public class TransactionDAO extends AbstractDAO<Transaction> {
         return transaction;
     }
 
-    public List<Transaction> findByLedger(User user, long ledgerId) {
+    public List<Transaction> findByBudget(User user, long budgetId) {
         Criteria criteria = defaultCriteria();
-        criteria.createAlias("t.ledger", "ledger");
+        criteria.createAlias("t.budget", "budget");
 
-        criteria.add(Restrictions.eq("ledger.id", ledgerId));
-        criteria.add(Restrictions.eq("ledger.user", user));
+        criteria.add(Restrictions.eq("budget.id", budgetId));
+        criteria.add(Restrictions.eq("budget.user", user));
         return list(criteria);
     }
 
     public List<Transaction> findByRecurring(User user, long recurringId) {
-        Query query = currentSession().createQuery("FROM Transaction t WHERE t.ledger.user = :user AND t.recurring.id = :recurringId ORDER BY t.transactionOn DESC, t.id ASC");
+        Query query = currentSession().createQuery("FROM Transaction t WHERE t.budget.user = :user AND t.recurring.id = :recurringId ORDER BY t.transactionOn DESC, t.id ASC");
         query.setParameter("user", user);
         query.setParameter("recurringId", recurringId);
         return list(query);
@@ -68,7 +68,7 @@ public class TransactionDAO extends AbstractDAO<Transaction> {
 
 
 
-        Query query = currentSession().createQuery("FROM Transaction t WHERE t.ledger.user = :user AND t.transactionOn BETWEEN :start AND :end ORDER BY t.transactionOn DESC, t.id ASC");
+        Query query = currentSession().createQuery("FROM Transaction t WHERE t.budget.user = :user AND t.transactionOn BETWEEN :start AND :end ORDER BY t.transactionOn DESC, t.id ASC");
         query
                 .setParameter("user", user)
                 .setParameter("start", start)
@@ -79,9 +79,9 @@ public class TransactionDAO extends AbstractDAO<Transaction> {
 
     public List<Transaction> findTransactions(User user, SearchFilter filter) {
         Criteria criteria = defaultCriteria();
-        criteria.createAlias("t.ledger", "ledger");
+        criteria.createAlias("t.budget", "budget");
 
-        criteria.add(Restrictions.eq("ledger.user", user));
+        criteria.add(Restrictions.eq("budget.user", user));
 
         if(filter.isAmountRange()) {
             criteria.add(Restrictions.between("amount", filter.getMinAmount(), filter.getMaxAmount()));

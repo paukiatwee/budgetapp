@@ -37,7 +37,7 @@
       </column>
     </createTable>
 
-    <createTable tableName="ledgers">
+    <createTable tableName="budgets">
       <column name="id" type="bigint" autoIncrement="true" startWith="1">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -67,7 +67,7 @@
       </column>
     </createTable>
 
-    <createTable tableName="ledger_types">
+    <createTable tableName="budget_types">
       <column name="id" type="bigint" autoIncrement="true" startWith="1">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -96,7 +96,7 @@
       <column name="created_at" type="timestamp" defaultValueDate="current_timestamp">
         <constraints nullable="false" />
       </column>
-      <column name="ledger_id" type="bigint">
+      <column name="budget_id" type="bigint">
         <constraints nullable="false" />
       </column>
       <column name="recurring_id" type="bigint" />
@@ -134,7 +134,7 @@
       <column name="created_at" type="timestamp" defaultValueDate="current_timestamp">
         <constraints nullable="false" />
       </column>
-      <column name="ledger_type_id" type="bigint">
+      <column name="budget_type_id" type="bigint">
         <constraints nullable="false" />
       </column>
     </createTable>
@@ -147,23 +147,23 @@
                              referencedTableName="users"
                              referencedColumnNames="id" />
 
-    <addForeignKeyConstraint baseTableName="ledgers" baseColumnNames="user_id" constraintName="fk_ledgers_users"
+    <addForeignKeyConstraint baseTableName="budgets" baseColumnNames="user_id" constraintName="fk_budgets_users"
                              referencedTableName="users"
                              referencedColumnNames="id" />
 
-    <addForeignKeyConstraint baseTableName="ledgers" baseColumnNames="category_id"
-                             constraintName="fk_ledgers_categories"
+    <addForeignKeyConstraint baseTableName="budgets" baseColumnNames="category_id"
+                             constraintName="fk_budgets_categories"
                              referencedTableName="categories"
                              referencedColumnNames="id" />
 
-    <addForeignKeyConstraint baseTableName="ledgers" baseColumnNames="type_id"
-                             constraintName="fk_ledgers_types"
-                             referencedTableName="ledger_types"
+    <addForeignKeyConstraint baseTableName="budgets" baseColumnNames="type_id"
+                             constraintName="fk_budgets_types"
+                             referencedTableName="budget_types"
                              referencedColumnNames="id" />
 
-    <addForeignKeyConstraint baseTableName="transactions" baseColumnNames="ledger_id"
-                             constraintName="fk_transactions_ledgers"
-                             referencedTableName="ledgers"
+    <addForeignKeyConstraint baseTableName="transactions" baseColumnNames="budget_id"
+                             constraintName="fk_transactions_budgets"
+                             referencedTableName="budgets"
                              referencedColumnNames="id" />
 
     <addForeignKeyConstraint baseTableName="transactions" baseColumnNames="recurring_id"
@@ -172,9 +172,9 @@
                              referencedTableName="recurrings"
                              referencedColumnNames="id" />
 
-    <addForeignKeyConstraint baseTableName="recurrings" baseColumnNames="ledger_type_id"
-                             constraintName="fk_recurrngs_ledger_types"
-                             referencedTableName="ledger_types"
+    <addForeignKeyConstraint baseTableName="recurrings" baseColumnNames="budget_type_id"
+                             constraintName="fk_recurrngs_budget_types"
+                             referencedTableName="budget_types"
                              referencedColumnNames="id" />
   </changeSet>
 </databaseChangeLog>

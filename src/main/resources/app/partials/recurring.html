@@ -16,15 +16,15 @@
         </div>
         <div class="box-body">
           <form name="form" novalidate role="form" class="form-horizontal">
-            <div class="form-group has-feedback" ng-class="errorClass('ledgerId')">
-              <label for="ledgerId" class="col-sm-3 control-label">Ledger</label>
+            <div class="form-group has-feedback" ng-class="errorClass('budgetId')">
+              <label for="budgetId" class="col-sm-3 control-label">Budget</label>
               <div class="col-sm-7">
                 <div class="form-control-static" ng-hide="loaded">
                   <div class="loading"></div>
                 </div>
-                <select class="form-control" id="ledgerId" name="ledgerId" ng-model="recurring.ledger" ng-show="loaded" ng-options="ledger.name for ledger in ledgers"></select>
-                <span class="help-block" ng-show="form.ledgerId.$invalid && form.ledgerId.$dirty">
-                  {{errorMessage('ledgerId')}}
+                <select class="form-control" id="budgetId" name="budgetId" ng-model="recurring.budget" ng-show="loaded" ng-options="budget.name for budget in budgets"></select>
+                <span class="help-block" ng-show="form.budgetId.$invalid && form.budgetId.$dirty">
+                  {{errorMessage('budgetId')}}
                 </span>
               </div>
             </div>

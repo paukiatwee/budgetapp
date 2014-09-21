@@ -4,18 +4,18 @@ import io.budgetapp.application.DataConstraintException;
 import io.budgetapp.crypto.PasswordEncoder;
 import io.budgetapp.dao.AuthTokenDAO;
 import io.budgetapp.dao.CategoryDAO;
-import io.budgetapp.dao.LedgerDAO;
-import io.budgetapp.dao.LedgerTypeDAO;
+import io.budgetapp.dao.BudgetDAO;
+import io.budgetapp.dao.BudgetTypeDAO;
 import io.budgetapp.dao.RecurringDAO;
 import io.budgetapp.dao.TransactionDAO;
 import io.budgetapp.dao.UserDAO;
 import io.budgetapp.model.AccountSummary;
 import io.budgetapp.model.AuthToken;
+import io.budgetapp.model.Budget;
+import io.budgetapp.model.BudgetType;
 import io.budgetapp.model.Category;
 import io.budgetapp.model.CategoryType;
 import io.budgetapp.model.Group;
-import io.budgetapp.model.Ledger;
-import io.budgetapp.model.LedgerType;
 import io.budgetapp.model.Point;
 import io.budgetapp.model.PointType;
 import io.budgetapp.model.Recurring;
@@ -25,8 +25,8 @@ import io.budgetapp.model.User;
 import io.budgetapp.model.form.LoginForm;
 import io.budgetapp.model.form.SignUpForm;
 import io.budgetapp.model.form.TransactionForm;
-import io.budgetapp.model.form.ledger.AddLedgerForm;
-import io.budgetapp.model.form.ledger.UpdateLedgerForm;
+import io.budgetapp.model.form.budget.AddBudgetForm;
+import io.budgetapp.model.form.budget.UpdateBudgetForm;
 import io.budgetapp.model.form.recurring.AddRecurringForm;
 import io.budgetapp.model.form.report.SearchFilter;
 import io.budgetapp.model.form.user.Profile;
@@ -59,8 +59,8 @@ public class FinanceService {
 
     private final SessionFactory sessionFactory;
     private final UserDAO userDAO;
-    private final LedgerDAO ledgerDAO;
-    private final LedgerTypeDAO ledgerTypeDAO;
+    private final BudgetDAO budgetDAO;
+    private final BudgetTypeDAO budgetTypeDAO;
     private final CategoryDAO categoryDAO;
     private final TransactionDAO transactionDAO;
     private final RecurringDAO recurringDAO;
@@ -68,11 +68,11 @@ public class FinanceService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public FinanceService(SessionFactory sessionFactory, UserDAO userDAO, LedgerDAO ledgerDAO, LedgerTypeDAO ledgerTypeDAO, CategoryDAO categoryDAO, TransactionDAO transactionDAO, RecurringDAO recurringDAO, AuthTokenDAO authTokenDAO, PasswordEncoder passwordEncoder) {
+    public FinanceService(SessionFactory sessionFactory, UserDAO userDAO, BudgetDAO budgetDAO, BudgetTypeDAO budgetTypeDAO, CategoryDAO categoryDAO, TransactionDAO transactionDAO, RecurringDAO recurringDAO, AuthTokenDAO authTokenDAO, PasswordEncoder passwordEncoder) {
         this.sessionFactory = sessionFactory;
         this.userDAO = userDAO;
-        this.ledgerDAO = ledgerDAO;
-        this.ledgerTypeDAO = ledgerTypeDAO;
+        this.budgetDAO = budgetDAO;
+        this.budgetTypeDAO = budgetTypeDAO;
         this.categoryDAO = categoryDAO;
         this.transactionDAO = transactionDAO;
         this.recurringDAO = recurringDAO;
@@ -147,35 +147,35 @@ public class FinanceService {
         }
         LOGGER.debug("Find account summary {} {}-{}", user, month, year);
         AccountSummary accountSummary = new AccountSummary();
-        List<Ledger> ledgers = ledgerDAO.findLedgers(user, month, year);
+        List<Budget> budgets = budgetDAO.findBudgets(user, month, year);
 
-        // no ledgers, first time access
-        if(ledgers.isEmpty()) {
-            LOGGER.debug("First time access ledgers {} {}-{}", user, month, year);
+        // no budgets, first time access
+        if(budgets.isEmpty()) {
+            LOGGER.debug("First time access budgets {} {}-{}", user, month, year);
             Collection<Category> categories = categoryDAO.findCategories(user);
             // no categories, first time access
             if(categories.isEmpty()) {
-                LOGGER.debug("Create default categories and ledgers {} {}-{}", user, month, year);
-                generateDefaultCategoriesAndLedgers(user, month, year);
+                LOGGER.debug("Create default categories and budgets {} {}-{}", user, month, year);
+                generateDefaultCategoriesAndBudgets(user, month, year);
             } else {
-                LOGGER.debug("Copy ledgers {} {}-{}", user, month, year);
-                generateLedgers(user, month, year);
+                LOGGER.debug("Copy budgets {} {}-{}", user, month, year);
+                generateBudgets(user, month, year);
             }
-            ledgers = ledgerDAO.findLedgers(user, month, year);
+            budgets = budgetDAO.findBudgets(user, month, year);
         }
-        Map<Category, List<Ledger>> grouped = ledgers
+        Map<Category, List<Budget>> grouped = budgets
                 .stream()
-                .collect(Collectors.groupingBy(Ledger::getCategory));
+                .collect(Collectors.groupingBy(Budget::getCategory));
 
-        for(Map.Entry<Category, List<Ledger>> entry: grouped.entrySet()) {
+        for(Map.Entry<Category, List<Budget>> entry: grouped.entrySet()) {
             Category category = entry.getKey();
-            double budget = entry.getValue().stream().mapToDouble(Ledger::getBudget).sum();
-            double spent = entry.getValue().stream().mapToDouble(Ledger::getSpent).sum();
+            double budget = entry.getValue().stream().mapToDouble(Budget::getBudget).sum();
+            double spent = entry.getValue().stream().mapToDouble(Budget::getSpent).sum();
             Group group = new Group(category.getId(), category.getName());
             group.setType(category.getType());
             group.setBudget(budget);
             group.setSpent(spent);
-            group.setLedgers(entry.getValue());
+            group.setBudgets(entry.getValue());
             accountSummary.getGroups().add(group);
         }
 
@@ -191,99 +191,99 @@ public class FinanceService {
             year = now.getYear();
         }
 
-        List<Ledger> ledgers = ledgerDAO.findLedgers(user, month, year);
+        List<Budget> budgets = budgetDAO.findBudgets(user, month, year);
         double budget =
-                ledgers
+                budgets
                         .stream()
                         .filter(p -> p.getCategory().getType() == CategoryType.EXPENSE)
-                        .mapToDouble(Ledger::getBudget)
+                        .mapToDouble(Budget::getBudget)
                         .sum();
 
         double spent =
-                ledgers
+                budgets
                         .stream()
                         .filter(p -> p.getCategory().getType() == CategoryType.EXPENSE)
-                        .mapToDouble(Ledger::getSpent)
+                        .mapToDouble(Budget::getSpent)
                         .sum();
         return new UsageSummary(budget, spent);
     }
 
-    private void generateDefaultCategoriesAndLedgers(User user, int month, int year) {
+    private void generateDefaultCategoriesAndBudgets(User user, int month, int year) {
         Collection<Category> categories = categoryDAO.addDefaultCategories(user);
-        Map<String, List<Ledger>> defaultLedgers = ledgerDAO.findDefaultLedgers();
+        Map<String, List<Budget>> defaultBudgets = budgetDAO.findDefaultBudgets();
         Date period = Util.yearMonthDate(month, year);
         for(Category category: categories) {
-            List<Ledger> ledgers = defaultLedgers.get(category.getName());
-            if(ledgers != null) {
-                for(Ledger ledger: ledgers) {
-                    LedgerType ledgerType = ledgerTypeDAO.addLedgerType();
-                    Ledger newLedger = new Ledger();
-                    newLedger.setName(ledger.getName());
-                    newLedger.setPeriod(period);
-                    newLedger.setCategory(category);
-                    newLedger.setLedgerType(ledgerType);
-                    ledgerDAO.addLedger(user, newLedger);
+            List<Budget> budgets = defaultBudgets.get(category.getName());
+            if(budgets != null) {
+                for(Budget budget : budgets) {
+                    BudgetType budgetType = budgetTypeDAO.addBudgetType();
+                    Budget newBudget = new Budget();
+                    newBudget.setName(budget.getName());
+                    newBudget.setPeriod(period);
+                    newBudget.setCategory(category);
+                    newBudget.setBudgetType(budgetType);
+                    budgetDAO.addBudget(user, newBudget);
                 }
             }
         }
     }
 
     //==================================================================
-    // LEDGER
+    // BUDGET
     //==================================================================
 
-    public Ledger addLedger(User user, AddLedgerForm ledgerForm) {
-        LedgerType ledgerType = ledgerTypeDAO.addLedgerType();
-        Ledger ledger = new Ledger(ledgerForm);
-        ledger.setLedgerType(ledgerType);
-        return ledgerDAO.addLedger(user, ledger);
+    public Budget addBudget(User user, AddBudgetForm budgetForm) {
+        BudgetType budgetType = budgetTypeDAO.addBudgetType();
+        Budget budget = new Budget(budgetForm);
+        budget.setBudgetType(budgetType);
+        return budgetDAO.addBudget(user, budget);
     }
 
-    public Ledger updateLedger(User user, UpdateLedgerForm ledgerForm) {
-        Ledger ledger = ledgerDAO.findById(user, ledgerForm.getId());
-        ledger.setName(ledgerForm.getName());
-        ledger.setBudget(ledgerForm.getBudget());
-        ledgerDAO.update(ledger);
-        return ledger;
+    public Budget updateBudget(User user, UpdateBudgetForm budgetForm) {
+        Budget budget = budgetDAO.findById(user, budgetForm.getId());
+        budget.setName(budgetForm.getName());
+        budget.setBudget(budgetForm.getBudget());
+        budgetDAO.update(budget);
+        return budget;
     }
 
-    public void deleteLedger(User user, long ledgerId) {
-        Ledger ledger = ledgerDAO.findById(user, ledgerId);
-        ledgerDAO.delete(ledger);
+    public void deleteBudget(User user, long budgetId) {
+        Budget budget = budgetDAO.findById(user, budgetId);
+        budgetDAO.delete(budget);
     }
 
-    public List<Ledger> findLedgersByUser(User user) {
-        return ledgerDAO.findLedgers(user);
+    public List<Budget> findBudgetsByUser(User user) {
+        return budgetDAO.findBudgets(user);
     }
 
-    public Ledger findLedgerById(User user, long ledgerId) {
-        return ledgerDAO.findById(user, ledgerId);
+    public Budget findBudgetById(User user, long budgetId) {
+        return budgetDAO.findById(user, budgetId);
     }
 
-    public List<Ledger> findLedgersByCategory(User user, long categoryId) {
-        return ledgerDAO.findByUserAndCategory(user, categoryId);
+    public List<Budget> findBudgetsByCategory(User user, long categoryId) {
+        return budgetDAO.findByUserAndCategory(user, categoryId);
     }
 
-    public List<String> findLedgerSuggestions(User user, String q) {
-        return ledgerDAO.findSuggestions(user, q);
+    public List<String> findBudgetSuggestions(User user, String q) {
+        return budgetDAO.findSuggestions(user, q);
     }
 
-    private void generateLedgers(User user, int month, int year) {
-        List<Ledger> originalLedgers = ledgerDAO.findLedgers(user);
+    private void generateBudgets(User user, int month, int year) {
+        List<Budget> originalBudgets = budgetDAO.findBudgets(user);
         Date period = Util.yearMonthDate(month, year);
-        for(Ledger ledger: originalLedgers) {
-            Ledger newLedger = new Ledger();
-            newLedger.setName(ledger.getName());
-            newLedger.setBudget(ledger.getBudget());
-            newLedger.setPeriod(period);
-            newLedger.setCategory(ledger.getCategory());
-            newLedger.setLedgerType(ledger.getLedgerType());
-            ledgerDAO.addLedger(user, newLedger);
+        for(Budget budget : originalBudgets) {
+            Budget newBudget = new Budget();
+            newBudget.setName(budget.getName());
+            newBudget.setBudget(budget.getBudget());
+            newBudget.setPeriod(period);
+            newBudget.setCategory(budget.getCategory());
+            newBudget.setBudgetType(budget.getBudgetType());
+            budgetDAO.addBudget(user, newBudget);
         }
     }
 
     //==================================================================
-    // END LEDGER
+    // END BUDGET
     //==================================================================
 
 
@@ -292,12 +292,12 @@ public class FinanceService {
     //==================================================================
 
     public Recurring addRecurring(User user, AddRecurringForm recurringForm) {
-        Ledger ledger = findLedgerById(user, recurringForm.getLedgerId());
+        Budget budget = findBudgetById(user, recurringForm.getBudgetId());
 
         Recurring recurring = new Recurring();
         recurring.setAmount(recurringForm.getAmount());
         recurring.setRecurringType(recurringForm.getRecurringType());
-        recurring.setLedgerType(ledger.getLedgerType());
+        recurring.setBudgetType(budget.getBudgetType());
         return recurringDAO.addRecurring(recurring);
     }
 
@@ -317,11 +317,11 @@ public class FinanceService {
         LOGGER.debug("Found {} recurring(s) item to update", recurrings.size());
         for (Recurring recurring : recurrings) {
 
-            // ledger
-            Ledger ledger = ledgerDAO.findByLedgerType(recurring.getLedgerType().getId());
-            ledger.setSpent(ledger.getSpent() + recurring.getAmount());
-            ledgerDAO.update(ledger);
-            // end ledger
+            // budget
+            Budget budget = budgetDAO.findByBudgetType(recurring.getBudgetType().getId());
+            budget.setSpent(budget.getSpent() + recurring.getAmount());
+            budgetDAO.update(budget);
+            // end budget
 
             // recurring
             recurring.setLastRunAt(new Date());
@@ -330,12 +330,12 @@ public class FinanceService {
 
             // transaction
             Transaction transaction = new Transaction();
-            transaction.setName(ledger.getName());
+            transaction.setName(budget.getName());
             transaction.setAmount(recurring.getAmount());
             transaction.setRecurring(recurring);
-            transaction.setRemark(recurring.getRecurringTypeDisplay() + " recurring for " + ledger.getName());
+            transaction.setRemark(recurring.getRecurringTypeDisplay() + " recurring for " + budget.getName());
             transaction.setAuto(true);
-            transaction.setLedger(ledger);
+            transaction.setBudget(budget);
             transaction.setTransactionOn(new Date());
             transactionDAO.addTransaction(transaction);
             // end transaction
@@ -345,8 +345,8 @@ public class FinanceService {
     }
 
     private void populateRecurring(Recurring recurring) {
-        Ledger ledger = ledgerDAO.findByLedgerType(recurring.getLedgerType().getId());
-        recurring.setName(ledger.getName());
+        Budget budget = budgetDAO.findByBudgetType(recurring.getBudgetType().getId());
+        recurring.setName(budget.getName());
     }
 
     public void deleteRecurring(User user, long recurringId) {
@@ -363,7 +363,7 @@ public class FinanceService {
     //==================================================================
     public Transaction addTransaction(User user, TransactionForm transactionForm) {
 
-        Ledger ledger = ledgerDAO.findById(user, transactionForm.getLedger().getId());
+        Budget budget = budgetDAO.findById(user, transactionForm.getBudget().getId());
 
         // validation
         if(Boolean.TRUE.equals(transactionForm.getRecurring()) && transactionForm.getRecurringType() == null) {
@@ -371,32 +371,32 @@ public class FinanceService {
         }
 
         Date transactionOn = transactionForm.getTransactionOn();
-        if(!Util.inMonth(transactionOn, ledger.getPeriod())) {
-            throw new DataConstraintException("transactionOn", "Transaction Date must within " + Util.toFriendlyMonthDisplay(ledger.getPeriod()) + " " + (ledger.getPeriod().getYear() + 1900));
+        if(!Util.inMonth(transactionOn, budget.getPeriod())) {
+            throw new DataConstraintException("transactionOn", "Transaction Date must within " + Util.toFriendlyMonthDisplay(budget.getPeriod()) + " " + (budget.getPeriod().getYear() + 1900));
         }
         // end validation
 
 
-        ledger.setSpent(ledger.getSpent() + transactionForm.getAmount());
-        ledgerDAO.update(ledger);
+        budget.setSpent(budget.getSpent() + transactionForm.getAmount());
+        budgetDAO.update(budget);
 
         if(Boolean.TRUE.equals(transactionForm.getRecurring())) {
             LOGGER.debug("Add recurring {} by {}", transactionForm, user);
             Recurring recurring = new Recurring();
             recurring.setAmount(transactionForm.getAmount());
             recurring.setRecurringType(transactionForm.getRecurringType());
-            recurring.setLedgerType(ledger.getLedgerType());
+            recurring.setBudgetType(budget.getBudgetType());
             recurring.setLastRunAt(new Date());
             recurringDAO.addRecurring(recurring);
         }
 
         Transaction transaction = new Transaction();
-        transaction.setName(ledger.getName());
+        transaction.setName(budget.getName());
         transaction.setAmount(transactionForm.getAmount());
         transaction.setRemark(transactionForm.getRemark());
         transaction.setAuto(Boolean.TRUE.equals(transactionForm.getRecurring()));
         transaction.setTransactionOn(transactionForm.getTransactionOn());
-        transaction.setLedger(transactionForm.getLedger());
+        transaction.setBudget(transactionForm.getBudget());
         return transactionDAO.addTransaction(transaction);
     }
 
@@ -424,8 +424,8 @@ public class FinanceService {
         return transactionDAO.findTransactions(user, filter);
     }
 
-    public List<Transaction> findTransactionsByLedger(User user, long ledgerId) {
-        return transactionDAO.findByLedger(user, ledgerId);
+    public List<Transaction> findTransactionsByBudget(User user, long budgetId) {
+        return transactionDAO.findByBudget(user, budgetId);
     }
 
     public List<Point> findTransactionUsage(User user) {
@@ -488,14 +488,14 @@ public class FinanceService {
     public List<Point> findUsageByCategory(User user) {
         List<Point> points = new ArrayList<>();
         LocalDate now = LocalDate.now();
-        List<Ledger> ledgers = ledgerDAO.findLedgers(user, now.getMonthValue(), now.getYear());
-        Map<Category, List<Ledger>> groups = ledgers
+        List<Budget> budgets = budgetDAO.findBudgets(user, now.getMonthValue(), now.getYear());
+        Map<Category, List<Budget>> groups = budgets
                 .stream()
-                .collect(Collectors.groupingBy(Ledger::getCategory));
-        for (Map.Entry<Category, List<Ledger>> entry : groups.entrySet()) {
+                .collect(Collectors.groupingBy(Budget::getCategory));
+        for (Map.Entry<Category, List<Budget>> entry : groups.entrySet()) {
             double total = entry.getValue()
                     .stream()
-                    .mapToDouble(Ledger::getSpent)
+                    .mapToDouble(Budget::getSpent)
                     .sum();
             Point point = new Point(entry.getKey().getName(), entry.getKey().getId(), total, PointType.CATEGORY);
             points.add(point);
@@ -509,12 +509,12 @@ public class FinanceService {
         List<Point> points = new ArrayList<>();
         LocalDate end = LocalDate.now();
         LocalDate start = end.minusMonths(6);
-        List<Ledger> ledgers = ledgerDAO.findByRange(user, start.getMonthValue(), start.getYear(), end.getMonthValue(), end.getYear());
+        List<Budget> budgets = budgetDAO.findByRange(user, start.getMonthValue(), start.getYear(), end.getMonthValue(), end.getYear());
 
         // group by period
-        Map<Date, List<Ledger>> groups = ledgers
+        Map<Date, List<Budget>> groups = budgets
                 .stream()
-                .collect(Collectors.groupingBy(Ledger::getPeriod, TreeMap::new, Collectors.toList()));
+                .collect(Collectors.groupingBy(Budget::getPeriod, TreeMap::new, Collectors.toList()));
 
         LocalDate now = LocalDate.now();
         // populate empty months, if any
@@ -524,25 +524,25 @@ public class FinanceService {
         }
 
         // generate points
-        for (Map.Entry<Date, List<Ledger>> entry : groups.entrySet()) {
+        for (Map.Entry<Date, List<Budget>> entry : groups.entrySet()) {
             // budget
             double budget = entry.getValue()
                     .stream()
-                    .mapToDouble(Ledger::getBudget)
+                    .mapToDouble(Budget::getBudget)
                     .sum();
 
             // spending
             double spending = entry.getValue()
                     .stream()
                     .filter(p -> p.getSpent() > 0)
-                    .mapToDouble(Ledger::getSpent)
+                    .mapToDouble(Budget::getSpent)
                     .sum();
 
             // refund
             double refund = entry.getValue()
                     .stream()
                     .filter(p -> p.getSpent() < 0)
-                    .mapToDouble(Ledger::getSpent)
+                    .mapToDouble(Budget::getSpent)
                     .sum();
 
             String month = Util.toFriendlyMonthDisplay(entry.getKey());

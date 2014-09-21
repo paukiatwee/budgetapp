@@ -20,10 +20,10 @@ public class SQLConstraintViolationExceptionMapper implements ExceptionMapper<Co
     }
 
     private List<String> getMessage(ConstraintViolationException e) {
-        if("fk_ledgers_categories".equalsIgnoreCase(e.getConstraintName())) {
-            return Collections.singletonList("Failed to delete category due to references to existing ledger(s).");
-        } else if("fk_transactions_ledgers".equalsIgnoreCase(e.getConstraintName()))  {
-            return Collections.singletonList("Failed to delete ledger due to references to existing transaction(s).");
+        if("fk_budgets_categories".equalsIgnoreCase(e.getConstraintName())) {
+            return Collections.singletonList("Failed to delete category due to references to existing budget(s).");
+        } else if("fk_transactions_budgets".equalsIgnoreCase(e.getConstraintName()))  {
+            return Collections.singletonList("Failed to delete budget due to references to existing transaction(s).");
         }
         return Collections.singletonList(e.getMessage());
     }

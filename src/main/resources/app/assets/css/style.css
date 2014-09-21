@@ -1499,49 +1499,44 @@ body {
 .clearfix:after {
   clear: both;
 }
-.ledgers ul {
+.budgets ul {
   margin-bottom: 0;
 }
-.ledgers li {
+.budgets li {
   padding: 5px;
 }
-.ledgers .fa {
+.budgets .fa {
   font-size: 16px;
 }
-.ledgers .name:hover,
-.ledgers .icon-edit:hover,
-.ledgers .icon-plus:hover,
-.ledgers .icon-list:hover {
+.budgets .name:hover,
+.budgets .icon-edit:hover,
+.budgets .icon-plus:hover,
+.budgets .icon-list:hover {
   cursor: pointer;
 }
-.ledgers .ledger:hover {
+.budgets .budget:hover {
   background-color: #DFF0D8;
 }
-.ledgers .ledger:hover .icon-edit {
+.budgets .budget:hover .icon-edit {
   color: black;
 }
-.ledgers .budget {
+.budgets .spent {
+  display: inline;
+  position: absolute;
+  right: 150px;
+}
+.budgets .remaining {
+  display: inline;
+}
+.budgets .projected {
   display: inline;
   position: absolute;
   right: 235px;
 }
-.ledgers .spent {
-  display: inline;
-  position: absolute;
-  right: 150px;
-}
-.ledgers .remaining {
+.budgets .actual {
   display: inline;
 }
-.ledgers .projected {
-  display: inline;
-  position: absolute;
-  right: 150px;
-}
-.ledgers .actual {
-  display: inline;
-}
-.ledgers .actions {
+.budgets .actions {
   display: inline;
   vertical-align: middle;
 }
@@ -1549,22 +1544,22 @@ table .actions {
   width: 1px;
   white-space: nowrap;
 }
-.ledger-header {
+.budget-header {
   font-weight: bold;
 }
-.ledger-header .name {
+.budget-header .name {
   margin-left: 16px;
 }
-.ledger-header .remaining {
+.budget-header .remaining {
   margin-right: 36px;
 }
-.ledger-footer {
+.budget-footer {
   font-weight: bold;
 }
-.ledger-footer .total {
+.budget-footer .total {
   margin-left: 16px;
 }
-.ledger-footer .remaining {
+.budget-footer .remaining {
   margin-right: 37px;
 }
 .overspend {

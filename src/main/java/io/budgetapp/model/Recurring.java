@@ -33,7 +33,7 @@ public class Recurring implements Serializable {
     private RecurringType recurringType;
     private Date lastRunAt;
     private Date createdAt;
-    private LedgerType ledgerType;
+    private BudgetType budgetType;
     private List<Transaction> transactions;
 
     // not in DB
@@ -94,14 +94,14 @@ public class Recurring implements Serializable {
         this.createdAt = createdAt;
     }
 
-    @JoinColumn(name = "ledger_type_id", updatable = false)
+    @JoinColumn(name = "budget_type_id", updatable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    public LedgerType getLedgerType() {
-        return ledgerType;
+    public BudgetType getBudgetType() {
+        return budgetType;
     }
 
-    public void setLedgerType(LedgerType ledgerType) {
-        this.ledgerType = ledgerType;
+    public void setBudgetType(BudgetType budgetType) {
+        this.budgetType = budgetType;
     }
 
     @JoinColumn(name = "transaction_id", updatable = false)

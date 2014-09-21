@@ -1,7 +1,7 @@
 package io.budgetapp.resource;
 
+import io.budgetapp.model.Budget;
 import io.budgetapp.model.Category;
-import io.budgetapp.model.Ledger;
 import io.budgetapp.model.Point;
 import io.budgetapp.model.User;
 import io.budgetapp.service.FinanceService;
@@ -66,9 +66,9 @@ public class CategoryResource extends AbstractResource {
 
     @GET
     @UnitOfWork
-    @Path("/{id}/ledgers")
-    public List<Ledger> findLedgers(@Auth User user, @PathParam("id") long id) {
-        return financeService.findLedgersByCategory(user, id);
+    @Path("/{id}/budgets")
+    public List<Budget> findBudgets(@Auth User user, @PathParam("id") long id) {
+        return financeService.findBudgetsByCategory(user, id);
     }
 
     @GET
