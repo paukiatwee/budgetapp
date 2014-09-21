@@ -34,8 +34,8 @@
             <thead>
             <tr>
               <th>Name</th>
-              <th>Budget</th>
-              <th>Spent</th>
+              <th>Projected</th>
+              <th>Actual</th>
               <th>Remaining</th>
               <th>Period</th>
               <th class="actions">Actions</th>
@@ -44,9 +44,9 @@
             <tbody>
             <tr ng-repeat="budget in budgets | filter: filter">
               <td>{{budget.name}}</td>
-              <td>{{budget.budget | currency}}</td>
-              <td>{{budget.spent | currency}}</td>
-              <td>{{budget.spent | currency}}</td>
+              <td>{{budget.projected | currency}}</td>
+              <td>{{budget.actual | currency}}</td>
+              <td>{{(budget.projected - budget.actual) | currency}}</td>
               <td>{{budget.period | yearMonth}}</td>
               <td class="actions">
                 <button type="button" class="btn btn-danger" ng-click="confirmDelete(budget)"><span class="fa fa-trash-o"></span> Delete</button>

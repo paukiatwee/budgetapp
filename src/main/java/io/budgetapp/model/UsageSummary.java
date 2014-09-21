@@ -8,23 +8,23 @@ import java.io.Serializable;
 public class UsageSummary implements Serializable {
     private static final long serialVersionUID = 3151593231290523047L;
 
-    private double budget;
-    private double spent;
+    private double projected;
+    private double actual;
 
-    public UsageSummary(double budget, double spent) {
-        this.budget = budget;
-        this.spent = spent;
+    public UsageSummary(double projected, double actual) {
+        this.projected = projected;
+        this.actual = actual;
     }
 
-    public double getBudget() {
-        return budget;
+    public double getProjected() {
+        return projected;
     }
 
-    public double getSpent() {
-        return spent;
+    public double getActual() {
+        return actual;
     }
 
     public double getRemaining() {
-        return budget - spent;
+        return projected - actual;
     }
 }

@@ -44,10 +44,10 @@
       <column name="name" type="varchar(256)">
         <constraints nullable="false" />
       </column>
-      <column name="budget" type="numeric(12, 2)">
+      <column name="projected" type="numeric(12, 2)">
         <constraints nullable="false" />
       </column>
-      <column name="spent" type="numeric(12, 2)">
+      <column name="actual" type="numeric(12, 2)">
         <constraints nullable="false" />
       </column>
       <column name="period_on" type="date">

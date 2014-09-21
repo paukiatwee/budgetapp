@@ -15,16 +15,16 @@
             <input type="text" class="form-control" id="name" name="name" placeholder="Name" ng-model="selected.name" required>
           </div>
         </div>
-        <div class="form-group" ng-class="{true: 'has-error'}[updateBudgetForm.budget.$dirty && updateBudgetForm.budget.$invalid]">
-          <label for="budget" class="col-sm-3 control-label">Budget</label>
+        <div class="form-group" ng-class="{true: 'has-error'}[updateBudgetForm.projected.$dirty && updateBudgetForm.projected.$invalid]">
+          <label for="projected" class="col-sm-3 control-label">Projected</label>
           <div class="col-sm-7">
-            <input type="number" step="1" min="0" ng-min="0" class="form-control" id="budget" name="budget" placeholder="Budget" ng-model="selected.budget">
+            <input type="number" step="1" min="0" ng-min="0" class="form-control" id="projected" name="projected" placeholder="Budget" ng-model="selected.projected">
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-3 control-label">Spent</label>
+          <label class="col-sm-3 control-label">Actual</label>
           <div class="col-sm-7">
-            <p class="form-control-static">{{selected.spent | currency}}</p>
+            <p class="form-control-static">{{selected.actual | currency}}</p>
           </div>
         </div>
       </div>
@@ -127,7 +127,7 @@
         <div class="panel-heading">
           <h3 class="panel-title">{{group.name}}</h3>
         </div>
-        <div class="panel-body budgets">
+        <div class="panel-body budgets income">
           <ul class="list-unstyled list-budgets">
             <li class="budget-header">
               <span class="name">Name</span>
@@ -140,15 +140,15 @@
             <li class="budget" ng-repeat="budget in group.budgets">
               <span class="fa fa-pencil icon-edit" title="Edit budget" ng-click="openBudgetModal(budget)"></span> <span class="name" ng-click="openBudgetModal(budget)">{{budget.name}}</span>
               <div class="pull-right">
-                <div class="projected">{{budget.budget | currency}}</div>
-                <div class="actual">{{budget.spent | currency}}</div>
+                <div class="projected">{{budget.projected | currency}}</div>
+                <div class="actual">{{budget.actual | currency}}</div>
               </div>
             </li>
             <li class="budget-footer">
               <span class="total">Total: </span>
               <div class="pull-right">
-                <div class="projected">{{group.budget | currency}}</div>
-                <div class="spent">{{group.spent | currency}}</div>
+                <div class="projected">{{group.projected | currency}}</div>
+                <div class="actual">{{group.actual | currency}}</div>
               </div>
               <div class="clearfix"></div>
             </li>
@@ -160,7 +160,7 @@
   <div class="row">
     <div masonry load-images="false" reload-on-show>
       <div class="masonry-brick col-xs-12 col-sm-12 col-md-12 col-lg-6 category-{{group.id}}" ng-repeat="group in summary.groups | filter: {type: 'EXPENSE'}">
-        <div class="panel panel-primary" ng-class="{'INCOME': 'panel-info', 'EXPENSE': 'panel-primary'}[group.type]">
+        <div class="panel panel-primary">
           <div class="panel-heading">
             <h3 class="panel-title">{{group.name}}</h3>
           </div>
@@ -169,8 +169,8 @@
               <li class="budget-header">
                 <span class="name">Name</span>
                 <div class="pull-right">
-                  <div class="projected">Budget</div>
-                  <div class="spent">Spent</div>
+                  <div class="projected">Projected</div>
+                  <div class="actual">Actual</div>
                   <div class="remaining">Remaining</div>
                 </div>
                 <div class="clearfix"></div>
@@ -178,10 +178,8 @@
               <li class="budget" ng-repeat="budget in group.budgets">
                 <span class="fa fa-pencil icon-edit" title="Edit budget" ng-click="openBudgetModal(budget)"></span> <span class="name" ng-click="openBudgetModal(budget)">{{budget.name}}</span>
                 <div class="pull-right">
-                  <div class="projected">{{budget.budget | currency}}</div>
-                  <div class="spent">
-                    {{budget.spent | currency}}
-                  </div>
+                  <div class="projected">{{budget.projected | currency}}</div>
+                  <div class="actual">{{budget.actual | currency}}</div>
                   <div class="remaining" ng-class="{overspend: budget.remaining < 0}">
                     {{budget.remaining | currency}}
                   </div>
@@ -193,8 +191,8 @@
               <li class="budget-footer">
                 <span class="total">Total: </span>
                 <div class="pull-right">
-                  <div class="budget">{{group.budget | currency}}</div>
-                  <div class="spent">{{group.spent | currency}}</div>
+                  <div class="projected">{{group.projected | currency}}</div>
+                  <div class="actual">{{group.actual | currency}}</div>
                   <div class="remaining" ng-class="{overspend: group.remaining < 0}">{{group.remaining | currency}}</div>
                 </div>
                 <div class="clearfix"></div>

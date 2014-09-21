@@ -241,44 +241,44 @@ financeControllers.controller('ManageController', function ($scope, $routeParams
   $scope.$watch(
       "summary",
       function(summary) {
-        var totalSpent = 0.0;
-        var totalBudget = 0.0;
+        var totalActual = 0.0;
+        var totalProjected = 0.0;
         var  changed = false;
         _.forEach(summary.groups, function(group) {
-          var spent = _.reduce(group.budgets, function(sum, budget) {
+          var actual = _.reduce(group.budgets, function(sum, budget) {
             changed = true;
-            budget.remaining = budget.budget - budget.spent;
+            budget.remaining = budget.projected - budget.actual;
 
             if(group.type == 'EXPENSE') {
-              return sum + budget.spent;
+              return sum + budget.actual;
             } else {
               return sum;
             }
 
           }, 0);
-          totalSpent += spent;
-          group.spent = spent;
+          totalActual += actual;
+          group.actual = actual;
         });
 
         _.forEach(summary.groups, function(group) {
-          var budget = _.reduce(group.budgets, function(sum, budget) {
+          var projected = _.reduce(group.budgets, function(sum, budget) {
             changed = true;
 
             if(group.type == 'EXPENSE') {
-              return sum + budget.budget;
+              return sum + budget.projected;
             } else {
               return sum;
             }
           }, 0);
-          totalBudget += budget;
-          group.budget = budget;
-          group.remaining = group.budget - group.spent;
+          totalProjected += projected;
+          group.projected = projected;
+          group.remaining = group.projected - group.actual;
         });
 
         if(changed) {
-          $scope.usage.spent = totalSpent;
-          $scope.usage.budget = totalBudget;
-          $scope.usage.remaining = totalBudget - totalSpent;
+          $scope.usage.actual = totalActual;
+          $scope.usage.projected = totalProjected;
+          $scope.usage.remaining = totalProjected - totalActual;
         }
       },
       true
@@ -358,15 +358,15 @@ var BudgetModalController = function ($scope, $modalInstance, budget) {
   $scope.original = angular.copy(budget);
 
   $scope.ok = function () {
-    if(!$scope.selected.budget) {
-      $scope.selected.budget = 0;
+    if(!$scope.selected.projected) {
+      $scope.selected.projected = 0;
     }
     $modalInstance.close($scope.selected);
   };
 
   $scope.cancel = function () {
     $scope.selected.name = $scope.original.name;
-    $scope.selected.budget = $scope.original.budget;
+    $scope.selected.projected = $scope.original.projected;
     $modalInstance.dismiss('cancel');
   };
 };
@@ -383,7 +383,7 @@ var TransactionModalController = function ($scope, $modalInstance, budget, Trans
   // TODO https://github.com/angular-ui/bootstrap/issues/969
   $scope.ok = function (form) {
     TransactionService.save($scope.transaction).$promise.then(function() {
-      budget.spent += $scope.transaction.amount;
+      budget.actual += $scope.transaction.amount;
       $modalInstance.close();
     }, function(response) {
       $scope.form = form;

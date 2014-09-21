@@ -15,7 +15,7 @@ public class BudgetForm implements Serializable {
     private static final long serialVersionUID = 7677505567308081026L;
 
     private String name;
-    private double budget;
+    private double projected;
 
     @NotBlank(message = "{validation.name.required}")
     public String getName() {
@@ -26,13 +26,13 @@ public class BudgetForm implements Serializable {
         this.name = name;
     }
 
-    @Min(value = 0, message = "{validation.budget.min}")
-    public double getBudget() {
-        return budget;
+    @Min(value = 0, message = "{validation.projected.min}")
+    public double getProjected() {
+        return projected;
     }
 
-    public void setBudget(double budget) {
-        this.budget = budget;
+    public void setProjected(double projected) {
+        this.projected = projected;
     }
 
 }

@@ -169,8 +169,8 @@ public class FinanceService {
 
         for(Map.Entry<Category, List<Budget>> entry: grouped.entrySet()) {
             Category category = entry.getKey();
-            double budget = entry.getValue().stream().mapToDouble(Budget::getBudget).sum();
-            double spent = entry.getValue().stream().mapToDouble(Budget::getSpent).sum();
+            double budget = entry.getValue().stream().mapToDouble(Budget::getProjected).sum();
+            double spent = entry.getValue().stream().mapToDouble(Budget::getActual).sum();
             Group group = new Group(category.getId(), category.getName());
             group.setType(category.getType());
             group.setBudget(budget);
@@ -196,14 +196,14 @@ public class FinanceService {
                 budgets
                         .stream()
                         .filter(p -> p.getCategory().getType() == CategoryType.EXPENSE)
-                        .mapToDouble(Budget::getBudget)
+                        .mapToDouble(Budget::getProjected)
                         .sum();
 
         double spent =
                 budgets
                         .stream()
                         .filter(p -> p.getCategory().getType() == CategoryType.EXPENSE)
-                        .mapToDouble(Budget::getSpent)
+                        .mapToDouble(Budget::getActual)
                         .sum();
         return new UsageSummary(budget, spent);
     }
@@ -242,7 +242,7 @@ public class FinanceService {
     public Budget updateBudget(User user, UpdateBudgetForm budgetForm) {
         Budget budget = budgetDAO.findById(user, budgetForm.getId());
         budget.setName(budgetForm.getName());
-        budget.setBudget(budgetForm.getBudget());
+        budget.setProjected(budgetForm.getProjected());
         budgetDAO.update(budget);
         return budget;
     }
@@ -274,7 +274,7 @@ public class FinanceService {
         for(Budget budget : originalBudgets) {
             Budget newBudget = new Budget();
             newBudget.setName(budget.getName());
-            newBudget.setBudget(budget.getBudget());
+            newBudget.setProjected(budget.getProjected());
             newBudget.setPeriod(period);
             newBudget.setCategory(budget.getCategory());
             newBudget.setBudgetType(budget.getBudgetType());
@@ -319,7 +319,7 @@ public class FinanceService {
 
             // budget
             Budget budget = budgetDAO.findByBudgetType(recurring.getBudgetType().getId());
-            budget.setSpent(budget.getSpent() + recurring.getAmount());
+            budget.setActual(budget.getActual() + recurring.getAmount());
             budgetDAO.update(budget);
             // end budget
 
@@ -377,7 +377,7 @@ public class FinanceService {
         // end validation
 
 
-        budget.setSpent(budget.getSpent() + transactionForm.getAmount());
+        budget.setActual(budget.getActual() + transactionForm.getAmount());
         budgetDAO.update(budget);
 
         if(Boolean.TRUE.equals(transactionForm.getRecurring())) {
@@ -495,7 +495,7 @@ public class FinanceService {
         for (Map.Entry<Category, List<Budget>> entry : groups.entrySet()) {
             double total = entry.getValue()
                     .stream()
-                    .mapToDouble(Budget::getSpent)
+                    .mapToDouble(Budget::getActual)
                     .sum();
             Point point = new Point(entry.getKey().getName(), entry.getKey().getId(), total, PointType.CATEGORY);
             points.add(point);
@@ -528,21 +528,21 @@ public class FinanceService {
             // budget
             double budget = entry.getValue()
                     .stream()
-                    .mapToDouble(Budget::getBudget)
+                    .mapToDouble(Budget::getProjected)
                     .sum();
 
             // spending
             double spending = entry.getValue()
                     .stream()
-                    .filter(p -> p.getSpent() > 0)
-                    .mapToDouble(Budget::getSpent)
+                    .filter(p -> p.getActual() > 0)
+                    .mapToDouble(Budget::getActual)
                     .sum();
 
             // refund
             double refund = entry.getValue()
                     .stream()
-                    .filter(p -> p.getSpent() < 0)
-                    .mapToDouble(Budget::getSpent)
+                    .filter(p -> p.getActual() < 0)
+                    .mapToDouble(Budget::getActual)
                     .sum();
 
             String month = Util.toFriendlyMonthDisplay(entry.getKey());

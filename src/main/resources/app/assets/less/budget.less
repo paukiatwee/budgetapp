@@ -56,13 +56,7 @@ body {
     }
   }
 
-//  .budget {
-//    display: inline;
-//    position: absolute;
-//    right: 235px;
-//  }
-
-  .spent {
+  .actual {
     display: inline;
     position: absolute;
     right: 150px;
@@ -78,13 +72,19 @@ body {
     right: 235px;
   }
 
-  .actual {
-    display: inline;
-  }
-
   .actions {
     display: inline;
     vertical-align: middle;
+  }
+
+  &.income {
+    .projected {
+      right: 150px;
+    }
+
+    .actual {
+      position: inherit;
+    }
   }
 }
 

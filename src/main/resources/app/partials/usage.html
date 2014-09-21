@@ -3,8 +3,8 @@
     <div class="small-box bg-red">
       <div class="inner">
         <h3 ng-hide="usageLoaded" class="loading-icon"><span class="ion ion-refreshing"></span></h3>
-        <h3 ng-show="usageLoaded">{{usage.spent | currency}}</h3>
-        <p>Spent</p>
+        <h3 ng-show="usageLoaded">{{usage.actual | currency}}</h3>
+        <p>Actual</p>
       </div>
       <div class="icon">
         <i class="ion ion-bag"></i>
@@ -15,8 +15,8 @@
     <div class="small-box bg-aqua">
       <div class="inner">
         <h3 ng-hide="usageLoaded" class="loading-icon"><span class="ion ion-refreshing"></span></h3>
-        <h3 ng-show="usageLoaded">{{usage.budget | currency}}</h3>
-        <p>Budget</p>
+        <h3 ng-show="usageLoaded">{{usage.projected | currency}}</h3>
+        <p>Projected</p>
       </div>
       <div class="icon">
         <i class="ion ion-pie-graph"></i>

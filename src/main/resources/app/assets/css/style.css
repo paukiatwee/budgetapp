@@ -1520,7 +1520,7 @@ body {
 .budgets .budget:hover .icon-edit {
   color: black;
 }
-.budgets .spent {
+.budgets .actual {
   display: inline;
   position: absolute;
   right: 150px;
@@ -1533,12 +1533,15 @@ body {
   position: absolute;
   right: 235px;
 }
-.budgets .actual {
-  display: inline;
-}
 .budgets .actions {
   display: inline;
   vertical-align: middle;
+}
+.budgets.income .projected {
+  right: 150px;
+}
+.budgets.income .actual {
+  position: inherit;
 }
 table .actions {
   width: 1px;

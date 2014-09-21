@@ -18,8 +18,8 @@ public class Budget implements Serializable {
 
     private Long id;
     private String name;
-    private double budget;
-    private double spent;
+    private double projected;
+    private double actual;
     private Date period;
     private Date createdAt;
     private User user;
@@ -35,7 +35,7 @@ public class Budget implements Serializable {
 
     public Budget(AddBudgetForm budgetForm) {
         setName(budgetForm.getName());
-        setBudget(budgetForm.getBudget());
+        setProjected(budgetForm.getProjected());
         setCategory(new Category(budgetForm.getCategoryId()));
     }
 
@@ -57,20 +57,20 @@ public class Budget implements Serializable {
         this.name = name;
     }
 
-    public double getBudget() {
-        return budget;
+    public double getProjected() {
+        return projected;
     }
 
-    public void setBudget(double budget) {
-        this.budget = budget;
+    public void setProjected(double projected) {
+        this.projected = projected;
     }
 
-    public double getSpent() {
-        return spent;
+    public double getActual() {
+        return actual;
     }
 
-    public void setSpent(double spent) {
-        this.spent = spent;
+    public void setActual(double actual) {
+        this.actual = actual;
     }
 
 
@@ -129,7 +129,7 @@ public class Budget implements Serializable {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Budget{");
         sb.append("id=").append(id);
-        sb.append(", spent=").append(spent);
+        sb.append(", actual=").append(actual);
         sb.append(", name='").append(name).append('\'');
         sb.append(", createdAt=").append(createdAt);
         sb.append(", user=").append(user);

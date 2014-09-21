@@ -37,12 +37,12 @@
                 </span>
               </div>
             </div>
-            <div class="form-group has-feedback" ng-class="errorClass('budget')">
-              <label for="budget" class="col-sm-3 control-label">Budget</label>
+            <div class="form-group has-feedback" ng-class="errorClass('projected')">
+              <label for="projected" class="col-sm-3 control-label">Projected</label>
               <div class="col-sm-7">
-                <input type="number" class="form-control" name="budget" id="budget" placeholder="Enter budget" ng-model="budget.budget">
-                <span class="help-block" ng-show="form.budget.$invalid && form.budget.$dirty">
-                  {{errorMessage('budget')}}
+                <input type="number" class="form-control" name="projected" id="projected" placeholder="Enter projected" ng-model="budget.projected">
+                <span class="help-block" ng-show="form.projected.$invalid && form.projected.$dirty">
+                  {{errorMessage('projected')}}
                 </span>
               </div>
             </div>
