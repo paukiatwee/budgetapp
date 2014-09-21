@@ -219,6 +219,13 @@ angular.module('ng').filter('datetime', ['moment', 'amMoment', function (moment,
   };
 }]);
 
+// true ✔ otherwise ✘
+angular.module('ng').filter('tick', function () {
+  return function (value) {
+    return value? '✔': '✘';
+  };
+});
+
 angular.module('ng').directive('chart', function() {
 
   'use strict';

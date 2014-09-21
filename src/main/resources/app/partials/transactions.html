@@ -19,10 +19,7 @@
     <tr ng-repeat="transaction in transactions">
       <td ng-class="{true: 'overspend'}[transaction.amount < 0]">{{transaction.amount | currency}}</td>
       <td><span title="{{transaction.remark | na }}">{{transaction.remark | na | truncate:true:50 }}</span></td>
-      <td>
-        <span ng-show="transaction.auto">&#10004;</span>
-        <span ng-show="!transaction.auto">&#10008;</span>
-      </td>
+      <td>{{transaction.auto | tick}}</td>
       <td>{{transaction.transactionOn | date}}</td>
     </tr>
     </tbody>
