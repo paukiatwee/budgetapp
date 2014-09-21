@@ -132,33 +132,24 @@
             <li class="ledger-header">
               <span class="name">Name</span>
               <div class="pull-right">
-                <div class="budget">Budget</div>
-                <div class="spent">Spent</div>
-                <div class="remaining">Remaining</div>
+                <div class="projected">Projected</div>
+                <div class="actual">Actual</div>
               </div>
               <div class="clearfix"></div>
             </li>
             <li class="ledger" ng-repeat="ledger in group.ledgers">
               <span class="fa fa-pencil icon-edit" title="Edit ledger" ng-click="openLedgerModal(ledger)"></span> <span class="name" ng-click="openLedgerModal(ledger)">{{ledger.name}}</span>
               <div class="pull-right">
-                <div class="budget">{{ledger.budget | currency}}</div>
-                <div class="spent">
-                  {{ledger.spent | currency}}
-                </div>
-                <div class="remaining" ng-class="{overspend: ledger.remaining < 0}">
-                  {{ledger.remaining | currency}}
-                </div>
-                <div class="actions">
-                  <span class="fa fa-plus-square-o icon-plus" ng-click="openTransactionModal(ledger)" title="Add transaction"></span> <span class="fa fa-list-ul icon-list" ng-click="openTransactionsModal(ledger)" title="View transactions"></span>
-                </div>
+                <div class="projected">{{ledger.budget | currency}}</div>
+                <div class="actual">{{ledger.spent | currency}}</div>
               </div>
             </li>
             <li class="ledger-footer">
               <span class="total">Total: </span>
               <div class="pull-right">
-                <div class="budget">{{group.budget | currency}}</div>
+                <div class="projected">{{group.budget | currency}}</div>
                 <div class="spent">{{group.spent | currency}}</div>
-                <div class="remaining" ng-class="{overspend: group.remaining < 0}">{{group.remaining | currency}}</div>
+                <div class="actual" ng-class="{overspend: group.remaining < 0}">{{group.remaining | currency}}</div>
               </div>
               <div class="clearfix"></div>
             </li>

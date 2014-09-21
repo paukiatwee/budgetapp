@@ -1533,6 +1533,14 @@ body {
 .ledgers .remaining {
   display: inline;
 }
+.ledgers .projected {
+  display: inline;
+  position: absolute;
+  right: 150px;
+}
+.ledgers .actual {
+  display: inline;
+}
 .ledgers .actions {
   display: inline;
   vertical-align: middle;
