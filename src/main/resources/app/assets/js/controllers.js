@@ -361,12 +361,17 @@ var BudgetModalController = function ($scope, $modalInstance, budget) {
     if(!$scope.selected.projected) {
       $scope.selected.projected = 0;
     }
+
+    if(!$scope.selected.actual) {
+      $scope.selected.actual = 0;
+    }
     $modalInstance.close($scope.selected);
   };
 
   $scope.cancel = function () {
     $scope.selected.name = $scope.original.name;
     $scope.selected.projected = $scope.original.projected;
+    $scope.selected.actual = $scope.original.actual;
     $modalInstance.dismiss('cancel');
   };
 };
