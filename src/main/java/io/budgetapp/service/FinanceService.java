@@ -241,8 +241,14 @@ public class FinanceService {
 
     public Budget updateBudget(User user, UpdateBudgetForm budgetForm) {
         Budget budget = budgetDAO.findById(user, budgetForm.getId());
+        Category category = categoryDAO.findById(budget.getCategory().getId());
         budget.setName(budgetForm.getName());
         budget.setProjected(budgetForm.getProjected());
+        // INCOME type allow user change actual without
+        // add transactions
+        if(category.getType() == CategoryType.INCOME) {
+            budget.setActual(budgetForm.getActual());
+        }
         budgetDAO.update(budget);
         return budget;
     }

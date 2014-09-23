@@ -18,10 +18,16 @@
         <div class="form-group" ng-class="{true: 'has-error'}[updateBudgetForm.projected.$dirty && updateBudgetForm.projected.$invalid]">
           <label for="projected" class="col-sm-3 control-label">Projected</label>
           <div class="col-sm-7">
-            <input type="number" step="1" min="0" ng-min="0" class="form-control" id="projected" name="projected" placeholder="Budget" ng-model="selected.projected">
+            <input type="number" step="1" min="0" ng-min="0" class="form-control" id="projected" name="projected" placeholder="Projected amount" ng-model="selected.projected">
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-show="selected.category.type == 'INCOME'">
+          <label for="actual" class="col-sm-3 control-label">Actual</label>
+          <div class="col-sm-7">
+            <input type="number" step="1" min="0" ng-min="0" class="form-control" id="actual" name="actual" placeholder="Actual" ng-model="selected.actual">
+          </div>
+        </div>
+        <div class="form-group" ng-show="selected.category.type == 'EXPENSE'">
           <label class="col-sm-3 control-label">Actual</label>
           <div class="col-sm-7">
             <p class="form-control-static">{{selected.actual | currency}}</p>

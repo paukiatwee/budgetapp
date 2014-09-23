@@ -77,6 +77,13 @@ public abstract class ResourceIT {
                 .post(ClientResponse.class, entity);
     }
 
+    protected static ClientResponse put(String path, Object entity) {
+        return client
+                .resource(getUrl(path))
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .put(ClientResponse.class, entity);
+    }
+
     protected static ClientResponse delete(String path) {
         return client
                 .resource(getUrl(path))

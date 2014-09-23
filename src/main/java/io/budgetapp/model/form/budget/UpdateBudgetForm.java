@@ -14,6 +14,7 @@ public class UpdateBudgetForm extends BudgetForm implements Serializable {
     private static final long serialVersionUID = 7677505567308081026L;
 
     private Long id;
+    private double actual;
 
     @NotNull(message = "{validation.id.required}")
     public Long getId() {
@@ -22,5 +23,13 @@ public class UpdateBudgetForm extends BudgetForm implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public double getActual() {
+        return actual;
+    }
+
+    public void setActual(double actual) {
+        this.actual = actual;
     }
 }

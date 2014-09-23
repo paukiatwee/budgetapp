@@ -66,7 +66,7 @@ public class BudgetApplication extends Application<AppConfiguration> {
 
     @Override
     public String getName() {
-        return "simple-finance";
+        return "budget-app";
     }
 
     @Override

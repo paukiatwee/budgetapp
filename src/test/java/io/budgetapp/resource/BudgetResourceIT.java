@@ -7,6 +7,7 @@ import io.budgetapp.modal.IdentityResponse;
 import io.budgetapp.model.Budget;
 import io.budgetapp.model.form.TransactionForm;
 import io.budgetapp.model.form.budget.AddBudgetForm;
+import io.budgetapp.model.form.budget.UpdateBudgetForm;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -56,6 +57,30 @@ public class BudgetResourceIT extends ResourceIT {
         // then
         assertCreated(response);
         Assert.assertNotNull(response.getLocation());
+    }
+
+    @Test
+    public void shouldBeAbleUpdateBudget() {
+        // give
+        AddBudgetForm budget = new AddBudgetForm();
+        budget.setName(randomAlphabets());
+        budget.setCategoryId(defaultCategory.getId());
+        ClientResponse createdResponse = post("/api/budgets", budget);
+        long budgetId = identityResponse(createdResponse).getId();
+
+        // when
+        UpdateBudgetForm updateBudgetForm = new UpdateBudgetForm();
+        updateBudgetForm.setId(budgetId);
+        updateBudgetForm.setName("Test");
+        updateBudgetForm.setProjected(100);
+        ClientResponse updateResponse = put("/api/budgets/" + budgetId, updateBudgetForm);
+        Budget updatedBudget = updateResponse.getEntity(Budget.class);
+
+        // then
+        assertCreated(createdResponse);
+        Assert.assertNotNull(createdResponse.getLocation());
+        Assert.assertEquals("Test", updatedBudget.getName());
+        Assert.assertEquals(100, updatedBudget.getProjected(), 0.000);
     }
 
     @Test
