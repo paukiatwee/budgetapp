@@ -1,5 +1,7 @@
 package io.budgetapp.util;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -70,6 +72,14 @@ public class Util {
 
     public static String toFriendlyMonthDisplay(Date date) {
         return Util.toLocalDate(date).getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault());
+    }
+
+    public static URI getDatabaseURL() {
+        try {
+            return new URI(System.getenv("DATABASE_URL"));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 
 }

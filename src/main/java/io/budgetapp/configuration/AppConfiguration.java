@@ -3,6 +3,7 @@ package io.budgetapp.configuration;
 import com.bazaarvoice.dropwizard.assets.AssetsBundleConfiguration;
 import com.bazaarvoice.dropwizard.assets.AssetsConfiguration;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.budgetapp.db.CustomDataSourceFactory;
 import io.budgetapp.model.Budget;
 import io.budgetapp.model.Category;
 import io.dropwizard.Configuration;
@@ -23,7 +24,7 @@ public class AppConfiguration extends Configuration implements AssetsBundleConfi
     @Valid
     @NotNull
     @JsonProperty("database")
-    private DataSourceFactory database = new DataSourceFactory();
+    private DataSourceFactory database = new CustomDataSourceFactory();
 
     @Valid
     @NotNull
