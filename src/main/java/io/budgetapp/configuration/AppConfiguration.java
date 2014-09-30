@@ -3,7 +3,6 @@ package io.budgetapp.configuration;
 import com.bazaarvoice.dropwizard.assets.AssetsBundleConfiguration;
 import com.bazaarvoice.dropwizard.assets.AssetsConfiguration;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.budgetapp.db.CustomDataSourceFactory;
 import io.budgetapp.model.Budget;
 import io.budgetapp.model.Category;
 import io.dropwizard.Configuration;
@@ -23,17 +22,14 @@ public class AppConfiguration extends Configuration implements AssetsBundleConfi
 
     @Valid
     @NotNull
-    @JsonProperty("database")
-    private DataSourceFactory database = new CustomDataSourceFactory();
+    private DataSourceFactory database = new DataSourceFactory();
 
     @Valid
     @NotNull
-    @JsonProperty
     private final AssetsConfiguration assets = new AssetsConfiguration();
 
     @Valid
     @NotNull
-    @JsonProperty("categories")
     private List<Category> categories = new ArrayList<>();
 
     @Valid
@@ -48,6 +44,25 @@ public class AppConfiguration extends Configuration implements AssetsBundleConfi
     @Override
     public AssetsConfiguration getAssetsConfiguration() {
         return assets;
+    }
+
+    @JsonProperty("assets")
+    public AssetsConfiguration getAssets() {
+        return assets;
+    }
+
+    @JsonProperty("database")
+    public void setDatabase(DataSourceFactory database) {
+        this.database = database;
+    }
+
+    @JsonProperty("categories")
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public void setBudgets(Map<String, List<Budget>> budgets) {
+        this.budgets = budgets;
     }
 
     public List<Category> getCategories() {
