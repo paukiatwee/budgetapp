@@ -48,23 +48,23 @@ categories:
   - name: Income
     type: INCOME
   - name: Home
-    type: EXPENSE
+    type: EXPENDITURE
   - name: Transportation
-    type: EXPENSE
+    type: EXPENDITURE
   - name: Health
-    type: EXPENSE
+    type: EXPENDITURE
   - name: Charity/Gifts
-    type: EXPENSE
+    type: EXPENDITURE
   - name: Daily Living
-    type: EXPENSE
+    type: EXPENDITURE
   - name: Entertainment
-    type: EXPENSE
+    type: EXPENDITURE
   - name: Savings
-    type: EXPENSE
+    type: EXPENDITURE
   - name: Obligations
-    type: EXPENSE
+    type: EXPENDITURE
   - name: Miscellaneous
-    type: EXPENSE
+    type: EXPENDITURE
 
 budgets:
   Income:

@@ -195,14 +195,14 @@ public class FinanceService {
         double budget =
                 budgets
                         .stream()
-                        .filter(p -> p.getCategory().getType() == CategoryType.EXPENSE)
+                        .filter(p -> p.getCategory().getType() == CategoryType.EXPENDITURE)
                         .mapToDouble(Budget::getProjected)
                         .sum();
 
         double spent =
                 budgets
                         .stream()
-                        .filter(p -> p.getCategory().getType() == CategoryType.EXPENSE)
+                        .filter(p -> p.getCategory().getType() == CategoryType.EXPENDITURE)
                         .mapToDouble(Budget::getActual)
                         .sum();
         return new UsageSummary(budget, spent);

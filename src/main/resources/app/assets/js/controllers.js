@@ -249,7 +249,7 @@ financeControllers.controller('ManageController', function ($scope, $routeParams
             changed = true;
             budget.remaining = budget.projected - budget.actual;
 
-            if(group.type == 'EXPENSE') {
+            if(group.type == 'EXPENDITURE') {
               return sum + budget.actual;
             } else {
               return sum;
@@ -264,7 +264,7 @@ financeControllers.controller('ManageController', function ($scope, $routeParams
           var projected = _.reduce(group.budgets, function(sum, budget) {
             changed = true;
 
-            if(group.type == 'EXPENSE') {
+            if(group.type == 'EXPENDITURE') {
               return sum + budget.projected;
             } else {
               return sum;

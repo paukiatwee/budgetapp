@@ -33,7 +33,7 @@ public class CategoryResourceIT extends ResourceIT {
         // give
         Category category = new Category();
         category.setName(randomAlphabets());
-        category.setType(CategoryType.EXPENSE);
+        category.setType(CategoryType.EXPENDITURE);
 
         // when
         ClientResponse response = post("/api/categories", category);
@@ -49,7 +49,7 @@ public class CategoryResourceIT extends ResourceIT {
         // give
         Category category = new Category();
         category.setName(randomAlphabets());
-        category.setType(CategoryType.EXPENSE);
+        category.setType(CategoryType.EXPENDITURE);
 
         // when
         ClientResponse response = post("/api/categories", category);
@@ -66,7 +66,7 @@ public class CategoryResourceIT extends ResourceIT {
         // give
         Category category = new Category();
         category.setName(randomAlphabets());
-        category.setType(CategoryType.EXPENSE);
+        category.setType(CategoryType.EXPENDITURE);
 
         // when
         ClientResponse response = post("/api/categories", category);

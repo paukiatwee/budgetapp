@@ -6,7 +6,7 @@ package io.budgetapp.model;
 public enum CategoryType {
 
     INCOME("Income"),
-    EXPENSE("Expense");
+    EXPENDITURE("Expenditure");
 
     private final String display;
 

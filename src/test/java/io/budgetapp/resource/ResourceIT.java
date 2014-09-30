@@ -50,7 +50,7 @@ public abstract class ResourceIT {
 
         defaultCategory = new Category();
         defaultCategory.setName(randomAlphabets());
-        defaultCategory.setType(CategoryType.EXPENSE);
+        defaultCategory.setType(CategoryType.EXPENDITURE);
 
         ClientResponse response = post("/api/categories", defaultCategory);
         String location = response.getLocation().toString();

@@ -27,7 +27,7 @@
             <input type="number" step="1" min="0" ng-min="0" class="form-control" id="actual" name="actual" placeholder="Actual" ng-model="selected.actual">
           </div>
         </div>
-        <div class="form-group" ng-show="selected.category.type == 'EXPENSE'">
+        <div class="form-group" ng-show="selected.category.type == 'EXPENDITURE'">
           <label class="col-sm-3 control-label">Actual</label>
           <div class="col-sm-7">
             <p class="form-control-static">{{selected.actual | currency}}</p>

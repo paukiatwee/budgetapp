@@ -67,7 +67,7 @@ public class TransactionResourceIT extends ResourceIT {
         // give
         Category category = new Category();
         category.setName(randomAlphabets());
-        category.setType(CategoryType.EXPENSE);
+        category.setType(CategoryType.EXPENDITURE);
 
         AddBudgetForm budget = new AddBudgetForm();
         budget.setName(randomAlphabets());
