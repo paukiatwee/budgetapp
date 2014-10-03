@@ -95,7 +95,11 @@ public class FinanceService {
             throw new DataConstraintException("username", "Username already taken.");
         }
         signUp.setPassword(passwordEncoder.encode(signUp.getPassword()));
-        return userDAO.add(signUp);
+        User user = userDAO.add(signUp);
+        LocalDate now = LocalDate.now();
+        // init account
+        initCategoriesAndBudgets(user, now.getMonthValue(), now.getYear());
+        return user;
     }
 
     public User update(User user, Profile profile) {
@@ -152,15 +156,7 @@ public class FinanceService {
         // no budgets, first time access
         if(budgets.isEmpty()) {
             LOGGER.debug("First time access budgets {} {}-{}", user, month, year);
-            Collection<Category> categories = categoryDAO.findCategories(user);
-            // no categories, first time access
-            if(categories.isEmpty()) {
-                LOGGER.debug("Create default categories and budgets {} {}-{}", user, month, year);
-                generateDefaultCategoriesAndBudgets(user, month, year);
-            } else {
-                LOGGER.debug("Copy budgets {} {}-{}", user, month, year);
-                generateBudgets(user, month, year);
-            }
+            initCategoriesAndBudgets(user, month, year);
             budgets = budgetDAO.findBudgets(user, month, year);
         }
         Map<Category, List<Budget>> grouped = budgets
@@ -181,6 +177,18 @@ public class FinanceService {
 
         Collections.sort(accountSummary.getGroups(), (o1, o2) -> o1.getId().compareTo(o2.getId()));
         return accountSummary;
+    }
+
+    private void initCategoriesAndBudgets(User user, int month, int year) {
+        Collection<Category> categories = categoryDAO.findCategories(user);
+        // no categories, first time access
+        if(categories.isEmpty()) {
+            LOGGER.debug("Create default categories and budgets {} {}-{}", user, month, year);
+            generateDefaultCategoriesAndBudgets(user, month, year);
+        } else {
+            LOGGER.debug("Copy budgets {} {}-{}", user, month, year);
+            generateBudgets(user, month, year);
+        }
     }
 
     public UsageSummary findUsageSummaryByUser(User user, Integer month, Integer year) {
