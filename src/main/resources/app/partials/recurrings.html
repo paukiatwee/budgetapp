@@ -33,7 +33,7 @@
           <div ng-hide="recurrings.length || !loaded" class="no-result">
             <h2>No Recurring</h2>
           </div>
-          <table class="table" ng-show="recurrings.length">
+          <table foo-table class="table footable" ng-model="recurrings" ng-show="recurrings.length">
             <thead>
             <tr>
               <th>Name</th>
@@ -41,7 +41,7 @@
               <th>Type</th>
               <th>Last Run Date</th>
               <th>Created Date</th>
-              <th class="actions">Actions</th>
+              <th class="actions" data-sort-ignore="true">Actions</th>
             </tr>
             </thead>
             <tbody>

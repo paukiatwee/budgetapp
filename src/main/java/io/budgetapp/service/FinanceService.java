@@ -151,13 +151,13 @@ public class FinanceService {
         }
         LOGGER.debug("Find account summary {} {}-{}", user, month, year);
         AccountSummary accountSummary = new AccountSummary();
-        List<Budget> budgets = budgetDAO.findBudgets(user, month, year);
+        List<Budget> budgets = budgetDAO.findBudgets(user, month, year, true);
 
         // no budgets, first time access
         if(budgets.isEmpty()) {
             LOGGER.debug("First time access budgets {} {}-{}", user, month, year);
             initCategoriesAndBudgets(user, month, year);
-            budgets = budgetDAO.findBudgets(user, month, year);
+            budgets = budgetDAO.findBudgets(user, month, year, true);
         }
         Map<Category, List<Budget>> grouped = budgets
                 .stream()
@@ -199,7 +199,7 @@ public class FinanceService {
             year = now.getYear();
         }
 
-        List<Budget> budgets = budgetDAO.findBudgets(user, month, year);
+        List<Budget> budgets = budgetDAO.findBudgets(user, month, year, true);
         double budget =
                 budgets
                         .stream()
@@ -502,7 +502,7 @@ public class FinanceService {
     public List<Point> findUsageByCategory(User user) {
         List<Point> points = new ArrayList<>();
         LocalDate now = LocalDate.now();
-        List<Budget> budgets = budgetDAO.findBudgets(user, now.getMonthValue(), now.getYear());
+        List<Budget> budgets = budgetDAO.findBudgets(user, now.getMonthValue(), now.getYear(), true);
         Map<Category, List<Budget>> groups = budgets
                 .stream()
                 .collect(Collectors.groupingBy(Budget::getCategory));

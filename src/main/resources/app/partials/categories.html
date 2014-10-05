@@ -30,13 +30,13 @@
         </div>
         <div class="panel-body">
           <div ng-hide="loaded" class="loading"></div>
-          <table class="table" ng-show="categories.length">
+          <table foo-table class="table footable" ng-model="categories" ng-show="categories.length">
             <thead>
             <tr>
               <th>Name</th>
               <th>Type</th>
               <th>Created Date</th>
-              <th class="actions">Actions</th>
+              <th class="actions" data-sort-ignore="true">Actions</th>
             </tr>
             </thead>
             <tbody>

@@ -30,19 +30,21 @@
         </div>
         <div class="panel-body">
           <div ng-hide="loaded" class="loading"></div>
-          <table class="table" ng-show="budgets.length">
+          <table foo-table class="table footable" ng-model="budgets" ng-show="budgets.length">
             <thead>
             <tr>
+              <th>Category</th>
               <th>Name</th>
               <th>Projected</th>
               <th>Actual</th>
               <th>Remaining</th>
               <th>Period</th>
-              <th class="actions">Actions</th>
+              <th class="actions" data-sort-ignore="true">Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="budget in budgets | filter: filter">
+              <td>{{budget.category.name}}</td>
               <td>{{budget.name}}</td>
               <td>{{budget.projected | currency}}</td>
               <td>{{budget.actual | currency}}</td>

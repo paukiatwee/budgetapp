@@ -8,6 +8,7 @@ import io.budgetapp.configuration.AppConfiguration;
 import io.budgetapp.model.User;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -57,7 +58,7 @@ public class BudgetDAO extends AbstractDAO<Budget> {
      */
     public List<Budget> findBudgets(User user) {
         LocalDate now = LocalDate.now();
-        return findBudgets(user, now.getMonthValue(), now.getYear());
+        return findBudgets(user, now.getMonthValue(), now.getYear(), false);
     }
 
     /**
@@ -65,12 +66,16 @@ public class BudgetDAO extends AbstractDAO<Budget> {
      * @param user
      * @param month
      * @param year
+     * @param lazy
      * @return
      */
-    public List<Budget> findBudgets(User user, int month, int year) {
+    public List<Budget> findBudgets(User user, int month, int year, boolean lazy) {
         LOGGER.debug("Find budgets by user {} by date {}-{}", user, month, year);
         Date yearMonth = Util.yearMonthDate(month, year);
         Criteria criteria = currentSession().createCriteria(Budget.class);
+        if(!lazy) {
+            criteria.setFetchMode("category", FetchMode.JOIN);
+        }
         criteria.add(Restrictions.eq("user", user));
         criteria.add(Restrictions.eq("period", yearMonth));
         criteria.addOrder(Order.asc("id"));
