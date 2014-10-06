@@ -17,6 +17,7 @@
 
   <build>
     <plugins>
+      <!--compile-->
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
@@ -25,6 +26,8 @@
           <target>1.8</target>
         </configuration>
       </plugin>
+
+      <!--tests-->
       <plugin>
         <artifactId>maven-failsafe-plugin</artifactId>
         <version>2.15</version>
@@ -41,6 +44,8 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.15</version>
       </plugin>
+
+      <!--package-->
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
         <version>1.6</version>
@@ -157,7 +162,60 @@
     </dependency>
   </dependencies>
 
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.7</version>
+        <configuration>
+          <dependencyDetailsEnabled>true</dependencyDetailsEnabled>
+          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+        </configuration>
+      </plugin>
+      <!--findbugs-->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <effort>Max</effort>
+          <threshold>Default</threshold>
+          <xmlOutput>true</xmlOutput>
+          <excludeFilterFile>${basedir}/config/findbugs-exclude.xml</excludeFilterFile>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+
   <profiles>
+    <profile>
+      <id>test</id>
+      <!-- enable plugins for tests -->
+      <build>
+        <plugins>
+          <!--findbugs-->
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>findbugs-maven-plugin</artifactId>
+            <version>3.0.0</version>
+            <configuration>
+              <effort>Max</effort>
+              <threshold>Default</threshold>
+              <xmlOutput>true</xmlOutput>
+              <excludeFilterFile>${basedir}/config/findbugs-exclude.xml</excludeFilterFile>
+            </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>openshift</id>
       <build>

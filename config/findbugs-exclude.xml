@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+  <!-- Don't bother with EI - expose internal representation -->
+  <!-- TODO: Use Java 8 Datetime -->
+  <Match>
+    <Bug code="EI,EI2" />
+  </Match>
+</FindBugsFilter>
