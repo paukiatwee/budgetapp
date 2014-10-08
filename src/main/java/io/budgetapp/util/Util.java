@@ -38,7 +38,6 @@ public class Util {
     public static LocalDate toLocalDate(Date date) {
         Instant instant = Instant.ofEpochMilli(date.getTime());
         return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
-
     }
 
     public static Date toDate(String isoDate) {
@@ -74,9 +73,9 @@ public class Util {
         return Util.toLocalDate(date).getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault());
     }
 
-    public static URI getDatabaseURL() {
+    public static URI getDatabaseURL(String env) {
         try {
-            return new URI(System.getenv("DATABASE_URL"));
+            return new URI(System.getenv(env));
         } catch (URISyntaxException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
