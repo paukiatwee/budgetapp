@@ -2,24 +2,24 @@
 database:
 
   # the name of your JDBC driver
-  driverClass: org.hsqldb.jdbcDriver
+  driverClass: org.postgresql.Driver
 
   # the username
-  user: sa
+  user:
 
   # the password
   password:
 
   # the JDBC URL
-  url: jdbc:hsqldb:mem:test;sql.syntax_pgs=true
+  url:
 
   # any properties specific to JDBC driver:
   properties:
     charSet: UTF-8
-    hibernate.dialect: io.budgetapp.hibernate.dialect.CustomHSQLDialect
+    hibernate.dialect: io.budgetapp.hibernate.dialect.CustomPostgreSQLDialect
     hibernate.format_sql: true
 
-  validationQuery: SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS
+  validationQuery: SELECT 1
 
 server:
 #  softNofileLimit: 1000

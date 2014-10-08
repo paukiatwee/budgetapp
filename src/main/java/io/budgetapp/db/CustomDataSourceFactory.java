@@ -4,41 +4,47 @@ import io.budgetapp.util.Util;
 import io.dropwizard.db.DataSourceFactory;
 
 import java.net.URI;
+import java.util.Optional;
 
 /**
- * Added support to get DB info from env, if any
+ *
  */
 public class CustomDataSourceFactory extends DataSourceFactory {
 
-    private boolean isHeroku() {
-        return System.getenv("DATABASE_URL") != null;
+    private Optional<String> cloudDatabaseUrl = Optional.empty();
+
+    public CustomDataSourceFactory() {
+        cloudDatabaseUrl = System
+                .getenv().keySet()
+                .stream().filter(e -> e.startsWith("HEROKU_POSTGRESQL_"))
+                .findFirst();
     }
 
     @Override
-    public String getUser() {
-        if(isHeroku()) {
-            return Util.getDatabaseURL().getUserInfo().split(":")[0];
+    public void setUser(String user) {
+        if(cloudDatabaseUrl.isPresent()) {
+            super.setUser(Util.getDatabaseURL(cloudDatabaseUrl.get()).getUserInfo().split(":")[0]);
         } else {
-            return super.getUser();
+            super.setUser(user);
         }
     }
 
     @Override
-    public String getPassword() {
-        if(isHeroku()) {
-            return Util.getDatabaseURL().getUserInfo().split(":")[1];
+    public void setPassword(String password) {
+        if(cloudDatabaseUrl.isPresent()) {
+            super.setPassword(Util.getDatabaseURL(cloudDatabaseUrl.get()).getUserInfo().split(":")[1]);
         } else {
-            return super.getPassword();
+            super.setPassword(password);
         }
     }
 
     @Override
-    public String getUrl() {
-        if(isHeroku()) {
-            URI dbUri = Util.getDatabaseURL();
-            return "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
+    public void setUrl(String url) {
+        if (cloudDatabaseUrl.isPresent()) {
+            URI uri = Util.getDatabaseURL(cloudDatabaseUrl.get());
+            super.setUrl("jdbc:postgresql://" + uri.getHost() + ':' + uri.getPort() + uri.getPath());
         } else {
-            return super.getUrl();
+            super.setUrl(url);
         }
     }
 }
