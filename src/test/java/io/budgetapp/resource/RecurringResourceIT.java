@@ -35,6 +35,7 @@ public class RecurringResourceIT extends ResourceIT {
 
         // give
         TransactionForm transaction = new TransactionForm();
+        transaction.setAmount(10.00);
         transaction.setRecurring(Boolean.TRUE);
         transaction.setRecurringType(RecurringType.MONTHLY);
         transaction.setBudget(defaultBudget);

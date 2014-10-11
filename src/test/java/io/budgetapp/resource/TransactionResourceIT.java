@@ -37,6 +37,7 @@ public class TransactionResourceIT extends ResourceIT {
 
         // give
         TransactionForm transaction = new TransactionForm();
+        transaction.setAmount(10.00);
         transaction.setBudget(defaultBudget);
 
         // when
@@ -52,6 +53,7 @@ public class TransactionResourceIT extends ResourceIT {
 
         // give
         TransactionForm transaction = new TransactionForm();
+        transaction.setAmount(10.00);
         transaction.setBudget(defaultBudget);
 
         // when
@@ -73,6 +75,7 @@ public class TransactionResourceIT extends ResourceIT {
         budget.setName(randomAlphabets());
 
         TransactionForm transaction = new TransactionForm();
+        transaction.setAmount(10.00);
 
         // when
         ClientResponse categoryResponse = post("/api/categories", category);
