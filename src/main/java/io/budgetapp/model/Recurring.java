@@ -75,7 +75,7 @@ public class Recurring implements Serializable {
     }
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "last_run_at", insertable = false, nullable = false)
+    @Column(name = "last_run_at", nullable = false)
     public Date getLastRunAt() {
         return lastRunAt;
     }

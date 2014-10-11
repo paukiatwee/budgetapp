@@ -8,7 +8,7 @@
   <changeSet id="1" author="pau">
     <createTable tableName="users">
       <column name="id" type="bigint" autoIncrement="true" startWith="1">
-        <constraints primaryKey="true" nullable="false"/>
+        <constraints primaryKey="true" nullable="false" />
       </column>
       <column name="username" type="varchar(256)">
         <constraints nullable="false" unique="true" />
@@ -24,7 +24,7 @@
 
     <createTable tableName="auth_tokens">
       <column name="id" type="bigint" autoIncrement="true" startWith="1">
-        <constraints primaryKey="true" nullable="false"/>
+        <constraints primaryKey="true" nullable="false" />
       </column>
       <column name="token" type="varchar(256)">
         <constraints nullable="false" unique="true" />
@@ -39,7 +39,7 @@
 
     <createTable tableName="budgets">
       <column name="id" type="bigint" autoIncrement="true" startWith="1">
-        <constraints primaryKey="true" nullable="false"/>
+        <constraints primaryKey="true" nullable="false" />
       </column>
       <column name="name" type="varchar(256)">
         <constraints nullable="false" />
@@ -69,7 +69,7 @@
 
     <createTable tableName="budget_types">
       <column name="id" type="bigint" autoIncrement="true" startWith="1">
-        <constraints primaryKey="true" nullable="false"/>
+        <constraints primaryKey="true" nullable="false" />
       </column>
       <column name="created_at" type="timestamp" defaultValueDate="current_timestamp">
         <constraints nullable="false" />
@@ -78,7 +78,7 @@
 
     <createTable tableName="transactions">
       <column name="id" type="bigint" autoIncrement="true" startWith="1">
-        <constraints primaryKey="true" nullable="false"/>
+        <constraints primaryKey="true" nullable="false" />
       </column>
       <column name="name" type="varchar(256)">
         <constraints nullable="false" />
@@ -104,7 +104,7 @@
 
     <createTable tableName="categories">
       <column name="id" type="bigint" autoIncrement="true" startWith="1">
-        <constraints primaryKey="true" nullable="false"/>
+        <constraints primaryKey="true" nullable="false" />
       </column>
       <column name="name" type="varchar(256)">
         <constraints nullable="false" />
@@ -122,7 +122,7 @@
 
     <createTable tableName="recurrings">
       <column name="id" type="bigint" autoIncrement="true" startWith="1">
-        <constraints primaryKey="true" nullable="false"/>
+        <constraints primaryKey="true" nullable="false" />
       </column>
       <column name="amount" type="numeric(12, 2)">
         <constraints nullable="false" />
@@ -130,7 +130,9 @@
       <column name="type" type="varchar(256)">
         <constraints nullable="false" />
       </column>
-      <column name="last_run_at" type="timestamp" />
+      <column name="last_run_at" type="timestamp">
+        <constraints nullable="false" />
+      </column>
       <column name="created_at" type="timestamp" defaultValueDate="current_timestamp">
         <constraints nullable="false" />
       </column>

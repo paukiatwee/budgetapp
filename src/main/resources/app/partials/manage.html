@@ -47,10 +47,13 @@
     </div>
     <form name="form" novalidate class="form-horizontal" role="form">
       <div class="modal-body">
-        <div class="form-group" ng-class="{true: 'has-error'}[form.amount.$dirty && form.amount.$invalid]">
+        <div class="form-group has-feedback" ng-class="errorClass('amount')">
           <label for="amount" class="col-sm-3 control-label">Amount</label>
           <div class="col-sm-7">
             <input type="number" step="1" class="form-control" id="amount" name="amount" placeholder="Amount" ng-model="transaction.amount" required>
+            <span class="help-block" ng-show="form.amount.$invalid && form.amount.$dirty">
+              {{errorMessage('amount')}}
+            </span>
           </div>
         </div>
         <div class="form-group">

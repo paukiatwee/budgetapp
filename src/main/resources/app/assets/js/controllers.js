@@ -380,7 +380,7 @@ var TransactionModalController = function ($scope, $modalInstance, budget, Trans
 
   $scope.selected = budget;
   $scope.original = angular.copy(budget);
-  $scope.transaction = {budget: {id: budget.id}, recurringType: 'DAILY'};
+  $scope.transaction = {budget: {id: budget.id}};
 
   $scope.errorMessage = errorMessage;
   $scope.errorClass = errorClass;

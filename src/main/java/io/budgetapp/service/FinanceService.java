@@ -318,9 +318,7 @@ public class FinanceService {
     public List<Recurring> findRecurrings(User user) {
         List<Recurring> results = recurringDAO.findRecurrings(user);
         // TODO: fix N + 1 query but now still OK
-        for (Recurring recurring : results) {
-            populateRecurring(recurring);
-        }
+        results.forEach(this::populateRecurring);
         LOGGER.debug("Found recurrings {}", results);
         return results;
     }
@@ -380,6 +378,10 @@ public class FinanceService {
         Budget budget = budgetDAO.findById(user, transactionForm.getBudget().getId());
 
         // validation
+        if(transactionForm.getAmount() == 0) {
+            throw new DataConstraintException("amount", "Amount is required");
+        }
+
         if(Boolean.TRUE.equals(transactionForm.getRecurring()) && transactionForm.getRecurringType() == null) {
             throw new DataConstraintException("recurringType", "Recurring Type is required");
         }
@@ -400,7 +402,7 @@ public class FinanceService {
             recurring.setAmount(transactionForm.getAmount());
             recurring.setRecurringType(transactionForm.getRecurringType());
             recurring.setBudgetType(budget.getBudgetType());
-            recurring.setLastRunAt(new Date());
+            recurring.setLastRunAt(transactionForm.getTransactionOn());
             recurringDAO.addRecurring(recurring);
         }
 

@@ -123,8 +123,9 @@ public class BudgetApplication extends Application<AppConfiguration> {
         urlRewriteFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD), false, "/*");
         urlRewriteFilter.setInitParameter("confPath", "urlrewrite.xml");
 
-        FilterRegistration.Dynamic filterSlow = environment.servlets().addFilter("slowFilter", SlowNetworkFilter.class);
-        filterSlow.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD), false, "/*");
+        // only enable for dev
+        // FilterRegistration.Dynamic filterSlow = environment.servlets().addFilter("slowFilter", SlowNetworkFilter.class);
+        // filterSlow.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD), false, "/*");
 
         // exception mapper
         environment.jersey().register(new NotFoundExceptionMapper());
