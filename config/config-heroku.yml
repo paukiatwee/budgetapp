@@ -2,16 +2,16 @@
 database:
 
   # the name of your JDBC driver
-  driverClass: org.postgresql.Driver
+  driverClass: org.hsqldb.jdbcDriver
 
   # the username
-  user:
+  user: sa
 
   # the password
   password:
 
   # the JDBC URL
-  url:
+  url: jdbc:hsqldb:mem:test;sql.syntax_pgs=true
 
   # any properties specific to JDBC driver:
   properties:

@@ -30,8 +30,8 @@ logging:
   # Logger-specific levels.
   loggers:
 
-    # Sets the level for 'com.example' to DEBUG.
-    com.example: DEBUG
+    # Sets the level for 'io.budgetapp' to DEBUG.
+    io.budgetapp: DEBUG
 
     org.hibernate.SQL: ALL
 

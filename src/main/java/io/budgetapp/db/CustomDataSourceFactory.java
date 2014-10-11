@@ -47,4 +47,13 @@ public class CustomDataSourceFactory extends DataSourceFactory {
             super.setUrl(url);
         }
     }
+
+    @Override
+    public void setDriverClass(String driverClass) {
+        if (cloudDatabaseUrl.isPresent()) {
+            super.setDriverClass("org.postgresql.Driver");
+        } else {
+            super.setDriverClass(driverClass);
+        }
+    }
 }
