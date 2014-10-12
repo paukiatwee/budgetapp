@@ -5,6 +5,7 @@ import io.budgetapp.model.UsageSummary;
 import io.budgetapp.model.User;
 import io.budgetapp.model.form.LoginForm;
 import io.budgetapp.model.form.SignUpForm;
+import io.budgetapp.model.form.user.Password;
 import io.budgetapp.model.form.user.Profile;
 import io.budgetapp.service.FinanceService;
 import io.dropwizard.auth.Auth;
@@ -47,6 +48,14 @@ public class UserResource extends AbstractResource {
     @UnitOfWork
     public Response update(@Auth User user, Profile profile) {
         return ok(financeService.update(user, profile));
+    }
+
+    @PUT
+    @UnitOfWork
+    @Path("/password")
+    public Response changePassword(@Auth User user, @Valid Password password) {
+        financeService.changePassword(user, password);
+        return ok();
     }
 
     @GET

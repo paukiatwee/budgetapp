@@ -29,6 +29,7 @@ import io.budgetapp.model.form.budget.AddBudgetForm;
 import io.budgetapp.model.form.budget.UpdateBudgetForm;
 import io.budgetapp.model.form.recurring.AddRecurringForm;
 import io.budgetapp.model.form.report.SearchFilter;
+import io.budgetapp.model.form.user.Password;
 import io.budgetapp.model.form.user.Profile;
 import io.budgetapp.util.Util;
 import org.hibernate.SessionFactory;
@@ -45,6 +46,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -106,6 +108,20 @@ public class FinanceService {
         user.setName(profile.getName());
         userDAO.update(user);
         return user;
+    }
+
+    public void changePassword(User user, Password password) {
+        User originalUser = userDAO.findById(user.getId());
+
+        if(!Objects.equals(password.getPassword(), password.getConfirm())) {
+            throw new DataConstraintException("confirm", "Confirm Password does not match");
+        }
+
+        if(!passwordEncoder.matches(password.getOriginal(), user.getPassword())) {
+            throw new DataConstraintException("original", "Current Password does not match");
+        }
+        originalUser.setPassword(passwordEncoder.encode(password.getPassword()));
+        userDAO.update(originalUser);
     }
 
     public Optional<User> findUserByToken(String token) {

@@ -32,7 +32,7 @@ public class BudgetResourceIT extends ResourceIT {
     @Test
     public void shouldAbleToListBudgets() {
 
-        // give user (created from ResourceIT)
+        // given user (created from ResourceIT)
 
         // when
         ClientResponse response = get("/api/budgets");
@@ -46,7 +46,7 @@ public class BudgetResourceIT extends ResourceIT {
     @Test
     public void shouldAbleCreateBudget() {
 
-        // give
+        // given
         AddBudgetForm budget = new AddBudgetForm();
         budget.setName(randomAlphabets());
         budget.setCategoryId(defaultCategory.getId());
@@ -61,7 +61,7 @@ public class BudgetResourceIT extends ResourceIT {
 
     @Test
     public void shouldBeAbleUpdateBudget() {
-        // give
+        // given
         AddBudgetForm budget = new AddBudgetForm();
         budget.setName(randomAlphabets());
         budget.setCategoryId(defaultCategory.getId());
@@ -86,7 +86,7 @@ public class BudgetResourceIT extends ResourceIT {
     @Test
     public void shouldAbleFindValidBudget() {
 
-        // give
+        // given
         AddBudgetForm budget = new AddBudgetForm();
         budget.setName(randomAlphabets());
         budget.setCategoryId(1L);
@@ -102,7 +102,7 @@ public class BudgetResourceIT extends ResourceIT {
     @Test
     public void shouldNotAbleDeleteBudgetWithChild() {
 
-        // give
+        // given
         AddBudgetForm addBudgetForm = new AddBudgetForm();
         addBudgetForm.setName(randomAlphabets());
         addBudgetForm.setCategoryId(1L);

@@ -172,6 +172,15 @@ financeControllers.controller('DashboardController', function ($scope, $modal, B
 
 financeControllers.controller('ProfileController', function ($scope, UserService) {
 
+  // method allow child controllers to access parent controller's scope
+  $scope.updateSuccess = function(message) {
+    $scope.success = true;
+    $scope.message = message;
+  };
+});
+
+financeControllers.controller('UpdateProfileController', function ($scope, UserService) {
+
   $scope.loaded = false;
   $scope.errorMessage = errorMessage;
   $scope.errorClass = errorClass;
@@ -184,14 +193,33 @@ financeControllers.controller('ProfileController', function ($scope, UserService
     var user = $scope.user || {};
     UserService.update(angular.toJson(user), function() {
       // ok
-      $scope.success = true;
-      $scope.message = "Successfully update profile";
+      $scope.updateSuccess("Successfully update profile");
     }, function() {
       // error
 
     })
   };
+});
 
+financeControllers.controller('ChangePasswordController', function ($scope, UserService) {
+
+  $scope.loaded = false;
+  $scope.errorMessage = errorMessage;
+  $scope.errorClass = errorClass;
+
+
+  $scope.changePassword = function() {
+    var password = $scope.password || {};
+    UserService.changePassword(angular.toJson(password), function() {
+      // ok
+      $scope.updateSuccess("Successfully change password");
+      $scope.password = {};
+      clearErrors($scope);
+    }, function(response) {
+      // error
+      failure($scope, response);
+    })
+  };
 });
 
 function labelFormatter(label, series) {

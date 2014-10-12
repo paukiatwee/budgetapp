@@ -29,7 +29,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public abstract class ResourceIT {
 
     protected static Client client;
-    protected static User user;
+    protected static User defaultUser;
     protected static Category defaultCategory;
     protected static Budget defaultBudget;
 
@@ -44,9 +44,11 @@ public abstract class ResourceIT {
         signUp.setPassword(randomAlphabets());
         post("/api/users", signUp);
         ClientResponse authResponse = post("/api/users/auth", signUp);
-        User user = authResponse.getEntity(User.class);
+        defaultUser = authResponse.getEntity(User.class);
+        defaultUser.setUsername(signUp.getUsername());
+        defaultUser.setPassword(signUp.getPassword());
 
-        client.addFilter(new HTTPTokenClientFilter(user.getToken()));
+        client.addFilter(new HTTPTokenClientFilter(defaultUser.getToken()));
 
         defaultCategory = new Category();
         defaultCategory.setName(randomAlphabets());

@@ -32,6 +32,7 @@ financeServices.factory('UserService', function($resource) {
     login: {method: 'POST', params: {path: 'auth'}},
     signup: {method: 'POST'},
     update: {method: 'PUT'},
+    changePassword: {method: 'PUT',  params: {path: 'password'}},
     account: {method: 'GET', params: {path: 'account'}},
     usage: {method: 'GET', params: {path: 'usage'}},
     ping: {method: 'GET', params: {path: 'ping'}}

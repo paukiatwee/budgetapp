@@ -33,7 +33,7 @@ public class RecurringResourceIT extends ResourceIT {
         ClientResponse before = get("/api/recurrings");
         int originalCount = identityResponses(before).size();
 
-        // give
+        // given
         TransactionForm transaction = new TransactionForm();
         transaction.setAmount(10.00);
         transaction.setRecurring(Boolean.TRUE);

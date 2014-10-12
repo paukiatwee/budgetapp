@@ -30,7 +30,7 @@ public class CategoryResourceIT extends ResourceIT {
     @Test
     public void shouldAbleCreateCategory() {
 
-        // give
+        // given
         Category category = new Category();
         category.setName(randomAlphabets());
         category.setType(CategoryType.EXPENDITURE);
@@ -46,7 +46,7 @@ public class CategoryResourceIT extends ResourceIT {
     @Test
     public void shouldAbleFindValidCategory() {
 
-        // give
+        // given
         Category category = new Category();
         category.setName(randomAlphabets());
         category.setType(CategoryType.EXPENDITURE);
@@ -63,7 +63,7 @@ public class CategoryResourceIT extends ResourceIT {
     @Test
     public void shouldNotAbleDeleteCategoryWithChild() {
 
-        // give
+        // given
         Category category = new Category();
         category.setName(randomAlphabets());
         category.setType(CategoryType.EXPENDITURE);

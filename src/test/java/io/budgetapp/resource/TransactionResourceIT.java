@@ -35,7 +35,7 @@ public class TransactionResourceIT extends ResourceIT {
     @Test
     public void shouldAbleCreateTransaction() {
 
-        // give
+        // given
         TransactionForm transaction = new TransactionForm();
         transaction.setAmount(10.00);
         transaction.setBudget(defaultBudget);
@@ -51,7 +51,7 @@ public class TransactionResourceIT extends ResourceIT {
     @Test
     public void shouldAbleFindValidTransaction() {
 
-        // give
+        // given
         TransactionForm transaction = new TransactionForm();
         transaction.setAmount(10.00);
         transaction.setBudget(defaultBudget);
@@ -66,7 +66,7 @@ public class TransactionResourceIT extends ResourceIT {
 
     @Test
     public void shouldAbleFindTransactionsByBudget() {
-        // give
+        // given
         Category category = new Category();
         category.setName(randomAlphabets());
         category.setType(CategoryType.EXPENDITURE);
