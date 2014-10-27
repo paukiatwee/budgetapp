@@ -6,6 +6,7 @@ import io.budgetapp.model.User;
 import io.budgetapp.model.Recurring;
 import io.budgetapp.model.RecurringType;
 import io.budgetapp.model.User;
+import io.budgetapp.util.Util;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 
@@ -54,16 +55,19 @@ public class RecurringDAO extends AbstractDAO<Recurring> {
         return currentSession()
                 .createQuery("SELECT r FROM Recurring r WHERE " +
                         "(r.recurringType = :daily AND DAY(r.lastRunAt) = :yesterday) OR " +
-                        "(r.recurringType = :weekly AND WEEK(r.lastRunAt) = :lastWeek) OR " +
-                        "(r.recurringType = :monthly AND MONTH(r.lastRunAt) = :lastMonth) OR " +
-                        "(r.recurringType = :yearly AND YEAR(r.lastRunAt) = :lastYear) OR " +
+                        // last week with same day of week
+                        "(r.recurringType = :weekly AND WEEK(r.lastRunAt) = :lastWeek AND DAYOFWEEK(r.lastRunAt) = DAYOFWEEK(CURRENT_TIMESTAMP)) OR " +
+                        // last month with same day of month
+                        "(r.recurringType = :monthly AND MONTH(r.lastRunAt) = :lastMonth AND DAY(r.lastRunAt) = DAY(CURRENT_TIMESTAMP)) OR " +
+                        // last year with same month
+                        "(r.recurringType = :yearly AND YEAR(r.lastRunAt) = :lastYear AND MONTH(r.lastRunAt) = MONTH(CURRENT_TIMESTAMP)) OR " +
                         "r.lastRunAt IS NULL")
                 .setParameter("daily", RecurringType.DAILY)
-                .setParameter("yesterday", now.minusDays(1).getDayOfMonth())
+                .setParameter("yesterday", Util.yesterday(now))
                 .setParameter("weekly", RecurringType.WEEKLY)
-                .setParameter("lastWeek", now.minusWeeks(1).get(ChronoField.ALIGNED_WEEK_OF_YEAR))
+                .setParameter("lastWeek", Util.lastWeek(now))
                 .setParameter("monthly", RecurringType.MONTHLY)
-                .setParameter("lastMonth", now.minusMonths(1).getMonthValue())
+                .setParameter("lastMonth", Util.lastMonth(now))
                 .setParameter("yearly", RecurringType.YEARLY)
                 .setParameter("lastYear", now.minusYears(1).getYear())
                 .list();

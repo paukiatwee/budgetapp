@@ -5,6 +5,7 @@ import io.budgetapp.model.RecurringType;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -16,6 +17,7 @@ public class AddRecurringForm implements Serializable {
 
     private Long budgetId;
     private Double amount;
+    private Date recurringAt;
     private RecurringType recurringType;
 
     @NotNull(message = "{validation.budget.required}")
@@ -34,6 +36,15 @@ public class AddRecurringForm implements Serializable {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    @NotNull(message = "{validation.recurringAt.required}")
+    public Date getRecurringAt() {
+        return recurringAt;
+    }
+
+    public void setRecurringAt(Date recurringAt) {
+        this.recurringAt = recurringAt;
     }
 
     @NotNull(message = "{validation.recurringType.required}")

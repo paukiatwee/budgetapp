@@ -322,13 +322,36 @@ public class FinanceService {
     //==================================================================
 
     public Recurring addRecurring(User user, AddRecurringForm recurringForm) {
+
+        // validation
+        Date now = new Date();
+        if(!Util.inMonth(recurringForm.getRecurringAt(), new Date())) {
+            throw new DataConstraintException("recurringAt", "Transaction Date must within " + Util.toFriendlyMonthDisplay(now) + " " + (now.getYear() + 1900));
+        }
+        // end validation
         Budget budget = findBudgetById(user, recurringForm.getBudgetId());
+        budget.setActual(budget.getActual() + recurringForm.getAmount());
+        budgetDAO.update(budget);
 
         Recurring recurring = new Recurring();
         recurring.setAmount(recurringForm.getAmount());
+        recurring.setLastRunAt(recurringForm.getRecurringAt());
         recurring.setRecurringType(recurringForm.getRecurringType());
         recurring.setBudgetType(budget.getBudgetType());
-        return recurringDAO.addRecurring(recurring);
+        recurring = recurringDAO.addRecurring(recurring);
+
+        Transaction transaction = new Transaction();
+        transaction.setName(budget.getName());
+        transaction.setAmount(recurring.getAmount());
+        transaction.setRemark("");
+        transaction.setAuto(Boolean.TRUE);
+        transaction.setTransactionOn(recurring.getLastRunAt());
+        transaction.setBudget(budget);
+        transaction.setRecurring(recurring);
+        transactionDAO.addTransaction(transaction);
+
+
+        return recurring;
     }
 
     public List<Recurring> findRecurrings(User user) {

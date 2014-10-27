@@ -17,7 +17,7 @@
         <constraints nullable="false" />
       </column>
       <column name="name" type="varchar(256)" />
-      <column name="created_at" type="timestamp" defaultValueDate="current_timestamp">
+      <column name="created_at" type="datetime" defaultValueDate="current_timestamp">
         <constraints nullable="false" />
       </column>
     </createTable>
@@ -29,7 +29,7 @@
       <column name="token" type="varchar(256)">
         <constraints nullable="false" unique="true" />
       </column>
-      <column name="created_at" type="timestamp" defaultValueDate="current_timestamp">
+      <column name="created_at" type="datetime" defaultValueDate="current_timestamp">
         <constraints nullable="false" />
       </column>
       <column name="user_id" type="bigint">
@@ -53,7 +53,7 @@
       <column name="period_on" type="date">
         <constraints nullable="false" />
       </column>
-      <column name="created_at" type="timestamp" defaultValueDate="current_timestamp">
+      <column name="created_at" type="datetime" defaultValueDate="current_timestamp">
         <constraints nullable="false" />
       </column>
       <column name="user_id" type="bigint">
@@ -71,7 +71,7 @@
       <column name="id" type="bigint" autoIncrement="true" startWith="1">
         <constraints primaryKey="true" nullable="false" />
       </column>
-      <column name="created_at" type="timestamp" defaultValueDate="current_timestamp">
+      <column name="created_at" type="datetime" defaultValueDate="current_timestamp">
         <constraints nullable="false" />
       </column>
     </createTable>
@@ -93,7 +93,7 @@
       <column name="transaction_on" type="date" defaultValueDate="current_timestamp">
         <constraints nullable="false" />
       </column>
-      <column name="created_at" type="timestamp" defaultValueDate="current_timestamp">
+      <column name="created_at" type="datetime" defaultValueDate="current_timestamp">
         <constraints nullable="false" />
       </column>
       <column name="budget_id" type="bigint">
@@ -112,7 +112,7 @@
       <column name="type" type="varchar(256)">
         <constraints nullable="false" />
       </column>
-      <column name="created_at" type="timestamp" defaultValueDate="current_timestamp">
+      <column name="created_at" type="datetime" defaultValueDate="current_timestamp">
         <constraints nullable="false" />
       </column>
       <column name="user_id" type="bigint">
@@ -130,10 +130,10 @@
       <column name="type" type="varchar(256)">
         <constraints nullable="false" />
       </column>
-      <column name="last_run_at" type="timestamp">
+      <column name="last_run_at" type="datetime">
         <constraints nullable="false" />
       </column>
-      <column name="created_at" type="timestamp" defaultValueDate="current_timestamp">
+      <column name="created_at" type="datetime" defaultValueDate="current_timestamp">
         <constraints nullable="false" />
       </column>
       <column name="budget_type_id" type="bigint">

@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.TextStyle;
+import java.time.temporal.ChronoField;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -67,6 +68,18 @@ public class Util {
         LocalDate checkDate = toLocalDate(check);
         LocalDate monthDate = toLocalDate(month);
         return checkDate.getYear() == monthDate.getYear() && checkDate.getMonthValue() == monthDate.getMonthValue();
+    }
+
+    public static int yesterday(LocalDate date) {
+        return date.minusDays(1).getDayOfMonth();
+    }
+
+    public static int lastWeek(LocalDate date) {
+        return date.minusWeeks(1).get(ChronoField.ALIGNED_WEEK_OF_YEAR);
+    }
+
+    public static int lastMonth(LocalDate date) {
+        return date.minusMonths(1).getMonthValue();
     }
 
     public static String toFriendlyMonthDisplay(Date date) {

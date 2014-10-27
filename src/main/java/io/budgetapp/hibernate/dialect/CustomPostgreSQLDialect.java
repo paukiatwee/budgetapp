@@ -11,6 +11,7 @@ public class CustomPostgreSQLDialect extends PostgreSQL9Dialect {
 
     public CustomPostgreSQLDialect() {
         super();
+        registerFunction("dayofweek", new SQLFunctionTemplate(StandardBasicTypes.INTEGER, "extract(dow from ?1)") );
         registerFunction( "week", new SQLFunctionTemplate(StandardBasicTypes.INTEGER, "extract(week from ?1)") );
     }
 }
