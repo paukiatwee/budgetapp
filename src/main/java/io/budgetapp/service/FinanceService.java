@@ -326,7 +326,7 @@ public class FinanceService {
         // validation
         Date now = new Date();
         if(!Util.inMonth(recurringForm.getRecurringAt(), new Date())) {
-            throw new DataConstraintException("recurringAt", "Transaction Date must within " + Util.toFriendlyMonthDisplay(now) + " " + (now.getYear() + 1900));
+            throw new DataConstraintException("recurringAt", "Recurring Date must within " + Util.toFriendlyMonthDisplay(now) + " " + (now.getYear() + 1900));
         }
         // end validation
         Budget budget = findBudgetById(user, recurringForm.getBudgetId());
