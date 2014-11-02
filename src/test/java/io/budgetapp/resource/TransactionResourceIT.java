@@ -59,7 +59,7 @@ public class TransactionResourceIT extends ResourceIT {
         IdentityResponse identityResponse = identityResponse(response);
 
         // when
-        ClientResponse deleteResponse = delete(ResourceURL.TRANSACTION + identityResponse.getId());
+        ClientResponse deleteResponse = delete(ResourceURL.TRANSACTION + "/" + identityResponse.getId());
 
         // then
         assertDeleted(deleteResponse);
