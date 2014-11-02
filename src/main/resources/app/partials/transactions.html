@@ -23,8 +23,8 @@
       <td>{{transaction.auto | tick}}</td>
       <td>{{transaction.transactionOn | date}}</td>
       <td ng-show="transactionAction">
-        <button type="button" class="btn btn-danger" ng-click="deleteTransaction(transactions, transaction)">
-          <span class="fa fa-trash-o"></span> Delete
+        <button type="button" class="btn btn-danger" ng-click="deleteTransaction(transactions, transaction)" ng-disabled="transaction.loading">
+          <span class="fa fa-trash-o" ng-hide="transaction.loading"></span><span class="fa fa-spinner fa-spin" ng-show="transaction.loading"></span> Delete
         </button>
       </td>
     </tr>

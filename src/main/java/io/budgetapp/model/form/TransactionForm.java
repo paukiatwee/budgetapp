@@ -1,5 +1,6 @@
 package io.budgetapp.model.form;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.budgetapp.model.Budget;
 import io.budgetapp.model.RecurringType;
 
@@ -9,6 +10,7 @@ import java.util.Date;
 /**
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TransactionForm implements Serializable {
 
     private static final long serialVersionUID = 1432079737348530213L;

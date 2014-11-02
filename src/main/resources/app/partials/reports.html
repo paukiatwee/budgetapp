@@ -32,7 +32,8 @@
               </div>
             </div>
             <div class="actions">
-              <button type="button" class="btn btn-primary" ng-click="doSearch()" ng-disabled="!transactionsLoaded"><span class="fa fa-search"></span> Search</button>
+              <button type="button" class="btn btn-primary" ng-click="doSearch()" ng-disabled="!transactionsLoaded">
+                <span class="fa fa-search" ng-show="transactionsLoaded"></span><span class="fa fa-spinner fa-spin" ng-show="!transactionsLoaded"></span> Search</button>
             </div>
           </form>
         </div>

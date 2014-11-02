@@ -346,6 +346,7 @@ financeControllers.controller('ManageController', function ($scope, $routeParams
     $scope.transactionsLoaded = false;
     $scope.transactionAction = true;
     $scope.deleteTransaction = function (transactions, transaction) {
+      transaction.loading = true;
       TransactionService.delete({id: transaction.id}, function() {
         // update UI
         budget.actual = budget.actual - transaction.amount;
@@ -426,11 +427,14 @@ var TransactionModalController = function ($scope, $modalInstance, budget, Trans
 
   // TODO https://github.com/angular-ui/bootstrap/issues/969
   $scope.ok = function (form) {
+    $scope.transaction.loading = true;
     TransactionService.save($scope.transaction).$promise.then(function() {
       budget.actual += $scope.transaction.amount;
+      $scope.transaction.loading = false;
       $modalInstance.close();
     }, function(response) {
       $scope.form = form;
+      $scope.transaction.loading = false;
       failure($scope, response);
     });
 

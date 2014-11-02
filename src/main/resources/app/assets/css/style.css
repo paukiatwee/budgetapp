@@ -1839,6 +1839,12 @@ form .actions {
   text-align: center;
   margin: 10px 0;
 }
+button .ng-hide-add {
+  display: none !important;
+}
+button .ng-hide-remove {
+  display: inline !important;
+}
 .invisible {
   visibility: hidden;
 }
