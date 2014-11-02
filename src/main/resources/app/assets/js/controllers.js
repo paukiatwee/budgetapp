@@ -344,6 +344,17 @@ financeControllers.controller('ManageController', function ($scope, $routeParams
 
   $scope.openTransactionsModal = function (budget) {
     $scope.transactionsLoaded = false;
+    $scope.transactionAction = true;
+    $scope.deleteTransaction = function (transactions, transaction) {
+      TransactionService.delete({id: transaction.id}, function() {
+        // update UI
+        budget.actual = budget.actual - transaction.amount;
+        transactions.splice(transactions.indexOf(transaction), 1);
+      }, function(response) {
+        errorModal($modal, response.data.errors);
+      });
+    };
+
     $modal.open({
       templateUrl: '/app/partials/transactions.html',
       scope: $scope,
@@ -525,8 +536,8 @@ financeControllers.controller('RecurringsController', function ($scope, $modal, 
     modalInstance.result.then(function (selected) {
       selected.$delete({id: selected.id});
       $scope.recurrings.splice($scope.recurrings.indexOf(selected), 1);
-    }, function () {
-
+    }, function (response) {
+      errorModal($modal, response.data.errors);
     });
   };
 

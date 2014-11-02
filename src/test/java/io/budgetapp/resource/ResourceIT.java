@@ -16,6 +16,7 @@ import io.budgetapp.model.form.budget.AddBudgetForm;
 import org.junit.BeforeClass;
 
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
@@ -114,6 +115,14 @@ public abstract class ResourceIT {
 
     protected void assertOk(ClientResponse response) {
         assertThat(response.getStatus(), is(200));
+    }
+
+    protected void assertDeleted(ClientResponse response) {
+        assertThat(response.getStatus(), is(Response.Status.NO_CONTENT.getStatusCode()));
+    }
+
+    protected void assertNotFound(ClientResponse response) {
+        assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
     }
 
     protected void assertBadRequest(ClientResponse response) {

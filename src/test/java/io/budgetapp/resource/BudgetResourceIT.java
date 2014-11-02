@@ -114,7 +114,7 @@ public class BudgetResourceIT extends ResourceIT {
         Budget budget = new Budget();
         budget.setId(identityResponse(response).getId());
         transactionForm.setBudget(budget);
-        post("/api/transactions", transactionForm);
+        post(ResourceURL.TRANSACTION, transactionForm);
 
         // then
         ClientResponse newReponse = delete(response.getLocation().getPath());

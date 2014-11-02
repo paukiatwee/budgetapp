@@ -455,6 +455,19 @@ public class FinanceService {
         return transactionDAO.addTransaction(transaction);
     }
 
+    public boolean deleteTransaction(User user, long transactionId) {
+        // only delete transaction that belong to that user
+        Optional<Transaction> optional = transactionDAO.findById(user, transactionId);
+        if(optional.isPresent()) {
+            Transaction transaction = optional.get();
+            Budget budget = transaction.getBudget();
+            budget.setActual(budget.getActual() - transaction.getAmount());
+            transactionDAO.delete(transaction);
+            return true;
+        }
+        return false;
+    }
+
     public List<Transaction> findRecentTransactions(User user, Integer limit) {
         if(limit == null) {
             limit = 20;

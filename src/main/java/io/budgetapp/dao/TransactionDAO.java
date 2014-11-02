@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -46,6 +47,14 @@ public class TransactionDAO extends AbstractDAO<Transaction> {
         }
 
         return transaction;
+    }
+
+    public Optional<Transaction> findById(User user, long id) {
+        Query query = currentSession().createQuery("FROM Transaction t WHERE t.id = :id AND t.budget.user = :user");
+        query.setParameter("user", user);
+        query.setParameter("id", id);
+        Transaction result = (Transaction) query.uniqueResult();
+        return Optional.ofNullable(result);
     }
 
     public List<Transaction> findByBudget(User user, long budgetId) {
@@ -108,5 +117,9 @@ public class TransactionDAO extends AbstractDAO<Transaction> {
         criteria.addOrder(Order.desc("transactionOn"));
         criteria.addOrder(Order.desc("id"));
         return criteria;
+    }
+
+    public void delete(Transaction transaction) {
+        currentSession().delete(transaction);
     }
 }

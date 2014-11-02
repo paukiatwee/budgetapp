@@ -41,11 +41,41 @@ public class TransactionResourceIT extends ResourceIT {
         transaction.setBudget(defaultBudget);
 
         // when
-        ClientResponse response = post("/api/transactions", transaction);
+        ClientResponse response = post(ResourceURL.TRANSACTION, transaction);
 
         // then
         assertCreated(response);
         Assert.assertNotNull(response.getLocation());
+    }
+
+    @Test
+    public void shouldAbleDeleteValidTransaction() {
+
+        // given
+        TransactionForm transaction = new TransactionForm();
+        transaction.setAmount(10.00);
+        transaction.setBudget(defaultBudget);
+        ClientResponse response = post(ResourceURL.TRANSACTION, transaction);
+        IdentityResponse identityResponse = identityResponse(response);
+
+        // when
+        ClientResponse deleteResponse = delete(ResourceURL.TRANSACTION + identityResponse.getId());
+
+        // then
+        assertDeleted(deleteResponse);
+    }
+
+    @Test
+    public void shouldNotAbleDeleteInvalidTransaction() {
+
+        // given
+        long transactionId = Long.MAX_VALUE;
+
+        // when
+        ClientResponse deleteResponse = delete("/api/transactions/" + transactionId);
+
+        // then
+        assertNotFound(deleteResponse);
     }
 
     @Test
@@ -57,7 +87,7 @@ public class TransactionResourceIT extends ResourceIT {
         transaction.setBudget(defaultBudget);
 
         // when
-        ClientResponse response = post("/api/transactions", transaction);
+        ClientResponse response = post(ResourceURL.TRANSACTION, transaction);
 
         // then
         ClientResponse newReponse = get(response.getLocation().getPath());
@@ -86,7 +116,7 @@ public class TransactionResourceIT extends ResourceIT {
         Long budgetId = identityResponse(budgetResponse).getId();
 
         transaction.setBudget(new Budget(budgetId));
-        post("/api/transactions", transaction);
+        post(ResourceURL.TRANSACTION, transaction);
 
         // then
         ClientResponse newResponse = get("/api/budgets/" + budgetId + "/transactions");

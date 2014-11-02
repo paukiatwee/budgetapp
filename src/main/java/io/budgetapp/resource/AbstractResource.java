@@ -34,6 +34,10 @@ abstract class AbstractResource {
         }
     }
 
+    public Response notFound() {
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
     public Response deleted() {
         return Response.noContent().build();
     }

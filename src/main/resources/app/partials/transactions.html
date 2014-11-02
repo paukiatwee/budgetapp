@@ -13,6 +13,7 @@
       <th>Remark</th>
       <th>Recurring?</th>
       <th>Transaction Date</th>
+      <th ng-show="transactionAction">Action</th>
     </tr>
     </thead>
     <tbody>
@@ -21,6 +22,11 @@
       <td><span title="{{transaction.remark | na }}">{{transaction.remark | na | truncate:true:50 }}</span></td>
       <td>{{transaction.auto | tick}}</td>
       <td>{{transaction.transactionOn | date}}</td>
+      <td ng-show="transactionAction">
+        <button type="button" class="btn btn-danger" ng-click="deleteTransaction(transactions, transaction)">
+          <span class="fa fa-trash-o"></span> Delete
+        </button>
+      </td>
     </tr>
     </tbody>
   </table>

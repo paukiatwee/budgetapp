@@ -41,7 +41,7 @@ public class RecurringResourceIT extends ResourceIT {
         transaction.setBudget(defaultBudget);
 
         // when
-        ClientResponse response = post("/api/transactions", transaction);
+        ClientResponse response = post(ResourceURL.TRANSACTION, transaction);
 
         // then
         assertCreated(response);
