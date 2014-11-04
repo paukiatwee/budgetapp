@@ -226,6 +226,21 @@ angular.module('ng').filter('tick', function () {
   };
 });
 
+function showTooltip(x, y, contents) {
+
+  var tooltip = $('<div id="tooltip">' + contents + '</div>').css( {
+    position: 'absolute',
+    visibility: 'none',
+    top: y - 30,
+    left: x - 20,
+    border: '1px solid #fdd',
+    padding: '2px',
+    'background-color': '#fee'
+  }).appendTo("body").fadeIn(200);
+  // re position to center
+  tooltip.css("left", x - tooltip.width() / 2);
+}
+
 angular.module('ng').directive('chart', function() {
 
   'use strict';
@@ -237,6 +252,26 @@ angular.module('ng').directive('chart', function() {
       scope.$watch(attrs.ngModel, function (data) {
         if (!data) { return; }
         $.plot(elem, data, options);
+        if(options.grid && options.grid.hoverable) {
+
+          var previousPoint = null;
+
+          $(elem).bind("plothover", function (event, pos, item) {
+            if (item) {
+              if (previousPoint != item.datapoint) {
+                previousPoint = item.datapoint;
+
+                $("#tooltip").remove();
+                var x = item.datapoint[1].toFixed(2);
+
+                showTooltip(item.pageX, item.pageY, "$" + x);
+              }
+            } else {
+              $("#tooltip").remove();
+              previousPoint = null;
+            }
+          });
+        }
       }, true);
       elem.show();
     }
