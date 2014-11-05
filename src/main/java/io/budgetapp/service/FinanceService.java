@@ -567,6 +567,7 @@ public class FinanceService {
         List<Budget> budgets = budgetDAO.findBudgets(user, now.getMonthValue(), now.getYear(), true);
         Map<Category, List<Budget>> groups = budgets
                 .stream()
+                .filter(b -> b.getCategory().getType() == CategoryType.EXPENDITURE)
                 .collect(Collectors.groupingBy(Budget::getCategory));
         for (Map.Entry<Category, List<Budget>> entry : groups.entrySet()) {
             double total = entry.getValue()
