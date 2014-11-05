@@ -269,9 +269,24 @@ financeControllers.controller('ManageController', function ($scope, $routeParams
   $scope.$watch(
       "summary",
       function(summary) {
+        var totalIncome = 0.0;
         var totalActual = 0.0;
         var totalProjected = 0.0;
         var  changed = false;
+        _.forEach(summary.groups, function(group) {
+          var income = _.reduce(group.budgets, function(sum, budget) {
+            changed = true;
+
+            if(group.type == 'INCOME') {
+              return sum + budget.actual;
+            } else {
+              return sum;
+            }
+
+          }, 0);
+          totalIncome += income;
+        });
+
         _.forEach(summary.groups, function(group) {
           var actual = _.reduce(group.budgets, function(sum, budget) {
             changed = true;
@@ -304,6 +319,7 @@ financeControllers.controller('ManageController', function ($scope, $routeParams
         });
 
         if(changed) {
+          $scope.usage.income = totalIncome;
           $scope.usage.actual = totalActual;
           $scope.usage.projected = totalProjected;
           $scope.usage.remaining = totalProjected - totalActual;

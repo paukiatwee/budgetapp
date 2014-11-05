@@ -216,6 +216,14 @@ public class FinanceService {
         }
 
         List<Budget> budgets = budgetDAO.findBudgets(user, month, year, true);
+
+        double income =
+                budgets
+                        .stream()
+                        .filter(p -> p.getCategory().getType() == CategoryType.INCOME)
+                        .mapToDouble(Budget::getActual)
+                        .sum();
+
         double budget =
                 budgets
                         .stream()
@@ -229,7 +237,7 @@ public class FinanceService {
                         .filter(p -> p.getCategory().getType() == CategoryType.EXPENDITURE)
                         .mapToDouble(Budget::getActual)
                         .sum();
-        return new UsageSummary(budget, spent);
+        return new UsageSummary(income, budget, spent);
     }
 
     private void generateDefaultCategoriesAndBudgets(User user, int month, int year) {
