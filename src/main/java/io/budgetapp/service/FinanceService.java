@@ -604,20 +604,22 @@ public class FinanceService {
             // budget
             double budget = entry.getValue()
                     .stream()
+                    .filter(b -> b.getCategory().getType() == CategoryType.EXPENDITURE)
                     .mapToDouble(Budget::getProjected)
                     .sum();
 
             // spending
             double spending = entry.getValue()
                     .stream()
-                    .filter(p -> p.getActual() > 0)
+                    .filter(b -> b.getActual() > 0)
+                    .filter(b -> b.getCategory().getType() == CategoryType.EXPENDITURE)
                     .mapToDouble(Budget::getActual)
                     .sum();
 
             // refund
             double refund = entry.getValue()
                     .stream()
-                    .filter(p -> p.getActual() < 0)
+                    .filter(b -> b.getActual() < 0)
                     .mapToDouble(Budget::getActual)
                     .sum();
 
