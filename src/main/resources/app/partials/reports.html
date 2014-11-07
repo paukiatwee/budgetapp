@@ -50,7 +50,7 @@
           <div ng-hide="transactions.length || !transactionsLoaded" class="no-result">
             <h2>No transaction found</h2>
           </div>
-          <table foo-table class="table footable" data-page-size="5" ng-model="transactions" ng-show="transactions.length && transactionsLoaded">
+          <table foo-table class="table footable" ng-model="transactions" ng-show="transactions.length && transactionsLoaded">
             <thead>
             <tr>
               <th>Name</th>
