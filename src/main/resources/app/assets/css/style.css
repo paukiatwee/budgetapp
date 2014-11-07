@@ -1845,6 +1845,9 @@ button .ng-hide-add {
 button .ng-hide-remove {
   display: inline !important;
 }
+.table-pagination td {
+  text-align: center;
+}
 .invisible {
   visibility: hidden;
 }
