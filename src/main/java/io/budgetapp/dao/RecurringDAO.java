@@ -28,7 +28,7 @@ public class RecurringDAO extends AbstractDAO<Recurring> {
     }
 
     public List<Recurring> findRecurrings(User user) {
-        return currentSession().createQuery("SELECT r FROM Recurring r JOIN r.budgetType budgetType WHERE budgetType IN (FROM Budget budget WHERE budget.user = :user)")
+        return currentSession().createQuery("SELECT r FROM Recurring r JOIN r.budgetType budgetType WHERE budgetType IN (SELECT budget.budgetType FROM Budget budget WHERE budget.user = :user)")
                 .setParameter("user", user)
                 .list();
     }
