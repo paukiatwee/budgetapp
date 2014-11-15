@@ -16,6 +16,7 @@
   </properties>
 
   <build>
+    <finalName>budgetapp</finalName>
     <plugins>
       <!--compile-->
       <plugin>
@@ -214,23 +215,6 @@
             </executions>
           </plugin>
         </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>openshift</id>
-      <build>
-        <finalName>budgetapp</finalName>
-      </build>
-    </profile>
-    <profile>
-      <id>heroku</id>
-      <activation>
-        <property>
-          <name>env.DYNO</name>
-        </property>
-      </activation>
-      <build>
-        <finalName>budgetapp</finalName>
       </build>
     </profile>
   </profiles>
