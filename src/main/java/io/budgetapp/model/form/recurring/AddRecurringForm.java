@@ -19,6 +19,7 @@ public class AddRecurringForm implements Serializable {
     private Double amount;
     private Date recurringAt;
     private RecurringType recurringType;
+    private String remark;
 
     @NotNull(message = "{validation.budget.required}")
     public Long getBudgetId() {
@@ -54,5 +55,13 @@ public class AddRecurringForm implements Serializable {
 
     public void setRecurringType(RecurringType recurringType) {
         this.recurringType = recurringType;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

@@ -34,6 +34,7 @@ public class Recurring implements Serializable {
     private Date lastRunAt;
     private Date createdAt;
     private BudgetType budgetType;
+    private String remark;
     private List<Transaction> transactions;
 
     // not in DB
@@ -102,6 +103,14 @@ public class Recurring implements Serializable {
 
     public void setBudgetType(BudgetType budgetType) {
         this.budgetType = budgetType;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     @JoinColumn(name = "transaction_id", updatable = false)

@@ -39,6 +39,7 @@
               <th>Name</th>
               <th>Amount</th>
               <th>Type</th>
+              <th>Remark</th>
               <th>Last Run Date</th>
               <th>Created Date</th>
               <th class="actions" data-sort-ignore="true">Actions</th>
@@ -49,6 +50,7 @@
               <td>{{recurring.name}}</td>
               <td>{{recurring.amount | currency}}</td>
               <td>{{recurring.recurringTypeDisplay}}</td>
+              <td><span title="{{recurring.remark | na }}">{{recurring.remark | na | truncate:true:50 }}</span></td>
               <td>{{recurring.lastRunAt | datetime}}</td>
               <td>{{recurring.createdAt | date}}</td>
               <td class="actions">

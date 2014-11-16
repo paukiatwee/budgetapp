@@ -29,8 +29,8 @@ public class TransactionResource extends AbstractResource {
 
     @GET
     @UnitOfWork
-    public List<Transaction> findAllTransactions(@Auth User user) {
-        return financeService.findTransactions(user);
+    public List<Transaction> findAllTransactions(@Auth User user, @QueryParam("limit") Integer limit) {
+        return financeService.findRecentTransactions(user, limit);
     }
 
     @POST
@@ -73,10 +73,4 @@ public class TransactionResource extends AbstractResource {
         return financeService.findMonthlyTransactionUsage(user);
     }
 
-    @GET
-    @UnitOfWork
-    @Path("/recent")
-    public List<Transaction> findRecentTransactions(@Auth User user, @QueryParam("limit") Integer limit) {
-        return financeService.findRecentTransactions(user, limit);
-    }
 }

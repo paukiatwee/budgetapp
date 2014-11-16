@@ -346,12 +346,13 @@ public class FinanceService {
         recurring.setLastRunAt(recurringForm.getRecurringAt());
         recurring.setRecurringType(recurringForm.getRecurringType());
         recurring.setBudgetType(budget.getBudgetType());
+        recurring.setRemark(recurringForm.getRemark());
         recurring = recurringDAO.addRecurring(recurring);
 
         Transaction transaction = new Transaction();
         transaction.setName(budget.getName());
         transaction.setAmount(recurring.getAmount());
-        transaction.setRemark("");
+        transaction.setRemark(recurringForm.getRemark());
         transaction.setAuto(Boolean.TRUE);
         transaction.setTransactionOn(recurring.getLastRunAt());
         transaction.setBudget(budget);
@@ -449,6 +450,7 @@ public class FinanceService {
             recurring.setAmount(transactionForm.getAmount());
             recurring.setRecurringType(transactionForm.getRecurringType());
             recurring.setBudgetType(budget.getBudgetType());
+            recurring.setRemark(transactionForm.getRemark());
             recurring.setLastRunAt(transactionForm.getTransactionOn());
             recurringDAO.addRecurring(recurring);
         }
@@ -485,10 +487,6 @@ public class FinanceService {
 
     public Transaction findTransactionById(long transactionId) {
         return transactionDAO.findById(transactionId);
-    }
-
-    public List<Transaction> findTransactions(User user) {
-        return transactionDAO.find(user, 100);
     }
 
     public List<Transaction> findTransactionsByRecurring(User user, long recurringId) {
