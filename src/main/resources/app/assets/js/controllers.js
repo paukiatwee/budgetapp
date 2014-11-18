@@ -168,6 +168,11 @@ financeControllers.controller('DashboardController', function ($scope, $modal, B
       {label: "Spending", data: spendings}
     ];
   });
+
+  TransactionService.todayRecurrings(function(response) {
+    $scope.recurringTransactions = response;
+  });
+
 });
 
 financeControllers.controller('ProfileController', function ($scope, UserService) {
@@ -403,7 +408,11 @@ financeControllers.controller('ManageController', function ($scope, $routeParams
 //      $scope.data.loaded = true;
 //    });
 //    $scope.data.summary = summaries;
-  }
+  };
+
+  TransactionService.todayRecurrings(function(response) {
+    $scope.recurringTransactions = response;
+  });
 });
 
 

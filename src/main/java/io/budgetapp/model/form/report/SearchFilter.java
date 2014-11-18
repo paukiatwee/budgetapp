@@ -14,6 +14,7 @@ public class SearchFilter implements Serializable {
     private Double minAmount;
     private Date startOn;
     private Date endOn;
+    private Boolean auto;
 
     public Double getMaxAmount() {
         return maxAmount;
@@ -47,6 +48,14 @@ public class SearchFilter implements Serializable {
         this.endOn = endOn;
     }
 
+    public Boolean getAuto() {
+        return auto;
+    }
+
+    public void setAuto(Boolean auto) {
+        this.auto = auto;
+    }
+
     public boolean isDateRange() {
         return getStartOn() != null && getEndOn() != null;
     }
@@ -57,11 +66,13 @@ public class SearchFilter implements Serializable {
 
     @Override
     public String toString() {
-        return "SearchFilter{" +
-                "maxAmount=" + maxAmount +
-                ", minAmount=" + minAmount +
-                ", startOn=" + startOn +
-                ", endOn=" + endOn +
-                '}';
+        final StringBuilder sb = new StringBuilder("SearchFilter{");
+        sb.append("maxAmount=").append(maxAmount);
+        sb.append(", minAmount=").append(minAmount);
+        sb.append(", startOn=").append(startOn);
+        sb.append(", endOn=").append(endOn);
+        sb.append(", auto=").append(auto);
+        sb.append('}');
+        return sb.toString();
     }
 }

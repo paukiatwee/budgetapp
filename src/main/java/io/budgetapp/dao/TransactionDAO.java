@@ -108,6 +108,10 @@ public class TransactionDAO extends AbstractDAO<Transaction> {
             criteria.add(Restrictions.le("transactionOn", filter.getEndOn()));
         }
 
+        if(Boolean.TRUE.equals(filter.getAuto())) {
+            criteria.add(Restrictions.eq("auto", Boolean.TRUE));
+        }
+
         return list(criteria);
     }
 

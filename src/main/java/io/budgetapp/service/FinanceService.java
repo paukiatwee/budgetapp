@@ -478,6 +478,10 @@ public class FinanceService {
         return false;
     }
 
+    public Transaction findTransactionById(long transactionId) {
+        return transactionDAO.findById(transactionId);
+    }
+
     public List<Transaction> findRecentTransactions(User user, Integer limit) {
         if(limit == null) {
             limit = 20;
@@ -485,8 +489,12 @@ public class FinanceService {
         return transactionDAO.find(user, limit);
     }
 
-    public Transaction findTransactionById(long transactionId) {
-        return transactionDAO.findById(transactionId);
+    public List<Transaction> findTodayRecurringsTransactions(User user) {
+        SearchFilter filter = new SearchFilter();
+        filter.setStartOn(new Date());
+        filter.setEndOn(new Date());
+        filter.setAuto(Boolean.TRUE);
+        return transactionDAO.findTransactions(user, filter);
     }
 
     public List<Transaction> findTransactionsByRecurring(User user, long recurringId) {

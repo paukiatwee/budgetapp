@@ -17,7 +17,8 @@ financeServices.factory('BudgetService', function($resource) {
 financeServices.factory('TransactionService', function($resource) {
   return $resource("/api/transactions/:id/:path", {}, {
     summary: {method: 'GET', params: {path: 'summary'}, isArray: true},
-    monthly: {method: 'GET', params: {path: 'monthly'}, isArray: true}
+    monthly: {method: 'GET', params: {path: 'monthly'}, isArray: true},
+    todayRecurrings: {method: 'GET', params: {path: 'today'}, isArray: true}
   });
 });
 

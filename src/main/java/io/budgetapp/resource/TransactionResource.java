@@ -73,4 +73,11 @@ public class TransactionResource extends AbstractResource {
         return financeService.findMonthlyTransactionUsage(user);
     }
 
+    @GET
+    @UnitOfWork
+    @Path("/today")
+    public Response findTodayRecurringTransactions(@Auth User user) {
+        return ok(financeService.findTodayRecurringsTransactions(user));
+    }
+
 }

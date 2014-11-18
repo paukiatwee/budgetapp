@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="alert alert-info" role="alert" ng-show="recurringTransactions && recurringTransactions.length > 0">
+      <strong>You got {{recurringTransactions.length}} recurring for today:</strong>
+      <span ng-show="recurringTransactions.length == 1">{{recurringTransactions.0.name}} - {{recurringTransactions.0.amount | currency}}</span>
+      <ul ng-show="recurringTransactions.length > 1">
+        <li ng-repeat="recurring in recurringTransactions">
+          {{recurring.name}} - {{recurring.amount | currency}}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
