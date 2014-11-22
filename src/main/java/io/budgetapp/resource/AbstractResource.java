@@ -25,6 +25,14 @@ abstract class AbstractResource {
         return Response.status(Response.Status.BAD_REQUEST).build();
     }
 
+    public Response error() {
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+    }
+
+    public Response error(String message) {
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(message).build();
+    }
+
     public Response created(Object object, Object id) {
 
         try {
