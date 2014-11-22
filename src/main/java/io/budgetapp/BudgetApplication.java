@@ -18,6 +18,7 @@ import io.budgetapp.dao.RecurringDAO;
 import io.budgetapp.dao.TransactionDAO;
 import io.budgetapp.dao.UserDAO;
 import io.budgetapp.filter.SlowNetworkFilter;
+import io.budgetapp.managed.JobsManaged;
 import io.budgetapp.managed.MigrationManaged;
 import io.budgetapp.model.AuthToken;
 import io.budgetapp.model.Budget;
