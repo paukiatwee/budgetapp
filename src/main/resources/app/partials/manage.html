@@ -12,19 +12,19 @@
         <div class="form-group" ng-class="{true: 'has-error'}[updateBudgetForm.name.$dirty && updateBudgetForm.name.$invalid]">
           <label for="name" class="col-sm-3 control-label">Name</label>
           <div class="col-sm-7">
-            <input type="text" class="form-control" id="name" name="name" placeholder="Name" ng-model="selected.name" required>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" ng-model="selected.name" required>
           </div>
         </div>
         <div class="form-group" ng-class="{true: 'has-error'}[updateBudgetForm.projected.$dirty && updateBudgetForm.projected.$invalid]">
           <label for="projected" class="col-sm-3 control-label">Projected</label>
           <div class="col-sm-7">
-            <input type="number" step="1" min="0" ng-min="0" class="form-control" id="projected" name="projected" placeholder="Projected amount" ng-model="selected.projected">
+            <input type="number" step="1" min="0" ng-min="0" class="form-control" id="projected" name="projected" placeholder="Enter Projected Amount" ng-model="selected.projected">
           </div>
         </div>
         <div class="form-group" ng-show="selected.category.type == 'INCOME'">
           <label for="actual" class="col-sm-3 control-label">Actual</label>
           <div class="col-sm-7">
-            <input type="number" step="1" min="0" ng-min="0" class="form-control" id="actual" name="actual" placeholder="Actual" ng-model="selected.actual">
+            <input type="number" step="1" min="0" ng-min="0" class="form-control" id="actual" name="actual" placeholder="Enter Actual Amount" ng-model="selected.actual">
           </div>
         </div>
         <div class="form-group" ng-show="selected.category.type == 'EXPENDITURE'">
@@ -51,7 +51,7 @@
         <div class="form-group has-feedback" ng-class="errorClass('amount')">
           <label for="amount" class="col-sm-3 control-label">Amount</label>
           <div class="col-sm-7">
-            <input type="number" step="1" class="form-control" id="amount" name="amount" placeholder="Amount" ng-model="transaction.amount" required>
+            <input type="number" step="1" class="form-control" id="amount" name="amount" placeholder="Enter Transaction Amount" ng-model="transaction.amount" required>
             <span class="help-block" ng-show="form.amount.$invalid && form.amount.$dirty">
               {{errorMessage('amount')}}
             </span>
@@ -60,13 +60,13 @@
         <div class="form-group">
           <label for="remark" class="col-sm-3 control-label">Remark</label>
           <div class="col-sm-7">
-            <textarea class="form-control" id="remark" name="remark" rows="3" placeholder="Remark" ng-model="transaction.remark"></textarea>
+            <textarea class="form-control" id="remark" name="remark" rows="3" placeholder="Enter Remark" ng-model="transaction.remark"></textarea>
           </div>
         </div>
         <div class="form-group has-feedback" ng-class="errorClass('transactionOn')">
           <label for="transactionOn" class="col-sm-3 control-label">Transaction Date</label>
           <div class="col-sm-7">
-            <input type="date" class="form-control" id="transactionOn" name="transactionOn" placeholder="Transaction Date" ng-model="transaction.transactionOn">
+            <input type="date" class="form-control" id="transactionOn" name="transactionOn" placeholder="Enter Transaction Date (yyyy-mm-dd)" ng-model="transaction.transactionOn">
             <span class="help-block" ng-show="form.transactionOn.$invalid && form.transactionOn.$dirty">
               {{errorMessage('transactionOn')}}
             </span>

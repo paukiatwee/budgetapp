@@ -7,14 +7,14 @@
           <form name="form" novalidate role="form">
             <div class="form-group has-feedback" ng-class="errorClass('username')">
               <label for="username" class="control-label">Email</label>
-              <input type="email" class="form-control" id="username" name="username" placeholder="Enter email" ng-model="user.username">
+              <input type="email" class="form-control" id="username" name="username" placeholder="Enter Email" ng-model="user.username">
               <span class="help-block" ng-show="form.username.$invalid && form.username.$dirty">
                 {{errorMessage('username')}}
               </span>
             </div>
             <div class="form-group has-feedback" ng-class="errorClass('password')">
               <label for="password" class="control-label">Password</label>
-              <input type="password" class="form-control" id="password" name="password" placeholder="Password" ng-model="user.password">
+              <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" ng-model="user.password">
               <span class="help-block" ng-show="form.password.$invalid && form.password.$dirty">
                 {{errorMessage('password')}}
               </span>

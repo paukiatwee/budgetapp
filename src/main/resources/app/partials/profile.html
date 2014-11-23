@@ -29,7 +29,7 @@
                 <div class="form-group has-feedback" ng-class="errorClass('name')">
                   <label for="name" class="col-sm-3 control-label">Name</label>
                   <div class="col-sm-7">
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter name" ng-model="user.name">
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter Name" ng-model="user.name">
                   <span class="help-block" ng-show="form.name.$invalid && form.name.$dirty">
                     {{errorMessage('name')}}
                   </span>
@@ -61,7 +61,7 @@
                   </div>
                 </div>
                 <div class="form-group has-feedback" ng-class="errorClass('password')">
-                  <label for="password" class="col-sm-3 control-label">Password</label>
+                  <label for="password" class="col-sm-3 control-label">New Password</label>
                   <div class="col-sm-7">
                     <input type="password" class="form-control" name="password" id="password" placeholder="Enter New Password" ng-model="password.password">
                     <span class="help-block" ng-show="form.password.$invalid && form.password.$dirty">
