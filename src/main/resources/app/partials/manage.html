@@ -138,7 +138,9 @@
     <div class="col-lg-12 category-{{group.id}}" ng-repeat="group in summary.groups | filter: {type: 'INCOME'}">
       <div class="panel panel-info">
         <div class="panel-heading">
-          <h3 class="panel-title">{{group.name}}</h3>
+          <h3 class="panel-title">
+            <span ng-bind-html='group.name | icon | unsafe'></span>
+          </h3>
         </div>
         <div class="panel-body budgets income">
           <ul class="list-unstyled list-budgets">
@@ -175,7 +177,9 @@
       <div class="masonry-brick col-xs-12 col-sm-12 col-md-12 col-lg-6 category-{{group.id}}" ng-repeat="group in summary.groups | filter: {type: 'EXPENDITURE'}">
         <div class="panel panel-primary">
           <div class="panel-heading">
-            <h3 class="panel-title">{{group.name}}</h3>
+            <h3 class="panel-title">
+              <span ng-bind-html='group.name | icon | unsafe'></span>
+            </h3>
           </div>
           <div class="panel-body budgets">
             <ul class="list-unstyled list-budgets">

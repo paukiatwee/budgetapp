@@ -743,7 +743,7 @@ financeControllers.controller('ReportsController', function ($scope, ReportServi
   ReportService.transactions(angular.toJson({}), function (response) {
     $scope.transactions = response;
     $scope.transactionsLoaded = true;
-  })
+  });
   $scope.doSearch = function () {
     var search = $scope.search || {};
     $scope.transactionsLoaded = false;

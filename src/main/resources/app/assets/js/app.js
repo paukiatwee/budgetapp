@@ -332,3 +332,97 @@ angular.module('ng').directive('bsNavbar', function($rootScope, $location) {
     }
   };
 });
+
+angular.module('ng').filter('icon', function() {
+  'use strict';
+
+  var icons = [
+    {
+      icon: 'money',
+      keywords: ['money', 'income', 'salary', 'bonus', 'wages', 'dividend', 'saving']
+    },
+    {
+      icon: 'home',
+      keywords: ['home', 'house']
+    },
+    {
+      icon: 'shopping-cart',
+      keywords: ['daily', 'living', 'shopping']
+    },
+    {
+      icon: 'bus',
+      keywords: ['bus', 'transportation']
+    },
+    {
+      icon: 'taxi',
+      keywords: ['taxi', 'cab', 'automobile', 'car', 'transportation']
+    },
+    {
+      icon: 'hospital',
+      keywords: ['hospital', 'medical']
+    },
+    {
+      icon: 'loan',
+      keywords: ['loan', 'university']
+    },
+    {
+      icon: 'user-md',
+      keywords: ['doctor', 'medical', 'health']
+    },
+    {
+      icon: 'car',
+      keywords: ['car']
+    },
+    {
+      icon: 'child',
+      keywords: ['child']
+    },
+    {
+      icon: 'gift',
+      keywords: ['gift']
+    },
+    {
+      icon: 'gamepad',
+      keywords: ['game', 'entertainment']
+    },
+    {
+      icon: 'credit-card',
+      keywords: ['obligation']
+    }
+  ];
+
+  return function (name) {
+    var icon = _.find(icons, function(item) {
+      var names = name.toLowerCase().replace('/', ' ').split(' ');
+      for (var index = 0; index < names.length; ++index) {
+        var n = names[index];
+        if(endsWith(n, 's')) {
+          n = n.substring(0, n.length - 1)
+        }
+
+        if (item.keywords.indexOf(n) != -1) {
+          return true;
+        }
+      }
+    });
+
+    if(icon) {
+      return '<span class="fa fa-lg fa-' + icon.icon + '"></span> ' + name;
+    } else {
+      return ' <span class="fa fa-lg fa-usd"></span> ' + name;
+    }
+
+  };
+});
+
+
+angular.module('ng').filter('unsafe', function($sce) {
+  return function(val) {
+    return $sce.trustAsHtml(val);
+  };
+});
+
+
+function endsWith(str, suffix) {
+  return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
