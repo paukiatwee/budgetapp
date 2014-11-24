@@ -38,9 +38,9 @@
               </div>
             </div>
             <div class="form-group has-feedback"  ng-class="errorClass('recurringAt')">
-              <label for="recurringAt" class="col-sm-3 control-label">Enter Recurring Date (yyyy-mm-dd)</label>
+              <label for="recurringAt" class="col-sm-3 control-label">Recurring Date</label>
               <div class="col-sm-7">
-                <input type="date" id="recurringAt" name="recurringAt" class="form-control" ng-model="recurring.recurringAt" />
+                <input type="date" id="recurringAt" name="recurringAt" class="form-control" placeholder="Enter Recurring Date (yyyy-mm-dd)" ng-model="recurring.recurringAt" />
                 <span class="help-block" ng-show="form.recurringAt.$invalid && form.recurringAt.$dirty">
                   {{errorMessage('recurringAt')}}
                 </span>
