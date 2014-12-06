@@ -446,9 +446,9 @@ public class FinanceService {
         budget.setActual(budget.getActual() + transactionForm.getAmount());
         budgetDAO.update(budget);
 
+        Recurring recurring = new Recurring();
         if(Boolean.TRUE.equals(transactionForm.getRecurring())) {
             LOGGER.debug("Add recurring {} by {}", transactionForm, user);
-            Recurring recurring = new Recurring();
             recurring.setAmount(transactionForm.getAmount());
             recurring.setRecurringType(transactionForm.getRecurringType());
             recurring.setBudgetType(budget.getBudgetType());
@@ -464,6 +464,10 @@ public class FinanceService {
         transaction.setAuto(Boolean.TRUE.equals(transactionForm.getRecurring()));
         transaction.setTransactionOn(transactionForm.getTransactionOn());
         transaction.setBudget(transactionForm.getBudget());
+        if(Boolean.TRUE.equals(transactionForm.getRecurring())) {
+            transaction.setRecurring(recurring);
+        }
+
         return transactionDAO.addTransaction(transaction);
     }
 
