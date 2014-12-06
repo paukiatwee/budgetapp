@@ -279,54 +279,38 @@ financeControllers.controller('ManageController', function ($scope, $routeParams
         var totalProjected = 0.0;
         var  changed = false;
         _.forEach(summary.groups, function(group) {
-          var income = _.reduce(group.budgets, function(sum, budget) {
+
+          var projected = 0.0;
+          var actual = 0.0;
+
+          _.forEach(group.budgets, function (budget) {
             changed = true;
 
-            if(group.type == 'INCOME') {
-              return sum + budget.actual;
+            if (group.type == 'INCOME') {
+              // total actual income
+              totalIncome += budget.actual;
             } else {
-              return sum;
+              // total spending budget
+              totalProjected += budget.projected;
+              // total actual spending
+              totalActual += budget.actual;
             }
 
-          }, 0);
-          totalIncome += income;
-        });
-
-        _.forEach(summary.groups, function(group) {
-          var actual = _.reduce(group.budgets, function(sum, budget) {
-            changed = true;
             budget.remaining = budget.projected - budget.actual;
 
-            if(group.type == 'EXPENDITURE') {
-              return sum + budget.actual;
-            } else {
-              return sum;
-            }
+            projected += budget.projected;
+            actual += budget.actual;
+          });
 
-          }, 0);
-          totalActual += actual;
-          group.actual = actual;
-        });
-
-        _.forEach(summary.groups, function(group) {
-          var projected = _.reduce(group.budgets, function(sum, budget) {
-            changed = true;
-
-            if(group.type == 'EXPENDITURE') {
-              return sum + budget.projected;
-            } else {
-              return sum;
-            }
-          }, 0);
-          totalProjected += projected;
           group.projected = projected;
+          group.actual = actual;
           group.remaining = group.projected - group.actual;
         });
 
         if(changed) {
           $scope.usage.income = totalIncome;
-          $scope.usage.actual = totalActual;
           $scope.usage.projected = totalProjected;
+          $scope.usage.actual = totalActual;
           $scope.usage.remaining = totalProjected - totalActual;
         }
       },
