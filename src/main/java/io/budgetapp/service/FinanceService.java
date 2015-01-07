@@ -608,7 +608,7 @@ public class FinanceService {
         LocalDate now = LocalDate.now();
         // populate empty months, if any
         for (int i = 0; i < 6; i++) {
-            LocalDate day = LocalDate.of(now.getYear(), now.getMonthValue() - i, 1);
+            LocalDate day = now.minusMonths(i).withDayOfMonth(1);
             groups.putIfAbsent(Util.toDate(day), Collections.emptyList());
         }
 
