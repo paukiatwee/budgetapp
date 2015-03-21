@@ -1,6 +1,5 @@
 package io.budgetapp.resource;
 
-import com.sun.jersey.api.client.ClientResponse;
 import io.budgetapp.BudgetApplication;
 import io.budgetapp.configuration.AppConfiguration;
 import io.budgetapp.modal.IdentityResponse;
@@ -13,6 +12,7 @@ import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
@@ -35,7 +35,7 @@ public class BudgetResourceIT extends ResourceIT {
         // given user (created from ResourceIT)
 
         // when
-        ClientResponse response = get("/api/budgets");
+        Response response = get("/api/budgets");
         assertOk(response);
         List<IdentityResponse> identityResponses = identityResponses(response);
 
@@ -52,7 +52,7 @@ public class BudgetResourceIT extends ResourceIT {
         budget.setCategoryId(defaultCategory.getId());
 
         // when
-        ClientResponse response = post("/api/budgets", budget);
+        Response response = post("/api/budgets", budget);
 
         // then
         assertCreated(response);
@@ -65,7 +65,7 @@ public class BudgetResourceIT extends ResourceIT {
         AddBudgetForm budget = new AddBudgetForm();
         budget.setName(randomAlphabets());
         budget.setCategoryId(defaultCategory.getId());
-        ClientResponse createdResponse = post("/api/budgets", budget);
+        Response createdResponse = post("/api/budgets", budget);
         long budgetId = identityResponse(createdResponse).getId();
 
         // when
@@ -73,8 +73,8 @@ public class BudgetResourceIT extends ResourceIT {
         updateBudgetForm.setId(budgetId);
         updateBudgetForm.setName("Test");
         updateBudgetForm.setProjected(100);
-        ClientResponse updateResponse = put("/api/budgets/" + budgetId, updateBudgetForm);
-        Budget updatedBudget = updateResponse.getEntity(Budget.class);
+        Response updateResponse = put("/api/budgets/" + budgetId, updateBudgetForm);
+        Budget updatedBudget = updateResponse.readEntity(Budget.class);
 
         // then
         assertCreated(createdResponse);
@@ -92,10 +92,10 @@ public class BudgetResourceIT extends ResourceIT {
         budget.setCategoryId(1L);
 
         // when
-        ClientResponse response = post("/api/budgets", budget);
+        Response response = post("/api/budgets", budget);
 
         // then
-        ClientResponse newReponse = get(response.getLocation().getPath());
+        Response newReponse = get(response.getLocation().getPath());
         assertOk(newReponse);
     }
 
@@ -108,7 +108,7 @@ public class BudgetResourceIT extends ResourceIT {
         addBudgetForm.setCategoryId(1L);
 
         // when
-        ClientResponse response = post("/api/budgets", addBudgetForm);
+        Response response = post("/api/budgets", addBudgetForm);
         TransactionForm transactionForm = new TransactionForm();
         transactionForm.setAmount(10.00);
         Budget budget = new Budget();
@@ -117,7 +117,7 @@ public class BudgetResourceIT extends ResourceIT {
         post(ResourceURL.TRANSACTION, transactionForm);
 
         // then
-        ClientResponse newReponse = delete(response.getLocation().getPath());
+        Response newReponse = delete(response.getLocation().getPath());
         assertBadRequest(newReponse);
     }
 

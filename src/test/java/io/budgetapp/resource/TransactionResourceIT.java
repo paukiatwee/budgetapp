@@ -9,12 +9,12 @@ import io.budgetapp.model.Category;
 import io.budgetapp.model.CategoryType;
 import io.budgetapp.model.form.TransactionForm;
 import io.budgetapp.model.form.budget.AddBudgetForm;
-import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 
@@ -41,7 +41,7 @@ public class TransactionResourceIT extends ResourceIT {
         transaction.setBudget(defaultBudget);
 
         // when
-        ClientResponse response = post(ResourceURL.TRANSACTION, transaction);
+        Response response = post(ResourceURL.TRANSACTION, transaction);
 
         // then
         assertCreated(response);
@@ -55,11 +55,11 @@ public class TransactionResourceIT extends ResourceIT {
         TransactionForm transaction = new TransactionForm();
         transaction.setAmount(10.00);
         transaction.setBudget(defaultBudget);
-        ClientResponse response = post(ResourceURL.TRANSACTION, transaction);
+        Response response = post(ResourceURL.TRANSACTION, transaction);
         IdentityResponse identityResponse = identityResponse(response);
 
         // when
-        ClientResponse deleteResponse = delete(ResourceURL.TRANSACTION + "/" + identityResponse.getId());
+        Response deleteResponse = delete(ResourceURL.TRANSACTION + "/" + identityResponse.getId());
 
         // then
         assertDeleted(deleteResponse);
@@ -72,7 +72,7 @@ public class TransactionResourceIT extends ResourceIT {
         long transactionId = Long.MAX_VALUE;
 
         // when
-        ClientResponse deleteResponse = delete("/api/transactions/" + transactionId);
+        Response deleteResponse = delete("/api/transactions/" + transactionId);
 
         // then
         assertNotFound(deleteResponse);
@@ -87,10 +87,10 @@ public class TransactionResourceIT extends ResourceIT {
         transaction.setBudget(defaultBudget);
 
         // when
-        ClientResponse response = post(ResourceURL.TRANSACTION, transaction);
+        Response response = post(ResourceURL.TRANSACTION, transaction);
 
         // then
-        ClientResponse newReponse = get(response.getLocation().getPath());
+        Response newReponse = get(response.getLocation().getPath());
         assertOk(newReponse);
     }
 
@@ -108,18 +108,18 @@ public class TransactionResourceIT extends ResourceIT {
         transaction.setAmount(10.00);
 
         // when
-        ClientResponse categoryResponse = post("/api/categories", category);
+        Response categoryResponse = post("/api/categories", category);
         Long categoryId = identityResponse(categoryResponse).getId();
         budget.setCategoryId(categoryId);
 
-        ClientResponse budgetResponse = post("/api/budgets", budget);
+        Response budgetResponse = post("/api/budgets", budget);
         Long budgetId = identityResponse(budgetResponse).getId();
 
         transaction.setBudget(new Budget(budgetId));
         post(ResourceURL.TRANSACTION, transaction);
 
         // then
-        ClientResponse newResponse = get("/api/budgets/" + budgetId + "/transactions");
+        Response newResponse = get("/api/budgets/" + budgetId + "/transactions");
         List<IdentityResponse> ids = identityResponses(newResponse);
         assertOk(newResponse);
         Assert.assertEquals(1, ids.size());

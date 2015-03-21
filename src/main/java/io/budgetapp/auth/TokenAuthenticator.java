@@ -1,15 +1,15 @@
 package io.budgetapp.auth;
 
+import com.google.common.base.Optional;
 import io.budgetapp.model.User;
 import io.budgetapp.service.FinanceService;
 import io.dropwizard.auth.AuthenticationException;
-
-import java.util.Optional;
+import io.dropwizard.auth.Authenticator;
 
 /**
  *
  */
-public class TokenAuthenticator implements Authenticator<Token, User> {
+public class TokenAuthenticator implements Authenticator<String, User> {
 
     private final FinanceService financeService;
 
@@ -18,7 +18,12 @@ public class TokenAuthenticator implements Authenticator<Token, User> {
     }
 
     @Override
-    public Optional<User> authenticate(Token token) throws AuthenticationException {
-        return financeService.findUserByToken(token.getValue());
+    public Optional<User> authenticate(String token) throws AuthenticationException {
+        java.util.Optional<User> option = financeService.findUserByToken(token);
+        if(option.isPresent()) {
+            return Optional.of(option.get());
+        } else {
+            return Optional.absent();
+        }
     }
 }

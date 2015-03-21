@@ -1,7 +1,6 @@
 package io.budgetapp.resource;
 
 
-import com.sun.jersey.api.client.ClientResponse;
 import io.budgetapp.BudgetApplication;
 import io.budgetapp.configuration.AppConfiguration;
 import io.budgetapp.model.Category;
@@ -11,6 +10,8 @@ import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Test;
+
+import javax.ws.rs.core.Response;
 
 
 /**
@@ -36,7 +37,7 @@ public class CategoryResourceIT extends ResourceIT {
         category.setType(CategoryType.EXPENDITURE);
 
         // when
-        ClientResponse response = post("/api/categories", category);
+        Response response = post("/api/categories", category);
 
         // then
         assertCreated(response);
@@ -52,10 +53,10 @@ public class CategoryResourceIT extends ResourceIT {
         category.setType(CategoryType.EXPENDITURE);
 
         // when
-        ClientResponse response = post("/api/categories", category);
+        Response response = post("/api/categories", category);
 
         // then
-        ClientResponse newReponse = get(response.getLocation().getPath());
+        Response newReponse = get(response.getLocation().getPath());
         assertOk(newReponse);
     }
 
@@ -69,14 +70,14 @@ public class CategoryResourceIT extends ResourceIT {
         category.setType(CategoryType.EXPENDITURE);
 
         // when
-        ClientResponse response = post("/api/categories", category);
+        Response response = post("/api/categories", category);
         AddBudgetForm budget = new AddBudgetForm();
         budget.setName(randomAlphabets());
         budget.setCategoryId(identityResponse(response).getId());
         post("/api/budgets", budget);
 
         // then
-        ClientResponse newReponse = delete(response.getLocation().getPath());
+        Response newReponse = delete(response.getLocation().getPath());
         assertBadRequest(newReponse);
     }
 }

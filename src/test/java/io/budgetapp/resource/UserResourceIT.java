@@ -1,7 +1,6 @@
 package io.budgetapp.resource;
 
 
-import com.sun.jersey.api.client.ClientResponse;
 import io.budgetapp.BudgetApplication;
 import io.budgetapp.configuration.AppConfiguration;
 import io.budgetapp.model.User;
@@ -12,6 +11,8 @@ import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Test;
+
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -36,7 +37,7 @@ public class UserResourceIT extends ResourceIT {
         // when
         signUp.setUsername(randomEmail());
         signUp.setPassword(randomAlphabets());
-        ClientResponse response = post("/api/users", signUp);
+        Response response = post("/api/users", signUp);
 
         // then
         assertCreated(response);
@@ -57,10 +58,10 @@ public class UserResourceIT extends ResourceIT {
         LoginForm login = new LoginForm();
         login.setUsername(defaultUser.getUsername());
         login.setPassword(password.getPassword());
-        ClientResponse authResponse = post(Resources.USER_AUTH, login);
+        Response authResponse = post(Resources.USER_AUTH, login);
 
         // then
         assertOk(authResponse);
-        Assert.assertNotNull(authResponse.getEntity(User.class).getToken());
+        Assert.assertNotNull(authResponse.readEntity(User.class).getToken());
     }
 }

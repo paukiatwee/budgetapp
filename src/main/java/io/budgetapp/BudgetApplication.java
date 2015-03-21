@@ -1,12 +1,12 @@
 package io.budgetapp;
 
 import com.bazaarvoice.dropwizard.assets.ConfiguredAssetsBundle;
-import com.sun.jersey.api.core.ResourceConfig;
+import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import io.budgetapp.application.ConstraintViolationExceptionMapper;
 import io.budgetapp.application.DataConstraintExceptionMapper;
 import io.budgetapp.application.NotFoundExceptionMapper;
 import io.budgetapp.application.SQLConstraintViolationExceptionMapper;
-import io.budgetapp.auth.TokenAuthProvider;
+import io.budgetapp.auth.DefaultUnauthorizedHandler;
 import io.budgetapp.auth.TokenAuthenticator;
 import io.budgetapp.configuration.AppConfiguration;
 import io.budgetapp.crypto.PasswordEncoder;
@@ -17,7 +17,6 @@ import io.budgetapp.dao.CategoryDAO;
 import io.budgetapp.dao.RecurringDAO;
 import io.budgetapp.dao.TransactionDAO;
 import io.budgetapp.dao.UserDAO;
-import io.budgetapp.filter.SlowNetworkFilter;
 import io.budgetapp.managed.JobsManaged;
 import io.budgetapp.managed.MigrationManaged;
 import io.budgetapp.model.AuthToken;
@@ -36,6 +35,8 @@ import io.budgetapp.resource.TransactionResource;
 import io.budgetapp.resource.UserResource;
 import io.budgetapp.service.FinanceService;
 import io.dropwizard.Application;
+import io.dropwizard.auth.AuthFactory;
+import io.dropwizard.auth.oauth.OAuthFactory;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.migrations.MigrationsBundle;
@@ -45,20 +46,27 @@ import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  *
  */
 public class BudgetApplication extends Application<AppConfiguration> {
+
     public static void main(String[] args) throws Exception {
         new BudgetApplication().run(args);
     }
 
     private final HibernateBundle<AppConfiguration> hibernate = new HibernateBundle<AppConfiguration>(User.class, Category.class, Budget.class, BudgetType.class, Transaction.class, Recurring.class, AuthToken.class) {
+
+        @Override
+        protected Hibernate4Module createHibernate4Module() {
+            Hibernate4Module module = super.createHibernate4Module();
+            // allow @Transient JPA annotation process by Jackson
+            module.disable(Hibernate4Module.Feature.USE_TRANSIENT_ANNOTATION);
+            return module;
+        }
+
         @Override
         public DataSourceFactory getDataSourceFactory(AppConfiguration configuration) {
             return configuration.getDataSourceFactory();
@@ -85,8 +93,6 @@ public class BudgetApplication extends Application<AppConfiguration> {
 
     @Override
     public void run(AppConfiguration configuration, Environment environment) {
-
-        removeUnused(environment);
 
         // password encoder
         final PasswordEncoder passwordEncoder = new PasswordEncoder();
@@ -119,7 +125,7 @@ public class BudgetApplication extends Application<AppConfiguration> {
         environment.lifecycle().manage(new JobsManaged(financeService));
 
         // auth
-        environment.jersey().register(new TokenAuthProvider<>(new TokenAuthenticator(financeService)));
+        environment.jersey().register(AuthFactory.binder(new OAuthFactory<>(new TokenAuthenticator(financeService), "realm", User.class).prefix("Bearer").responseBuilder(new DefaultUnauthorizedHandler())));
 
         // filters
         FilterRegistration.Dynamic urlRewriteFilter = environment.servlets().addFilter("rewriteFilter", UrlRewriteFilter.class);
@@ -136,22 +142,6 @@ public class BudgetApplication extends Application<AppConfiguration> {
         environment.jersey().register(new ConstraintViolationExceptionMapper());
         environment.jersey().register(new SQLConstraintViolationExceptionMapper());
 
-    }
-
-    private void removeUnused(Environment environment) {
-        final ResourceConfig config = environment.jersey().getResourceConfig();
-        final Set<Object> singletons = config.getSingletons();
-        final List<Object> singletonsToRemove = new ArrayList<>();
-
-        for (Object s : singletons) {
-            if (s instanceof io.dropwizard.jersey.validation.ConstraintViolationExceptionMapper) {
-                singletonsToRemove.add(s);
-            }
-        }
-
-        for (Object s : singletonsToRemove) {
-            config.getSingletons().remove(s);
-        }
     }
 
 }

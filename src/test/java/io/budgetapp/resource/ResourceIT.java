@@ -1,10 +1,6 @@
 package io.budgetapp.resource;
 
 import com.google.common.io.Resources;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.filter.LoggingFilter;
 import io.budgetapp.client.HTTPTokenClientFilter;
 import io.budgetapp.modal.IdentityResponse;
 import io.budgetapp.model.Budget;
@@ -13,8 +9,14 @@ import io.budgetapp.model.CategoryType;
 import io.budgetapp.model.User;
 import io.budgetapp.model.form.SignUpForm;
 import io.budgetapp.model.form.budget.AddBudgetForm;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.filter.LoggingFilter;
 import org.junit.BeforeClass;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -36,26 +38,28 @@ public abstract class ResourceIT {
 
     @BeforeClass
     public static void before() {
-        client = new Client();
-        client.addFilter(new LoggingFilter(System.out));
+        ClientConfig clientConfig = new ClientConfig();
+        clientConfig.register(HTTPTokenClientFilter.class);
+        clientConfig.register(LoggingFilter.class);
+        client = ClientBuilder.newClient(clientConfig);
 
         SignUpForm signUp = new SignUpForm();
 
         signUp.setUsername(randomEmail());
         signUp.setPassword(randomAlphabets());
         post("/api/users", signUp);
-        ClientResponse authResponse = post("/api/users/auth", signUp);
-        defaultUser = authResponse.getEntity(User.class);
+        Response authResponse = post("/api/users/auth", signUp);
+        defaultUser = authResponse.readEntity(User.class);
         defaultUser.setUsername(signUp.getUsername());
         defaultUser.setPassword(signUp.getPassword());
 
-        client.addFilter(new HTTPTokenClientFilter(defaultUser.getToken()));
+        client.register(new HTTPTokenClientFilter(defaultUser.getToken()));
 
         defaultCategory = new Category();
         defaultCategory.setName(randomAlphabets());
         defaultCategory.setType(CategoryType.EXPENDITURE);
 
-        ClientResponse response = post("/api/categories", defaultCategory);
+        Response response = post("/api/categories", defaultCategory);
         String location = response.getLocation().toString();
         String[] raw = location.split("/");
         defaultCategory.setId(Long.valueOf(raw[raw.length - 1]));
@@ -73,59 +77,59 @@ public abstract class ResourceIT {
 
     }
 
-    protected static ClientResponse post(String path, Object entity) {
+    protected static Response post(String path, Object entity) {
         return client
-                .resource(getUrl(path))
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .post(ClientResponse.class, entity);
+                .target(getUrl(path))
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .buildPost(Entity.json(entity)).invoke();
     }
 
-    protected static ClientResponse put(String path, Object entity) {
+    protected static Response put(String path, Object entity) {
         return client
-                .resource(getUrl(path))
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .put(ClientResponse.class, entity);
+                .target(getUrl(path))
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .buildPut(Entity.json(entity)).invoke();
     }
 
-    protected static ClientResponse delete(String path) {
+    protected static Response delete(String path) {
         return client
-                .resource(getUrl(path))
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .delete(ClientResponse.class);
+                .target(getUrl(path))
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .buildDelete().invoke();
     }
 
-    protected ClientResponse get(String path) {
+    protected Response get(String path) {
         return client
-                .resource(getUrl(path))
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .get(ClientResponse.class);
+                .target(getUrl(path))
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .buildGet().invoke();
     }
 
-    protected IdentityResponse identityResponse(ClientResponse response) {
-        return response.getEntity(IdentityResponse.class);
+    protected IdentityResponse identityResponse(Response response) {
+        return response.readEntity(IdentityResponse.class);
     }
 
-    protected List<IdentityResponse> identityResponses(ClientResponse response) {
-        return response.getEntity(new GenericType<List<IdentityResponse>>(){});
+    protected List<IdentityResponse> identityResponses(Response response) {
+        return response.readEntity(new GenericType<List<IdentityResponse>>() {});
     }
 
-    protected void assertCreated(ClientResponse response) {
+    protected void assertCreated(Response response) {
         assertThat(response.getStatus(), is(201));
     }
 
-    protected void assertOk(ClientResponse response) {
+    protected void assertOk(Response response) {
         assertThat(response.getStatus(), is(200));
     }
 
-    protected void assertDeleted(ClientResponse response) {
+    protected void assertDeleted(Response response) {
         assertThat(response.getStatus(), is(Response.Status.NO_CONTENT.getStatusCode()));
     }
 
-    protected void assertNotFound(ClientResponse response) {
+    protected void assertNotFound(Response response) {
         assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
     }
 
-    protected void assertBadRequest(ClientResponse response) {
+    protected void assertBadRequest(Response response) {
         assertThat(response.getStatus(), is(400));
     }
 

@@ -1,6 +1,5 @@
 package io.budgetapp.resource;
 
-import com.sun.jersey.api.client.ClientResponse;
 import io.budgetapp.BudgetApplication;
 import io.budgetapp.configuration.AppConfiguration;
 import io.budgetapp.model.RecurringType;
@@ -9,6 +8,8 @@ import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Test;
+
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -30,7 +31,7 @@ public class RecurringResourceIT extends ResourceIT {
     public void shouldAbleCreateRecurring() {
 
         // before
-        ClientResponse before = get("/api/recurrings");
+        Response before = get("/api/recurrings");
         int originalCount = identityResponses(before).size();
 
         // given
@@ -41,13 +42,13 @@ public class RecurringResourceIT extends ResourceIT {
         transaction.setBudget(defaultBudget);
 
         // when
-        ClientResponse response = post(ResourceURL.TRANSACTION, transaction);
+        Response response = post(ResourceURL.TRANSACTION, transaction);
 
         // then
         assertCreated(response);
         Assert.assertNotNull(response.getLocation());
 
-        ClientResponse after = get("/api/recurrings");
+        Response after = get("/api/recurrings");
         int finalCount = identityResponses(after).size();
         Assert.assertTrue(finalCount - originalCount - 1 == 0);
     }
