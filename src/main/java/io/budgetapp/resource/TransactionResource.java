@@ -27,6 +27,11 @@ public class TransactionResource extends AbstractResource {
         this.financeService = financeService;
     }
 
+    @Override
+    public String getPath() {
+        return ResourceURL.TRANSACTION;
+    }
+
     @GET
     @UnitOfWork
     public List<Transaction> findAllTransactions(@Auth User user, @QueryParam("limit") Integer limit) {

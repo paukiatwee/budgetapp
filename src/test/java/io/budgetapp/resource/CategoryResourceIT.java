@@ -37,7 +37,7 @@ public class CategoryResourceIT extends ResourceIT {
         category.setType(CategoryType.EXPENDITURE);
 
         // when
-        Response response = post("/api/categories", category);
+        Response response = post(ResourceURL.CATEGORY, category);
 
         // then
         assertCreated(response);
@@ -53,7 +53,7 @@ public class CategoryResourceIT extends ResourceIT {
         category.setType(CategoryType.EXPENDITURE);
 
         // when
-        Response response = post("/api/categories", category);
+        Response response = post(ResourceURL.CATEGORY, category);
 
         // then
         Response newReponse = get(response.getLocation().getPath());
@@ -70,11 +70,11 @@ public class CategoryResourceIT extends ResourceIT {
         category.setType(CategoryType.EXPENDITURE);
 
         // when
-        Response response = post("/api/categories", category);
+        Response response = post(ResourceURL.CATEGORY, category);
         AddBudgetForm budget = new AddBudgetForm();
         budget.setName(randomAlphabets());
         budget.setCategoryId(identityResponse(response).getId());
-        post("/api/budgets", budget);
+        post(ResourceURL.BUDGET, budget);
 
         // then
         Response newReponse = delete(response.getLocation().getPath());

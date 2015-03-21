@@ -39,7 +39,6 @@ public abstract class ResourceIT {
     @BeforeClass
     public static void before() {
         ClientConfig clientConfig = new ClientConfig();
-        clientConfig.register(HTTPTokenClientFilter.class);
         clientConfig.register(LoggingFilter.class);
         client = ClientBuilder.newClient(clientConfig);
 
@@ -47,7 +46,7 @@ public abstract class ResourceIT {
 
         signUp.setUsername(randomEmail());
         signUp.setPassword(randomAlphabets());
-        post("/api/users", signUp);
+        post(ResourceURL.USER, signUp);
         Response authResponse = post("/api/users/auth", signUp);
         defaultUser = authResponse.readEntity(User.class);
         defaultUser.setUsername(signUp.getUsername());
@@ -59,7 +58,7 @@ public abstract class ResourceIT {
         defaultCategory.setName(randomAlphabets());
         defaultCategory.setType(CategoryType.EXPENDITURE);
 
-        Response response = post("/api/categories", defaultCategory);
+        Response response = post(ResourceURL.CATEGORY, defaultCategory);
         String location = response.getLocation().toString();
         String[] raw = location.split("/");
         defaultCategory.setId(Long.valueOf(raw[raw.length - 1]));
@@ -70,7 +69,7 @@ public abstract class ResourceIT {
         AddBudgetForm addBudgetForm = new AddBudgetForm();
         addBudgetForm.setName(defaultBudget.getName());
         addBudgetForm.setCategoryId(defaultCategory.getId());
-        response = post("/api/budgets", addBudgetForm);
+        response = post(ResourceURL.BUDGET, addBudgetForm);
         location = response.getLocation().toString();
         raw = location.split("/");
         defaultBudget.setId(Long.valueOf(raw[raw.length - 1]));

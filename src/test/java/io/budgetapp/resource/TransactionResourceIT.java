@@ -108,11 +108,11 @@ public class TransactionResourceIT extends ResourceIT {
         transaction.setAmount(10.00);
 
         // when
-        Response categoryResponse = post("/api/categories", category);
+        Response categoryResponse = post(ResourceURL.CATEGORY, category);
         Long categoryId = identityResponse(categoryResponse).getId();
         budget.setCategoryId(categoryId);
 
-        Response budgetResponse = post("/api/budgets", budget);
+        Response budgetResponse = post(ResourceURL.BUDGET, budget);
         Long budgetId = identityResponse(budgetResponse).getId();
 
         transaction.setBudget(new Budget(budgetId));

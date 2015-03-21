@@ -37,7 +37,7 @@ public class UserResourceIT extends ResourceIT {
         // when
         signUp.setUsername(randomEmail());
         signUp.setPassword(randomAlphabets());
-        Response response = post("/api/users", signUp);
+        Response response = post(ResourceURL.USER, signUp);
 
         // then
         assertCreated(response);

@@ -26,7 +26,7 @@ import java.util.Optional;
 /**
  *
  */
-@Path("/api/users")
+@Path(ResourceURL.USER)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserResource extends AbstractResource {
@@ -35,6 +35,11 @@ public class UserResource extends AbstractResource {
 
     public UserResource(FinanceService financeService) {
         this.financeService = financeService;
+    }
+
+    @Override
+    public String getPath() {
+        return ResourceURL.USER;
     }
 
     @POST

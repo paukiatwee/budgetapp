@@ -35,7 +35,7 @@ public class BudgetResourceIT extends ResourceIT {
         // given user (created from ResourceIT)
 
         // when
-        Response response = get("/api/budgets");
+        Response response = get(ResourceURL.BUDGET);
         assertOk(response);
         List<IdentityResponse> identityResponses = identityResponses(response);
 
@@ -52,7 +52,7 @@ public class BudgetResourceIT extends ResourceIT {
         budget.setCategoryId(defaultCategory.getId());
 
         // when
-        Response response = post("/api/budgets", budget);
+        Response response = post(ResourceURL.BUDGET, budget);
 
         // then
         assertCreated(response);
@@ -65,7 +65,7 @@ public class BudgetResourceIT extends ResourceIT {
         AddBudgetForm budget = new AddBudgetForm();
         budget.setName(randomAlphabets());
         budget.setCategoryId(defaultCategory.getId());
-        Response createdResponse = post("/api/budgets", budget);
+        Response createdResponse = post(ResourceURL.BUDGET, budget);
         long budgetId = identityResponse(createdResponse).getId();
 
         // when
@@ -92,7 +92,7 @@ public class BudgetResourceIT extends ResourceIT {
         budget.setCategoryId(1L);
 
         // when
-        Response response = post("/api/budgets", budget);
+        Response response = post(ResourceURL.BUDGET, budget);
 
         // then
         Response newReponse = get(response.getLocation().getPath());
@@ -108,7 +108,7 @@ public class BudgetResourceIT extends ResourceIT {
         addBudgetForm.setCategoryId(1L);
 
         // when
-        Response response = post("/api/budgets", addBudgetForm);
+        Response response = post(ResourceURL.BUDGET, addBudgetForm);
         TransactionForm transactionForm = new TransactionForm();
         transactionForm.setAmount(10.00);
         Budget budget = new Budget();

@@ -31,7 +31,7 @@ public class RecurringResourceIT extends ResourceIT {
     public void shouldAbleCreateRecurring() {
 
         // before
-        Response before = get("/api/recurrings");
+        Response before = get(ResourceURL.RECURRING);
         int originalCount = identityResponses(before).size();
 
         // given
@@ -48,7 +48,7 @@ public class RecurringResourceIT extends ResourceIT {
         assertCreated(response);
         Assert.assertNotNull(response.getLocation());
 
-        Response after = get("/api/recurrings");
+        Response after = get(ResourceURL.RECURRING);
         int finalCount = identityResponses(after).size();
         Assert.assertTrue(finalCount - originalCount - 1 == 0);
     }

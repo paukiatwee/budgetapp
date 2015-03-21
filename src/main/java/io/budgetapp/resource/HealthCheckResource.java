@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  *
  */
-@Path("/api/health")
+@Path(ResourceURL.HEALTH)
 @Produces(MediaType.APPLICATION_JSON)
 public class HealthCheckResource extends AbstractResource {
 
@@ -25,6 +25,11 @@ public class HealthCheckResource extends AbstractResource {
 
     public HealthCheckResource(HealthCheckRegistry healthCheckRegistry) {
         this.healthCheckRegistry = healthCheckRegistry;
+    }
+
+    @Override
+    public String getPath() {
+        return ResourceURL.HEALTH;
     }
 
     @GET

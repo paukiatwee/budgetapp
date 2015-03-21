@@ -26,7 +26,7 @@ import java.util.List;
 /**
  *
  */
-@Path("/api/budgets")
+@Path(ResourceURL.BUDGET)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class BudgetResource extends AbstractResource {
@@ -35,6 +35,11 @@ public class BudgetResource extends AbstractResource {
 
     public BudgetResource(FinanceService financeService) {
         this.financeService = financeService;
+    }
+
+    @Override
+    public String getPath() {
+        return ResourceURL.BUDGET;
     }
 
     @GET

@@ -22,7 +22,7 @@ import java.util.List;
 /**
  *
  */
-@Path("/api/recurrings")
+@Path(ResourceURL.RECURRING)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class RecurringResource extends AbstractResource {
@@ -31,6 +31,11 @@ public class RecurringResource extends AbstractResource {
 
     public RecurringResource(FinanceService financeService) {
         this.financeService = financeService;
+    }
+
+    @Override
+    public String getPath() {
+        return ResourceURL.RECURRING;
     }
 
     @GET

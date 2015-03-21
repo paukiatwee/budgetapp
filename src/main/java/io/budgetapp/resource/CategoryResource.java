@@ -24,7 +24,7 @@ import java.util.List;
 /**
  *
  */
-@Path("/api/categories")
+@Path(ResourceURL.CATEGORY)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class CategoryResource extends AbstractResource {
@@ -33,6 +33,11 @@ public class CategoryResource extends AbstractResource {
 
     public CategoryResource(FinanceService financeService) {
         this.financeService = financeService;
+    }
+
+    @Override
+    public String getPath() {
+        return ResourceURL.CATEGORY;
     }
 
     @GET

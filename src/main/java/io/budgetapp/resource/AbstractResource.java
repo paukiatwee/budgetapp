@@ -9,6 +9,8 @@ import java.net.URISyntaxException;
  */
 abstract class AbstractResource {
 
+    public abstract String getPath();
+
     public Response ok(Object object) {
         return Response.ok(object).build();
     }
@@ -36,7 +38,7 @@ abstract class AbstractResource {
     public Response created(Object object, Object id) {
 
         try {
-            return Response.created(new URI(String.valueOf(id))).entity(object).build();
+            return Response.created(new URI(getPath() + "/" + String.valueOf(id))).entity(object).build();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e.getMessage(), e);
         }

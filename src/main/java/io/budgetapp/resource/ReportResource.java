@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 /**
  *
  */
-@Path("/api/reports")
+@Path(ResourceURL.REPORT)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ReportResource extends AbstractResource {
@@ -25,6 +25,11 @@ public class ReportResource extends AbstractResource {
 
     public ReportResource(FinanceService financeService) {
         this.financeService = financeService;
+    }
+
+    @Override
+    public String getPath() {
+        return ResourceURL.REPORT;
     }
 
     @POST
