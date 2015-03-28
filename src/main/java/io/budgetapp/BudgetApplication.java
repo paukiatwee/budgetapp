@@ -42,6 +42,7 @@ import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.glassfish.jersey.server.ServerProperties;
 import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
 import javax.servlet.DispatcherType;
@@ -119,6 +120,9 @@ public class BudgetApplication extends Application<AppConfiguration> {
 
         // health check
         environment.jersey().register(new HealthCheckResource(environment.healthChecks()));
+
+        // properties
+        environment.jersey().property(ServerProperties.PROCESSING_RESPONSE_ERRORS_ENABLED, true);
 
         // managed
         environment.lifecycle().manage(new MigrationManaged(configuration));
