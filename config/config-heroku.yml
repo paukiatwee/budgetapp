@@ -27,6 +27,7 @@ server:
   applicationConnectors:
     - type: http
       port: 8080
+  registerDefaultExceptionMappers: false
 
 # Logging settings.
 logging:

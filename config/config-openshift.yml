@@ -26,6 +26,7 @@ server:
     - type: http
       bindHost: @OPENSHIFT_DIY_IP@
       port: @OPENSHIFT_DIY_PORT@
+  registerDefaultExceptionMappers: false
 
 # Logging settings.
 logging:

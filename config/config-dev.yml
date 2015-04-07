@@ -30,6 +30,7 @@ server:
   adminConnectors:
     - type: http
       port: 8081
+  registerDefaultExceptionMappers: false
 
 assets:
   overrides:
