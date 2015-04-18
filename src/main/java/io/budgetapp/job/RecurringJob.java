@@ -1,6 +1,7 @@
 package io.budgetapp.job;
 
 import io.budgetapp.service.FinanceService;
+import org.glassfish.jersey.server.internal.process.MappableException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -43,17 +44,12 @@ public class RecurringJob extends TimerTask {
                 if (txn != null && txn.isActive()) {
                     txn.rollback();
                 }
-                this.<RuntimeException>rethrow(e);
+                throw new MappableException(e);
             }
         } finally {
             session.close();
             ManagedSessionContext.unbind(sessionFactory);
         }
         LOGGER.debug("Complete recurring job and took {}ms", System.currentTimeMillis() - start);
-    }
-
-    @SuppressWarnings("unchecked")
-    private <E extends Exception> void rethrow(Exception e) throws E {
-        throw (E) e;
     }
 }
