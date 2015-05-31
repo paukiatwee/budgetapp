@@ -67,8 +67,8 @@ public class TransactionResource extends AbstractResource {
     @GET
     @UnitOfWork
     @Path("/summary")
-    public List<Point> findSummary(@Auth User user) {
-        return financeService.findTransactionUsage(user);
+    public List<Point> findSummary(@Auth User user, @QueryParam("month") Integer month, @QueryParam("year") Integer year) {
+        return financeService.findTransactionUsage(user, month, year);
     }
 
     @GET

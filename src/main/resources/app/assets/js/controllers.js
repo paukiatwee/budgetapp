@@ -54,12 +54,29 @@ financeControllers.controller('SignupController', function ($scope, $rootScope, 
   };
 });
 
-financeControllers.controller('DashboardController', function ($scope, $modal, BudgetService,
+financeControllers.controller('DashboardController', function ($scope, $modal, $location, $routeParams, BudgetService,
                                                                CategoryService, TransactionService, UserService) {
   $scope.usageLoaded = false;
-  $scope.usage = UserService.usage(function() {
+
+  $scope.periods = [];
+
+  for(var i = 0; i < 7; i++) {
+    $scope.periods.push(moment().subtract(i, 'months').format("YYYY-MM"));
+  }
+
+  $scope.period = $routeParams.period || $scope.periods[0];
+
+  $scope.reload = function() {
+    $location.url("/dashboard/" + $scope.period);
+  };
+
+  var year = $scope.period.split("-")[0];
+  var month = $scope.period.split("-")[1];
+
+  $scope.usage = UserService.usage({month: month, year: year}, function() {
     $scope.usageLoaded = true;
   });
+
   $scope.transactionLoaded = false;
   $scope.transactionsOptions = {
     series: {
@@ -95,7 +112,7 @@ financeControllers.controller('DashboardController', function ($scope, $modal, B
     }
   };
 
-  TransactionService.summary(function (response) {
+  TransactionService.summary({month: month, year: year}, function (response) {
     $scope.transactionsData = [_.map(response, function(point) {return [point.key, point.value]})];
   });
 
@@ -118,7 +135,7 @@ financeControllers.controller('DashboardController', function ($scope, $modal, B
     colors: ["#60CD9B", "#66B5D7", "#EEC95A", "#E87352"]
   };
 
-  CategoryService.summary(function (response) {
+  CategoryService.summary({month: month, year: year}, function (response) {
     if(response.length == 0) {
       $scope.categoriesData = [{label: "No Data", data: 1}];
     } else {
@@ -240,7 +257,7 @@ financeControllers.controller('ManageController', function ($scope, $routeParams
 
   var groups = [];
 
-  var current = moment(new Date()).format("YYYY-MM");
+  var current = moment().format("YYYY-MM");
   var period = $routeParams.period || current;
   var year = period.split("-")[0];
   var month = period.split("-")[1];

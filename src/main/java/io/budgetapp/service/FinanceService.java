@@ -523,16 +523,34 @@ public class FinanceService {
         return transactionDAO.findByBudget(user, budgetId);
     }
 
-    public List<Point> findTransactionUsage(User user) {
+    public List<Point> findTransactionUsage(User user, Integer month, Integer year) {
+        LocalDate now = LocalDate.now();
+
+        if(month == null || year == null) {
+            month = now.getMonthValue();
+            year = now.getYear();
+        }
+
         List<Point> points = new ArrayList<>();
 
-        LocalDate lastWeek = LocalDate.now().minusWeeks(1);
-        Instant instantEnd = lastWeek.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
-        Date start = Date.from(instantEnd);
+        LocalDate begin = LocalDate.of(year, month, 1);
+        Instant instantStart = begin.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
+        Date start = Date.from(instantStart);
 
-        LocalDate now = LocalDate.now();
-        Instant instantStart = now.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
-        Date end = Date.from(instantStart);
+        LocalDate ending = LocalDate.of(year, month, begin.lengthOfMonth());
+        if(now.getMonthValue() == month && now.getYear() == year) {
+            ending = now;
+        }
+
+        // first 1-7 days show last 7 days's transactions instead of
+        // show 1 or 2 days
+        if(ending.getDayOfMonth() < 7) {
+            begin = begin.minusDays(7);
+        }
+
+        Instant instantEnd = ending.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
+        Date end = Date.from(instantEnd);
+
 
         List<Transaction> transactions = transactionDAO.findByRange(user, start, end);
 
@@ -540,8 +558,8 @@ public class FinanceService {
                 .stream()
                 .collect(Collectors.groupingBy(Transaction::getTransactionOn, TreeMap::new, Collectors.toList()));
 
-        for (int i = 0; i < 8; i++) {
-            LocalDate day = LocalDate.now().minusDays(i);
+        for (int i = 0; i < begin.lengthOfMonth(); i++) {
+            LocalDate day = begin.plusDays(i);
             Instant instantDay = day.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
             Date dayDate = Date.from(instantDay);
             groups.putIfAbsent(dayDate, Collections.emptyList());
@@ -580,10 +598,16 @@ public class FinanceService {
         return categoryDAO.findById(categoryId);
     }
 
-    public List<Point> findUsageByCategory(User user) {
+    public List<Point> findUsageByCategory(User user, Integer month, Integer year) {
+
+        if(month == null || year == null) {
+            LocalDate now = LocalDate.now();
+            month = now.getMonthValue();
+            year = now.getYear();
+        }
+
         List<Point> points = new ArrayList<>();
-        LocalDate now = LocalDate.now();
-        List<Budget> budgets = budgetDAO.findBudgets(user, now.getMonthValue(), now.getYear(), true);
+        List<Budget> budgets = budgetDAO.findBudgets(user, month, year, true);
         Map<Category, List<Budget>> groups = budgets
                 .stream()
                 .filter(b -> b.getCategory().getType() == CategoryType.EXPENDITURE)

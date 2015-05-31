@@ -62,6 +62,10 @@ financeApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'Anal
               templateUrl: '/app/partials/dashboard.html?' + financeAppConfig.version,
               controller: 'DashboardController'
             }).
+            when('/dashboard/:period', {
+              templateUrl: '/app/partials/dashboard.html?' + financeAppConfig.version,
+              controller: 'DashboardController'
+            }).
             when('/manage', {
               templateUrl: '/app/partials/manage.html?' + financeAppConfig.version,
               controller: 'ManageController'

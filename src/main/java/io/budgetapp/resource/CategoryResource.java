@@ -79,8 +79,8 @@ public class CategoryResource extends AbstractResource {
     @GET
     @UnitOfWork
     @Path("/summary")
-    public List<Point> findSummary(@Auth User user) {
-        return financeService.findUsageByCategory(user);
+    public List<Point> findSummary(@Auth User user, @QueryParam("month") Integer month, @QueryParam("year") Integer year) {
+        return financeService.findUsageByCategory(user, month, year);
     }
 
     @GET

@@ -1,5 +1,21 @@
 <section class="content-header">
-  <h2>Dashboard</h2>
+  <h2 class="pull-left">Dashboard</h2>
+  <div class="pull-right">
+    <form class="form-inline">
+      <div class="form-group">
+        <label for="period">View Month: </label>
+        <select
+            name="period"
+            id="period"
+            class="form-control"
+            ng-model="period"
+            ng-options="period for period in periods"
+            ng-change="reload()">
+        </select>
+      </div>
+    </form>
+  </div>
+  <div class="clearfix"></div>
 </section>
 
 <section class="content dashboard">
