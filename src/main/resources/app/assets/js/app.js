@@ -30,7 +30,7 @@ angular.module('financeApp').constant('financeAppConfig', {
 financeApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'AnalyticsProvider',
       function($routeProvider, $httpProvider, $locationProvider, AnalyticsProvider) {
         $httpProvider.interceptors.push('TokenInterceptor');
-        var financeAppConfig = {version: '1.0.0'};
+        var financeAppConfig = {version: '1.0.1'};
 
         // initial configuration
         AnalyticsProvider.setAccount('UA-53663138-1');
