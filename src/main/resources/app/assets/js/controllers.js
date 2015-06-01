@@ -827,7 +827,7 @@ function errorModal($modal, errors) {
 function success($scope) {
   $scope.response = {};
   _.each($scope.form, function (field) {
-    if (field.$setValidity) {
+    if (field && field.$setValidity) {
       field.$dirty = false;
       field.$setValidity("server", true);
     }
@@ -837,7 +837,7 @@ function success($scope) {
 function clearErrors($scope) {
   $scope.response = {};
   _.each($scope.form, function (field) {
-    if(field.$setValidity) {
+    if(field && field.$setValidity) {
       field.$setValidity("server", true);
     }
   });
@@ -848,7 +848,7 @@ function failure($scope, response) {
   $scope.response = response.data;
 
   _.each($scope.form, function (field) {
-    if(field.$setValidity) {
+    if(field && field.$setValidity) {
       field.$setValidity("server", true);
     }
   });

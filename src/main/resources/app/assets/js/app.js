@@ -17,20 +17,20 @@ var spinnerOpts = {
   left: '50%' // Left position relative to parent
 };
 
-var financeApp = angular.module('financeApp', ['ngRoute', 'ngAnimate', 'wu.masonry', 'ui.bootstrap', 'angular-google-analytics', 'angular-loading-bar', 'angularMoment', 'financeControllers', 'financeServices']);
+var budgetApp = angular.module('budgetApp', ['ngRoute', 'ngAnimate', 'wu.masonry', 'ui.bootstrap', 'angular-google-analytics', 'angular-loading-bar', 'angularMoment', 'financeControllers', 'financeServices']);
 
-angular.module('financeApp').constant('angularMomentConfig', {
+angular.module('budgetApp').constant('angularMomentConfig', {
   timezone: 'utc'
 });
 
-angular.module('financeApp').constant('financeAppConfig', {
+angular.module('budgetApp').constant('budgetAppConfig', {
   version: '1.0.0'
 });
 
-financeApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'AnalyticsProvider',
+budgetApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'AnalyticsProvider',
       function($routeProvider, $httpProvider, $locationProvider, AnalyticsProvider) {
         $httpProvider.interceptors.push('TokenInterceptor');
-        var financeAppConfig = {version: '1.0.1'};
+        var budgetAppConfig = {version: '1.0.2'};
 
         // initial configuration
         AnalyticsProvider.setAccount('UA-53663138-1');
@@ -47,75 +47,78 @@ financeApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'Anal
         // change page event name
         AnalyticsProvider.setPageEvent('$routeChangeStart');
 
-        $locationProvider.html5Mode(true);
+        $locationProvider.html5Mode({
+          enabled: true,
+          requireBase: false
+        });
 
         $routeProvider.
             when('/', {
-              templateUrl: '/app/partials/login.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/login.html?' + budgetAppConfig.version,
               controller: 'LoginController'
             }).
             when('/signup', {
-              templateUrl: '/app/partials/signup.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/signup.html?' + budgetAppConfig.version,
               controller: 'SignupController'
             }).
             when('/dashboard', {
-              templateUrl: '/app/partials/dashboard.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/dashboard.html?' + budgetAppConfig.version,
               controller: 'DashboardController'
             }).
             when('/dashboard/:period', {
-              templateUrl: '/app/partials/dashboard.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/dashboard.html?' + budgetAppConfig.version,
               controller: 'DashboardController'
             }).
             when('/manage', {
-              templateUrl: '/app/partials/manage.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/manage.html?' + budgetAppConfig.version,
               controller: 'ManageController'
             }).
             when('/manage/:period', {
-              templateUrl: '/app/partials/manage.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/manage.html?' + budgetAppConfig.version,
               controller: 'ManageController'
             }).
             when('/recurrings', {
-              templateUrl: '/app/partials/recurrings.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/recurrings.html?' + budgetAppConfig.version,
               controller: 'RecurringsController'
             }).
             when('/recurrings/new', {
-              templateUrl: '/app/partials/recurring.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/recurring.html?' + budgetAppConfig.version,
               controller: 'RecurringController'
             }).
             when('/categories', {
-              templateUrl: '/app/partials/categories.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/categories.html?' + budgetAppConfig.version,
               controller: 'CategoriesController'
             }).
             when('/categories/new', {
-              templateUrl: '/app/partials/category.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/category.html?' + budgetAppConfig.version,
               controller: 'CategoryController'
             }).
             when('/budgets', {
-              templateUrl: '/app/partials/budgets.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/budgets.html?' + budgetAppConfig.version,
               controller: 'BudgetsController'
             }).
             when('/budgets/new', {
-              templateUrl: '/app/partials/budget.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/budget.html?' + budgetAppConfig.version,
               controller: 'BudgetController'
             }).
             when('/profile', {
-              templateUrl: '/app/partials/profile.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/profile.html?' + budgetAppConfig.version,
               controller: 'ProfileController'
             }).
             when('/reports', {
-              templateUrl: '/app/partials/reports.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/reports.html?' + budgetAppConfig.version,
               controller: 'ReportsController'
             }).
             when('/help', {
-              templateUrl: '/app/partials/help.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/help.html?' + budgetAppConfig.version,
               controller: 'HelpController'
             }).
             when('/logout', {
-              templateUrl: '/app/partials/blank.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/blank.html?' + budgetAppConfig.version,
               controller: 'LogoutController'
             }).
             when('/404', {
-              templateUrl: '/app/partials/404.html?' + financeAppConfig.version,
+              templateUrl: '/app/partials/404.html?' + budgetAppConfig.version,
               controller: 'NotFoundController'
             }).
             otherwise({
@@ -124,7 +127,7 @@ financeApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'Anal
       }]
 );
 
-financeApp.run(function($rootScope, $location, $window, Analytics, AuthenticationService, UserService) {
+budgetApp.run(function($rootScope, $location, $window, Analytics, AuthenticationService, UserService) {
   $rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
 
     if(!$rootScope.user && AuthenticationService.anonymous.indexOf(nextRoute.originalPath) == -1) {
@@ -144,7 +147,7 @@ financeApp.run(function($rootScope, $location, $window, Analytics, Authenticatio
 });
 
 // filters
-angular.module('ng').filter('truncate', function () {
+angular.module('budgetApp').filter('truncate', function () {
   return function (value, wordwise, max, tail) {
     if (!value) return '';
 
@@ -165,7 +168,7 @@ angular.module('ng').filter('truncate', function () {
 });
 
 // show N/A if the value is null or empty string
-angular.module('ng').filter('na', function () {
+angular.module('budgetApp').filter('na', function () {
   return function (value) {
     if (!value || value == '') return 'N/A';
     return value;
@@ -173,7 +176,7 @@ angular.module('ng').filter('na', function () {
 });
 
 // format date, format is 'YYYY-MM'
-angular.module('ng').filter('yearMonth', ['moment', 'amMoment', function (moment, amMoment) {
+angular.module('budgetApp').filter('yearMonth', ['moment', 'amMoment', function (moment, amMoment) {
   return function (value) {
     if (typeof value === 'undefined' || value === null) {
       return '';
@@ -190,7 +193,7 @@ angular.module('ng').filter('yearMonth', ['moment', 'amMoment', function (moment
 }]);
 
 // format date, format is 'YYYY-MM-DD'
-angular.module('ng').filter('date', ['moment', 'amMoment', function (moment, amMoment) {
+angular.module('budgetApp').filter('date', ['moment', 'amMoment', function (moment, amMoment) {
   return function (value) {
     if (typeof value === 'undefined' || value === null) {
       return '';
@@ -207,7 +210,7 @@ angular.module('ng').filter('date', ['moment', 'amMoment', function (moment, amM
 }]);
 
 // format datetime, format is 'YYYY-MM-DD HH:mm'
-angular.module('ng').filter('datetime', ['moment', 'amMoment', function (moment, amMoment) {
+angular.module('budgetApp').filter('datetime', ['moment', 'amMoment', function (moment, amMoment) {
   return function (value) {
     if (typeof value === 'undefined' || value === null) {
       return '';
@@ -224,7 +227,7 @@ angular.module('ng').filter('datetime', ['moment', 'amMoment', function (moment,
 }]);
 
 // true ✔ otherwise ✘
-angular.module('ng').filter('tick', function () {
+angular.module('budgetApp').filter('tick', function () {
   return function (value) {
     return value? '✔': '✘';
   };
@@ -245,7 +248,7 @@ function showTooltip(x, y, contents) {
   tooltip.css("left", x - tooltip.width() / 2);
 }
 
-angular.module('ng').directive('chart', function() {
+angular.module('budgetApp').directive('chart', function() {
 
   'use strict';
 
@@ -282,7 +285,7 @@ angular.module('ng').directive('chart', function() {
   };
 });
 
-angular.module('ng').directive('fooTable', function() {
+angular.module('budgetApp').directive('fooTable', function() {
 
   'use strict';
 
@@ -298,7 +301,7 @@ angular.module('ng').directive('fooTable', function() {
   };
 });
 
-angular.module('ng').directive('bsNavbar', function($rootScope, $location) {
+angular.module('budgetApp').directive('bsNavbar', function($rootScope, $location) {
   'use strict';
 
   return {
@@ -337,7 +340,7 @@ angular.module('ng').directive('bsNavbar', function($rootScope, $location) {
   };
 });
 
-angular.module('ng').filter('icon', function() {
+angular.module('budgetApp').filter('icon', function() {
   'use strict';
 
   var icons = [
@@ -420,7 +423,7 @@ angular.module('ng').filter('icon', function() {
 });
 
 
-angular.module('ng').filter('unsafe', function($sce) {
+angular.module('budgetApp').filter('unsafe', function($sce) {
   return function(val) {
     return $sce.trustAsHtml(val);
   };
