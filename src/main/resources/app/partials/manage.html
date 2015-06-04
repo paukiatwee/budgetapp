@@ -66,7 +66,7 @@
         <div class="form-group has-feedback" ng-class="errorClass('transactionOn')">
           <label for="transactionOn" class="col-sm-3 control-label">Transaction Date</label>
           <div class="col-sm-7">
-            <input type="date" class="form-control" id="transactionOn" name="transactionOn" placeholder="Enter Transaction Date (yyyy-mm-dd)" ng-model="transaction.transactionOn">
+            <input type="date" class="form-control" id="transactionOn" name="transactionOn" placeholder="Enter Transaction Date (yyyy-mm-dd)" ng-model-options="{ timezone: 'UTC' }" ng-model="transaction.transactionOn">
             <span class="help-block" ng-show="form.transactionOn.$invalid && form.transactionOn.$dirty">
               {{errorMessage('transactionOn')}}
             </span>

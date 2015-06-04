@@ -24,11 +24,11 @@
             <div class="form-group">
               <label for="startOn" class="col-sm-2 control-label">Start Date</label>
               <div class="col-sm-4">
-                <input type="date" class="form-control" id="startOn" placeholder="Transaction Start Date (yyyy-mm-dd)" ng-model="search.startOn">
+                <input type="date" class="form-control" id="startOn" placeholder="Transaction Start Date (yyyy-mm-dd)" ng-model-options="{ timezone: 'UTC' }" ng-model="search.startOn">
               </div>
               <label for="endOn" class="col-sm-2 control-label">End Date</label>
               <div class="col-sm-4">
-                <input type="date" class="form-control" id="endOn" placeholder="Transaction End Date (yyyy-mm-dd)" ng-model="search.endOn">
+                <input type="date" class="form-control" id="endOn" placeholder="Transaction End Date (yyyy-mm-dd)" ng-model-options="{ timezone: 'UTC' }" ng-model="search.endOn">
               </div>
             </div>
             <div class="actions">
