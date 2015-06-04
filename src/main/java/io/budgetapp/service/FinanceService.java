@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -534,8 +535,6 @@ public class FinanceService {
         List<Point> points = new ArrayList<>();
 
         LocalDate begin = LocalDate.of(year, month, 1);
-        Instant instantStart = begin.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
-        Date start = Date.from(instantStart);
 
         LocalDate ending = LocalDate.of(year, month, begin.lengthOfMonth());
         if(now.getMonthValue() == month && now.getYear() == year) {
@@ -545,8 +544,11 @@ public class FinanceService {
         // first 1-7 days show last 7 days's transactions instead of
         // show 1 or 2 days
         if(ending.getDayOfMonth() < 7) {
-            begin = begin.minusDays(7);
+            begin = begin.minusDays(7 - ending.getDayOfMonth());
         }
+
+        Instant instantStart = begin.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
+        Date start = Date.from(instantStart);
 
         Instant instantEnd = ending.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
         Date end = Date.from(instantEnd);
@@ -558,7 +560,9 @@ public class FinanceService {
                 .stream()
                 .collect(Collectors.groupingBy(Transaction::getTransactionOn, TreeMap::new, Collectors.toList()));
 
-        for (int i = 0; i < begin.lengthOfMonth(); i++) {
+        int days = Period.between(begin, ending).getDays() + 1;
+
+        for (int i = 0; i < days; i++) {
             LocalDate day = begin.plusDays(i);
             Instant instantDay = day.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
             Date dayDate = Date.from(instantDay);
