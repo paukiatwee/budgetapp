@@ -23,14 +23,13 @@ angular.module('budgetApp').constant('angularMomentConfig', {
   timezone: 'utc'
 });
 
-angular.module('budgetApp').constant('budgetAppConfig', {
-  version: '1.0.0'
+angular.module('budgetApp').constant('appConfig', {
+  version: '1.0.3'
 });
 
-budgetApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'AnalyticsProvider',
-      function($routeProvider, $httpProvider, $locationProvider, AnalyticsProvider) {
+budgetApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'AnalyticsProvider', 'appConfig',
+      function($routeProvider, $httpProvider, $locationProvider, AnalyticsProvider, appConfig) {
         $httpProvider.interceptors.push('TokenInterceptor');
-        var budgetAppConfig = {version: '1.0.2'};
 
         // initial configuration
         AnalyticsProvider.setAccount('UA-53663138-1');
@@ -54,71 +53,71 @@ budgetApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'Analy
 
         $routeProvider.
             when('/', {
-              templateUrl: '/app/partials/login.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/login.html?' + appConfig.version,
               controller: 'LoginController'
             }).
             when('/signup', {
-              templateUrl: '/app/partials/signup.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/signup.html?' + appConfig.version,
               controller: 'SignupController'
             }).
             when('/dashboard', {
-              templateUrl: '/app/partials/dashboard.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/dashboard.html?' + appConfig.version,
               controller: 'DashboardController'
             }).
             when('/dashboard/:period', {
-              templateUrl: '/app/partials/dashboard.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/dashboard.html?' + appConfig.version,
               controller: 'DashboardController'
             }).
             when('/manage', {
-              templateUrl: '/app/partials/manage.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/manage.html?' + appConfig.version,
               controller: 'ManageController'
             }).
             when('/manage/:period', {
-              templateUrl: '/app/partials/manage.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/manage.html?' + appConfig.version,
               controller: 'ManageController'
             }).
             when('/recurrings', {
-              templateUrl: '/app/partials/recurrings.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/recurrings.html?' + appConfig.version,
               controller: 'RecurringsController'
             }).
             when('/recurrings/new', {
-              templateUrl: '/app/partials/recurring.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/recurring.html?' + appConfig.version,
               controller: 'RecurringController'
             }).
             when('/categories', {
-              templateUrl: '/app/partials/categories.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/categories.html?' + appConfig.version,
               controller: 'CategoriesController'
             }).
             when('/categories/new', {
-              templateUrl: '/app/partials/category.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/category.html?' + appConfig.version,
               controller: 'CategoryController'
             }).
             when('/budgets', {
-              templateUrl: '/app/partials/budgets.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/budgets.html?' + appConfig.version,
               controller: 'BudgetsController'
             }).
             when('/budgets/new', {
-              templateUrl: '/app/partials/budget.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/budget.html?' + appConfig.version,
               controller: 'BudgetController'
             }).
             when('/profile', {
-              templateUrl: '/app/partials/profile.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/profile.html?' + appConfig.version,
               controller: 'ProfileController'
             }).
             when('/reports', {
-              templateUrl: '/app/partials/reports.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/reports.html?' + appConfig.version,
               controller: 'ReportsController'
             }).
             when('/help', {
-              templateUrl: '/app/partials/help.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/help.html?' + appConfig.version,
               controller: 'HelpController'
             }).
             when('/logout', {
-              templateUrl: '/app/partials/blank.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/blank.html?' + appConfig.version,
               controller: 'LogoutController'
             }).
             when('/404', {
-              templateUrl: '/app/partials/404.html?' + budgetAppConfig.version,
+              templateUrl: '/app/partials/404.html?' + appConfig.version,
               controller: 'NotFoundController'
             }).
             otherwise({

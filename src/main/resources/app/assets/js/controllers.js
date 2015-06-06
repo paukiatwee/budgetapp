@@ -248,7 +248,7 @@ function labelFormatter(label, series) {
   return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + Math.round(series.percent) + "%</div>";
 }
 
-financeControllers.controller('ManageController', function ($scope, $routeParams, $modal, BudgetService, TransactionService, UserService) {
+financeControllers.controller('ManageController', function ($scope, $routeParams, $modal, appConfig, BudgetService, TransactionService, UserService) {
 
   $scope.loaded = false;
   $scope.errorMessage = errorMessage;
@@ -379,7 +379,7 @@ financeControllers.controller('ManageController', function ($scope, $routeParams
     };
 
     $modal.open({
-      templateUrl: '/app/partials/transactions.html',
+      templateUrl: '/app/partials/transactions.html?' + appConfig.version,
       scope: $scope,
       controller: TransactionsModalController,
       size: 'lg',
@@ -542,7 +542,7 @@ financeControllers.controller('CategoryController', function ($scope, CategorySe
   }
 });
 
-financeControllers.controller('RecurringsController', function ($scope, $modal, RecurringService) {
+financeControllers.controller('RecurringsController', function ($scope, $modal, appConfig, RecurringService) {
 
   $scope.loaded = false;
   $scope.recurrings = RecurringService.query(function() {
@@ -551,7 +551,7 @@ financeControllers.controller('RecurringsController', function ($scope, $modal, 
 
   $scope.confirmDelete = function (recurring) {
     var modalInstance = $modal.open({
-      templateUrl: '/app/partials/confirmDeleteModal.html',
+      templateUrl: '/app/partials/confirmDeleteModal.html?' + appConfig.version,
       controller: ConfirmDeleteModalController,
       resolve: {
         modal: function() {
@@ -637,7 +637,7 @@ financeControllers.controller('RecurringController', function ($scope, Recurring
 });
 
 
-financeControllers.controller('CategoriesController', function ($scope, $modal, CategoryService) {
+financeControllers.controller('CategoriesController', function ($scope, $modal, appConfig, CategoryService) {
 
   $scope.loaded = false;
   $scope.categories = CategoryService.query(function() {
@@ -646,7 +646,7 @@ financeControllers.controller('CategoriesController', function ($scope, $modal, 
 
   $scope.confirmDelete = function (category) {
     var modalInstance = $modal.open({
-      templateUrl: '/app/partials/confirmDeleteModal.html',
+      templateUrl: '/app/partials/confirmDeleteModal.html?' + appConfig.version,
       controller: ConfirmDeleteModalController,
       resolve: {
         modal: function() {
@@ -689,7 +689,7 @@ financeControllers.controller('CategoriesController', function ($scope, $modal, 
   };
 });
 
-financeControllers.controller('BudgetsController', function ($scope, $modal, BudgetService) {
+financeControllers.controller('BudgetsController', function ($scope, $modal, appConfig, BudgetService) {
 
   $scope.loaded = false;
   $scope.budgets = BudgetService.query(function() {
@@ -698,7 +698,7 @@ financeControllers.controller('BudgetsController', function ($scope, $modal, Bud
 
   $scope.confirmDelete = function (budget) {
     var modalInstance = $modal.open({
-      templateUrl: '/app/partials/confirmDeleteModal.html',
+      templateUrl: '/app/partials/confirmDeleteModal.html?' + appConfig.version,
       controller: ConfirmDeleteModalController,
       resolve: {
         modal: function() {
