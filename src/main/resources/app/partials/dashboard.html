@@ -30,7 +30,7 @@
         <div class="panel-heading"><span class="fa fa-bar-chart-o"></span> Transaction Logs</div>
         <div class="panel-body">
           <div ng-hide="transactionsData" class="loading float"></div>
-          <chart class="chart" ng-model='transactionsData' ng-options="transactionsOptions"></chart>
+          <chart class="chart" ng-model='transactionsData' chart-options="transactionsOptions"></chart>
         </div>
       </div>
     </div>
@@ -39,7 +39,7 @@
         <div class="panel-heading"><span class="fa fa-bar-chart-o"></span> Spending by Category</div>
         <div class="panel-body">
           <div ng-hide="categoriesData" class="loading float"></div>
-          <chart class="chart" ng-model='categoriesData' ng-options="categoriesOptions"></chart>
+          <chart class="chart" ng-model='categoriesData' chart-options="categoriesOptions"></chart>
         </div>
       </div>
     </div>
@@ -48,7 +48,7 @@
         <div class="panel-heading"><span class="fa fa-bar-chart-o"></span> Spending by Month</div>
         <div class="panel-body">
           <div ng-hide="monthlyData" class="loading float"></div>
-          <chart class="chart" ng-model='monthlyData' ng-options="monthlyOptions"></chart>
+          <chart class="chart" ng-model='monthlyData' chart-options="monthlyOptions"></chart>
         </div>
       </div>
     </div>
