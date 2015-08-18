@@ -308,15 +308,16 @@ public class FinanceService {
     }
 
     private void generateBudgets(User user, int month, int year) {
-        LocalDate previousMonth = LocalDate.now().minusMonths(1L);
-        // get previous month's budgets
-        // when user navigate forward
-        List<Budget> originalBudgets = budgetDAO.findBudgets(user, previousMonth.getMonthValue(), previousMonth.getYear(), false);
+        LocalDate now = LocalDate.now();
+        // use current month's budgets
+        // when user navigate backward
+        List<Budget> originalBudgets = budgetDAO.findBudgets(user, now.getMonthValue(), now.getYear(), false);
+        // current month budget is empty
         if(originalBudgets.isEmpty()) {
-            // copy from current month's budget
-            // when user navigate backward
-            LocalDate now = LocalDate.now();
-            originalBudgets = budgetDAO.findBudgets(user, now.getMonthValue(), now.getYear(), false);
+            // use previous month's budget
+            // when user navigate forward
+            LocalDate previousMonth = LocalDate.now().minusMonths(1L);
+            originalBudgets = budgetDAO.findBudgets(user, previousMonth.getMonthValue(), previousMonth.getYear(), false);
         }
         Date period = Util.yearMonthDate(month, year);
         for(Budget budget : originalBudgets) {
