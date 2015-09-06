@@ -6,7 +6,7 @@ angular.module('budgetApp').constant('angularMomentConfig', {
 });
 
 angular.module('budgetApp').constant('appConfig', {
-  version: '1.0.3'
+  version: '1.0.4'
 });
 
 budgetApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'AnalyticsProvider', 'appConfig',
