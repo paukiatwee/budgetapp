@@ -16,74 +16,79 @@
         </div>
         <div class="box-body">
           <tabset>
-            <tab heading="Profile" ng-controller="UpdateProfileController">
-              <div ng-hide="loaded" class="loading"></div>
-              <div class="space"></div>
-              <form name="form" novalidate role="form" class="form-horizontal" ng-show="loaded">
-                <div class="form-group has-feedback">
-                  <label for="username" class="col-sm-3 control-label">Username</label>
-                  <div class="col-sm-7">
-                    <p id="username" class="form-control-static">{{user.username}}</p>
+            <tab heading="Profile">
+              <div ng-controller="UpdateProfileController">
+                <div ng-hide="loaded" class="loading"></div>
+                <div class="space"></div>
+                <form name="form" novalidate role="form" class="form-horizontal" ng-show="loaded">
+                  <div class="form-group has-feedback">
+                    <label for="username" class="col-sm-3 control-label">Username</label>
+                    <div class="col-sm-7">
+                      <p id="username" class="form-control-static">{{user.username}}</p>
+                    </div>
                   </div>
-                </div>
-                <div class="form-group has-feedback" ng-class="errorClass('name')">
-                  <label for="name" class="col-sm-3 control-label">Name</label>
-                  <div class="col-sm-7">
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter Name" ng-model="user.name">
+                  <div class="form-group has-feedback" ng-class="errorClass('name')">
+                    <label for="name" class="col-sm-3 control-label">Name</label>
+                    <div class="col-sm-7">
+                      <input type="text" class="form-control" name="name" id="name" placeholder="Enter Name" ng-model="user.name">
                   <span class="help-block" ng-show="form.name.$invalid && form.name.$dirty">
                     {{errorMessage('name')}}
                   </span>
+                    </div>
                   </div>
-                </div>
-                <div class="form-group has-feedback">
-                  <label for="createdAt" class="col-sm-3 control-label">Member Since</label>
-                  <div class="col-sm-7">
-                    <p id="createdAt" class="form-control-static">{{user.createdAt | date}}</p>
+                  <div class="form-group has-feedback">
+                    <label for="createdAt" class="col-sm-3 control-label">Member Since</label>
+                    <div class="col-sm-7">
+                      <p id="createdAt" class="form-control-static">{{user.createdAt | date}}</p>
+                    </div>
                   </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-sm-offset-3 col-sm-7">
-                    <button type="submit" class="btn btn-primary" ng-click="updateProfile()"><span class="fa fa-save"></span> Update</button>
+                  <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-7">
+                      <button type="submit" class="btn btn-primary" ng-click="updateProfile()"><span class="fa fa-save"></span> Update</button>
+                    </div>
                   </div>
-                </div>
-              </form>
+                </form>
+              </div>
             </tab>
-            <tab heading="Change Password" ng-controller="ChangePasswordController">
-              <div class="space"></div>
-              <form name="form" novalidate role="form" class="form-horizontal">
-                <div class="form-group has-feedback" ng-class="errorClass('original')">
-                  <label for="original" class="col-sm-3 control-label">Current Password</label>
-                  <div class="col-sm-7">
-                    <input type="password" class="form-control" name="original" id="original" placeholder="Enter Current Password" ng-model="password.original">
+            <tab heading="Change Password">
+              <div ng-controller="ChangePasswordController">
+                <div class="space"></div>
+
+                <form name="form" novalidate role="form" class="form-horizontal">
+                  <div class="form-group has-feedback" ng-class="errorClass('original')">
+                    <label for="original" class="col-sm-3 control-label">Current Password</label>
+                    <div class="col-sm-7">
+                      <input type="password" class="form-control" name="original" id="original" placeholder="Enter Current Password" ng-model="password.original">
                     <span class="help-block" ng-show="form.original.$invalid && form.original.$dirty">
                       {{errorMessage('original')}}
                     </span>
+                    </div>
                   </div>
-                </div>
-                <div class="form-group has-feedback" ng-class="errorClass('password')">
-                  <label for="password" class="col-sm-3 control-label">New Password</label>
-                  <div class="col-sm-7">
-                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter New Password" ng-model="password.password">
+                  <div class="form-group has-feedback" ng-class="errorClass('password')">
+                    <label for="password" class="col-sm-3 control-label">New Password</label>
+                    <div class="col-sm-7">
+                      <input type="password" class="form-control" name="password" id="password" placeholder="Enter New Password" ng-model="password.password">
                     <span class="help-block" ng-show="form.password.$invalid && form.password.$dirty">
                       {{errorMessage('password')}}
                     </span>
+                    </div>
                   </div>
-                </div>
-                <div class="form-group has-feedback" ng-class="errorClass('confirm')">
-                  <label for="confirm" class="col-sm-3 control-label">Confirm Password</label>
-                  <div class="col-sm-7">
-                    <input type="password" class="form-control" name="confirm" id="confirm" placeholder="Enter Confirm New Password" ng-model="password.confirm">
+                  <div class="form-group has-feedback" ng-class="errorClass('confirm')">
+                    <label for="confirm" class="col-sm-3 control-label">Confirm Password</label>
+                    <div class="col-sm-7">
+                      <input type="password" class="form-control" name="confirm" id="confirm" placeholder="Enter Confirm New Password" ng-model="password.confirm">
                     <span class="help-block" ng-show="form.confirm.$invalid && form.confirm.$dirty">
                       {{errorMessage('confirm')}}
                     </span>
+                    </div>
                   </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-sm-offset-3 col-sm-7">
-                    <button type="submit" class="btn btn-primary" ng-click="changePassword()"><span class="fa fa-save"></span> Change Password</button>
+                  <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-7">
+                      <button type="submit" class="btn btn-primary" ng-click="changePassword()"><span class="fa fa-save"></span> Change Password</button>
+                    </div>
                   </div>
-                </div>
-              </form>
+                </form>
+              </div>
             </tab>
           </tabset>
         </div>
