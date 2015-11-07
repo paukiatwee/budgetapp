@@ -96,7 +96,7 @@ public class UserResource extends AbstractResource {
     @GET
     @UnitOfWork
     @Path("/ping")
-    public Response ping(@Auth(required = false) User user) {
+    public Response ping(@Auth User user) {
         if(user != null) {
             return ok(user);
         } else {

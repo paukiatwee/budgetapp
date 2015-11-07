@@ -16,6 +16,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.Date;
 
 /**
@@ -24,7 +25,7 @@ import java.util.Date;
 @Entity
 @Table(name = "users")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User implements Serializable {
+public class User implements Principal, Serializable {
 
     private static final long serialVersionUID = 3868269731826822792L;
     private Long id;
@@ -71,6 +72,7 @@ public class User implements Serializable {
         return password;
     }
 
+    @Override
     public String getName() {
         return name;
     }

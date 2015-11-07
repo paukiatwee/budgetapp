@@ -6,42 +6,27 @@ import io.budgetapp.application.ConstraintViolationExceptionMapper;
 import io.budgetapp.application.DataConstraintExceptionMapper;
 import io.budgetapp.application.NotFoundExceptionMapper;
 import io.budgetapp.application.SQLConstraintViolationExceptionMapper;
+import io.budgetapp.auth.DefaultAuthorizer;
 import io.budgetapp.auth.DefaultUnauthorizedHandler;
 import io.budgetapp.auth.TokenAuthenticator;
 import io.budgetapp.configuration.AppConfiguration;
 import io.budgetapp.crypto.PasswordEncoder;
-import io.budgetapp.dao.AuthTokenDAO;
-import io.budgetapp.dao.BudgetDAO;
-import io.budgetapp.dao.BudgetTypeDAO;
-import io.budgetapp.dao.CategoryDAO;
-import io.budgetapp.dao.RecurringDAO;
-import io.budgetapp.dao.TransactionDAO;
-import io.budgetapp.dao.UserDAO;
+import io.budgetapp.dao.*;
 import io.budgetapp.managed.JobsManaged;
 import io.budgetapp.managed.MigrationManaged;
-import io.budgetapp.model.AuthToken;
-import io.budgetapp.model.Budget;
-import io.budgetapp.model.BudgetType;
-import io.budgetapp.model.Category;
-import io.budgetapp.model.Recurring;
-import io.budgetapp.model.Transaction;
-import io.budgetapp.model.User;
-import io.budgetapp.resource.BudgetResource;
-import io.budgetapp.resource.CategoryResource;
-import io.budgetapp.resource.HealthCheckResource;
-import io.budgetapp.resource.RecurringResource;
-import io.budgetapp.resource.ReportResource;
-import io.budgetapp.resource.TransactionResource;
-import io.budgetapp.resource.UserResource;
+import io.budgetapp.model.*;
+import io.budgetapp.resource.*;
 import io.budgetapp.service.FinanceService;
 import io.dropwizard.Application;
-import io.dropwizard.auth.AuthFactory;
-import io.dropwizard.auth.oauth.OAuthFactory;
+import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.AuthValueFactoryProvider;
+import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
 import javax.servlet.DispatcherType;
@@ -126,7 +111,16 @@ public class BudgetApplication extends Application<AppConfiguration> {
         environment.lifecycle().manage(new JobsManaged(financeService));
 
         // auth
-        environment.jersey().register(AuthFactory.binder(new OAuthFactory<>(new TokenAuthenticator(financeService), "realm", User.class).prefix("Bearer").responseBuilder(new DefaultUnauthorizedHandler())));
+        final OAuthCredentialAuthFilter<User> authFilter =
+                new OAuthCredentialAuthFilter.Builder<User>()
+                        .setAuthenticator(new TokenAuthenticator(financeService))
+                        .setPrefix("Bearer")
+                        .setAuthorizer(new DefaultAuthorizer())
+                        .setUnauthorizedHandler(new DefaultUnauthorizedHandler())
+                        .buildAuthFilter();
+        environment.jersey().register(RolesAllowedDynamicFeature.class);
+        environment.jersey().register(new AuthDynamicFeature(authFilter));
+        environment.jersey().register(new AuthValueFactoryProvider.Binder(User.class));
 
         // filters
         FilterRegistration.Dynamic urlRewriteFilter = environment.servlets().addFilter("rewriteFilter", UrlRewriteFilter.class);

@@ -4,6 +4,7 @@ import io.budgetapp.model.AuthToken;
 import io.budgetapp.model.User;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
@@ -16,8 +17,11 @@ import java.util.UUID;
  */
 public class AuthTokenDAO extends AbstractDAO<AuthToken> {
 
+    private final SessionFactory sessionFactory;
+
     public AuthTokenDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
+        this.sessionFactory = sessionFactory;
     }
 
     public AuthToken add(User user) {
@@ -28,9 +32,13 @@ public class AuthTokenDAO extends AbstractDAO<AuthToken> {
     }
 
     public Optional<AuthToken> find(String token) {
-        Criteria criteria = currentSession().createCriteria(AuthToken.class);
+        // TODO: remove manual transaction management
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(AuthToken.class);
         criteria.add(Restrictions.eq("token", token));
-        return Optional.ofNullable(uniqueResult(criteria));
+        Optional<AuthToken> result = Optional.ofNullable(uniqueResult(criteria));
+        session.close();
+        return result;
     }
 
     public List<AuthToken> findByUser(User user) {
