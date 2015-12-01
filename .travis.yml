@@ -2,3 +2,10 @@ language: java
 jdk:
 - oraclejdk8
 script: mvn verify -Ptest
+env:
+  global:
+    secure: E6Px/rHwipg36kfJxyRhalA5HVLDsQFXN2kd1arECFkLQQULJMrKDC3H2J6dSblV5ALMxRe4AoJ/jSfBYOcOwH+1qIkk40bOx1B4LxJrqvkGnbgKmDmYOIaKi0g4Lm4vUo54rDSe/O69m50kPdZn0NQdNmcpCSfGOASwagCaAc0=
+after_success:
+- docker build -t paukiatwee/budgetapp .
+- docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+- docker push paukiatwee/budgetapp
