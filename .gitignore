@@ -3,3 +3,11 @@
 target/
 .gradle/
 node_modules
+/bin/
+
+#eclipse ide files
+.classpath
+.project
+.settings/
+dependency-reduced-pom.xml
+
