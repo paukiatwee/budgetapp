@@ -314,10 +314,10 @@ public class FinanceService {
         List<Budget> originalBudgets = budgetDAO.findBudgets(user, now.getMonthValue(), now.getYear(), false);
         // current month budget is empty
         if(originalBudgets.isEmpty()) {
-            // use previous month's budget
-            // when user navigate forward
-            LocalDate previousMonth = LocalDate.now().minusMonths(1L);
-            originalBudgets = budgetDAO.findBudgets(user, previousMonth.getMonthValue(), previousMonth.getYear(), false);
+            // use latest budget
+            Date latestDate = budgetDAO.findLatestBudget(user);
+            LocalDate date = latestDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            originalBudgets = budgetDAO.findBudgets(user, date.getMonthValue(), date.getYear(), false);
         }
         Date period = Util.yearMonthDate(month, year);
         for(Budget budget : originalBudgets) {

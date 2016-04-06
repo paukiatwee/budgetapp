@@ -12,6 +12,8 @@ import org.hibernate.FetchMode;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,6 +82,15 @@ public class BudgetDAO extends AbstractDAO<Budget> {
         criteria.add(Restrictions.eq("period", yearMonth));
         criteria.addOrder(Order.asc("id"));
         return list(criteria);
+    }
+
+    public Date findLatestBudget(User user) {
+        LOGGER.debug("Find latest budget by user {}", user);
+        Criteria criteria = currentSession().createCriteria(Budget.class);
+        criteria.add(Restrictions.eq("user", user));
+        criteria.setProjection(Projections.max("createdAt"));
+        criteria.setMaxResults(1);
+        return (Date)criteria.uniqueResult();
     }
 
     /**
