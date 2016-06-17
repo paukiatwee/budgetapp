@@ -23,6 +23,7 @@ import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
+import io.dropwizard.hibernate.UnitOfWorkAwareProxyFactory;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -111,9 +112,10 @@ public class BudgetApplication extends Application<AppConfiguration> {
         environment.lifecycle().manage(new JobsManaged(financeService));
 
         // auth
+        TokenAuthenticator tokenAuthenticator = new UnitOfWorkAwareProxyFactory(hibernate).create(TokenAuthenticator.class, FinanceService.class, financeService);
         final OAuthCredentialAuthFilter<User> authFilter =
                 new OAuthCredentialAuthFilter.Builder<User>()
-                        .setAuthenticator(new TokenAuthenticator(financeService))
+                        .setAuthenticator(tokenAuthenticator)
                         .setPrefix("Bearer")
                         .setAuthorizer(new DefaultAuthorizer())
                         .setUnauthorizedHandler(new DefaultUnauthorizedHandler())

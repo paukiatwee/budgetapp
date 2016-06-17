@@ -9,3 +9,4 @@ WORKDIR /app
 CMD ["java", "-jar", "budgetapp.jar", "server", "config.yml"]
 
 EXPOSE 8080
+
