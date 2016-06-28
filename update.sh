@@ -1,4 +1,4 @@
 #!/bin/sh
 
 mvn versions:display-dependency-updates
-mvn versions:versions:display-plugin-updates
+mvn versions:display-plugin-updates
