@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.context.internal.ManagedSessionContext;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,12 +36,12 @@ public abstract class Job implements Runnable {
             try {
                 doRun();
                 final Transaction txn = session.getTransaction();
-                if (txn != null && txn.isActive()) {
+                if (txn != null && txn.getStatus() != TransactionStatus.ACTIVE) {
                     txn.commit();
                 }
             } catch (Exception e) {
                 final Transaction txn = session.getTransaction();
-                if (txn != null && txn.isActive()) {
+                if (txn != null && txn.getStatus() != TransactionStatus.ACTIVE) {
                     txn.rollback();
                 }
                 throw new MappableException(e);

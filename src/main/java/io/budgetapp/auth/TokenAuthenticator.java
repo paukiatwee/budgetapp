@@ -1,11 +1,12 @@
 package io.budgetapp.auth;
 
-import com.google.common.base.Optional;
 import io.budgetapp.model.User;
 import io.budgetapp.service.FinanceService;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
 import io.dropwizard.hibernate.UnitOfWork;
+
+import java.util.Optional;
 
 /**
  *
@@ -21,11 +22,11 @@ public class TokenAuthenticator implements Authenticator<String, User> {
     @UnitOfWork
     @Override
     public Optional<User> authenticate(String token) throws AuthenticationException {
-        java.util.Optional<User> option = financeService.findUserByToken(token);
+        Optional<User> option = financeService.findUserByToken(token);
         if(option.isPresent()) {
             return Optional.of(option.get());
         } else {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 }

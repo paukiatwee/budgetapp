@@ -1,7 +1,7 @@
 package io.budgetapp;
 
 import com.bazaarvoice.dropwizard.assets.ConfiguredAssetsBundle;
-import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import io.budgetapp.application.ConstraintViolationExceptionMapper;
 import io.budgetapp.application.DataConstraintExceptionMapper;
 import io.budgetapp.application.NotFoundExceptionMapper;
@@ -46,10 +46,11 @@ public class BudgetApplication extends Application<AppConfiguration> {
     private final HibernateBundle<AppConfiguration> hibernate = new HibernateBundle<AppConfiguration>(User.class, Category.class, Budget.class, BudgetType.class, Transaction.class, Recurring.class, AuthToken.class) {
 
         @Override
-        protected Hibernate4Module createHibernate4Module() {
-            Hibernate4Module module = super.createHibernate4Module();
+        protected Hibernate5Module createHibernate5Module() {
+            Hibernate5Module module = super.createHibernate5Module();
             // allow @Transient JPA annotation process by Jackson
-            module.disable(Hibernate4Module.Feature.USE_TRANSIENT_ANNOTATION);
+            module.disable(Hibernate5Module.Feature.FORCE_LAZY_LOADING);
+            module.disable(Hibernate5Module.Feature.USE_TRANSIENT_ANNOTATION);
             return module;
         }
 

@@ -3,7 +3,6 @@ package io.budgetapp.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  *
@@ -16,7 +15,6 @@ public class BudgetType implements Serializable {
 
     private Long id;
     private Date createdAt;
-    private List<Budget> budgets;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,22 +36,11 @@ public class BudgetType implements Serializable {
         this.createdAt = createdAt;
     }
 
-    @JoinColumn(updatable = false)
-    @OneToMany()
-    public List<Budget> getBudgets() {
-        return budgets;
-    }
-
-    public void setBudgets(List<Budget> budgets) {
-        this.budgets = budgets;
-    }
-
     @Override
     public String toString() {
         return "BudgetType{" +
                 "id=" + id +
                 ", createdAt=" + createdAt +
-                ", budgets=" + budgets +
                 '}';
     }
 }
