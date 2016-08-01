@@ -5,9 +5,13 @@
     "http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
 
 <urlrewrite>
+  <rule>
+    <from>^/robots\.txt$</from>
+    <to>/app/robots.txt</to>
+  </rule>
   <!-- support AngularJS HTML5 mode (URLs without hashes) -->
   <rule>
-    <from>^/(?!((api/.*)|(.*\.png)|(.*\.gif)|(.*\.jpg)|(.*\.html)|(.*\.js)|(.*\.css))).*$</from>
+    <from>^/(?!((api/.*)|(.*\.png)|(.*\.gif)|(.*\.jpg)|(.*\.html)|(.*\.js)|(.*\.css)|(.*\.txt))).*$</from>
     <to>/app/index.html</to>
   </rule>
 </urlrewrite>
