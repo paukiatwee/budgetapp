@@ -110,7 +110,7 @@ public class BudgetApplication extends Application<AppConfiguration> {
 
         // managed
         environment.lifecycle().manage(new MigrationManaged(configuration));
-        environment.lifecycle().manage(new JobsManaged(financeService));
+//        environment.lifecycle().manage(new JobsManaged(financeService));
 
         // auth
         TokenAuthenticator tokenAuthenticator = new UnitOfWorkAwareProxyFactory(hibernate).create(TokenAuthenticator.class, FinanceService.class, financeService);
