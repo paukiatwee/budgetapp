@@ -12,6 +12,7 @@ import io.budgetapp.auth.TokenAuthenticator;
 import io.budgetapp.configuration.AppConfiguration;
 import io.budgetapp.crypto.PasswordEncoder;
 import io.budgetapp.dao.*;
+import io.budgetapp.job.RecurringJob;
 import io.budgetapp.managed.JobsManaged;
 import io.budgetapp.managed.MigrationManaged;
 import io.budgetapp.model.*;
@@ -96,6 +97,9 @@ public class BudgetApplication extends Application<AppConfiguration> {
         // service
         final FinanceService financeService = new FinanceService(hibernate.getSessionFactory(), userDAO, budgetDAO, budgetTypeDAO, categoryDAO, transactionDAO, recurringDAO, authTokenDAO, passwordEncoder);
 
+        // jobs
+        final RecurringJob recurringJob = new UnitOfWorkAwareProxyFactory(hibernate).create(RecurringJob.class, FinanceService.class, financeService);
+
         // resource
         environment.jersey().register(new UserResource(financeService));
         environment.jersey().register(new CategoryResource(financeService));
@@ -110,7 +114,7 @@ public class BudgetApplication extends Application<AppConfiguration> {
 
         // managed
         environment.lifecycle().manage(new MigrationManaged(configuration));
-//        environment.lifecycle().manage(new JobsManaged(financeService));
+        environment.lifecycle().manage(new JobsManaged(recurringJob));
 
         // auth
         TokenAuthenticator tokenAuthenticator = new UnitOfWorkAwareProxyFactory(hibernate).create(TokenAuthenticator.class, FinanceService.class, financeService);

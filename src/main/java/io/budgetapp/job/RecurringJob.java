@@ -1,26 +1,33 @@
 package io.budgetapp.job;
 
 import io.budgetapp.service.FinanceService;
+import io.dropwizard.hibernate.UnitOfWork;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  */
-public class RecurringJob extends Job {
+public class RecurringJob implements Runnable {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecurringJob.class);
 
     private final FinanceService financeService;
 
     public RecurringJob(FinanceService financeService) {
-        super(financeService.getSessionFactory());
         this.financeService = financeService;
     }
 
+    @UnitOfWork
     @Override
-    public void doRun() {
+    public void run() {
+        long start = System.currentTimeMillis();
+        LOGGER.debug("Start {} job", getName());
         financeService.updateRecurrings();
+        LOGGER.debug("Complete {} job and took {}ms", getName(), System.currentTimeMillis() - start);
     }
 
-    @Override
-    public String getName() {
+    private String getName() {
         return "Recurring job";
     }
 }
