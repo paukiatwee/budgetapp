@@ -11,8 +11,5 @@ script: mvn verify -Ptest
 
 after_success:
   - docker build -t paukiatwee/budgetapp .
+  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - docker push paukiatwee/budgetapp
-
-env:
-  global:
-    secure: "dHv7rC8QZiIxtDEI4rrSIGXN0rTnbMsoTvQSfz8Dl811slI3ZMpu3oipPg6gGdFMrnTvrNwTTp6bvO2O0uOhVX10TEJGCer4nNM2RHGQ/cMUwuAXnCpV82UZaTxvMb10h3FqzCBMlYWljqXnYDUyG5x0XCs6e/ZYAp83IqplqyQ="
