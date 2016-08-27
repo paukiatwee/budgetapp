@@ -1,5 +1,0 @@
-#!/bin/bash
-
-cd $OPENSHIFT_REPO_DIR
-
-java ${OPENSHIFT_REPO_DIR}target/budgetapp.jar server config/config-openshift.yml > ${OPENSHIFT_DIY_LOG_DIR}/budgetapp.log &

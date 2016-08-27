@@ -27,7 +27,6 @@ Configuration file separate by environment:
 * `config/config-dev.yml` - Local Development
 * `src/test/resources/config-test.yml` - Integration Test
 * `config/config-heroku.yml` - [Heroku][]
-* `config/config-openshift.yml` - [OpenShift][] (WIP since JDK 8 is not support yet)
 
 
 ## Database Configuration
@@ -60,6 +59,5 @@ database:
 This code is released under version 2.0 of the [Apache License][].
 
 [Heroku]: https://www.heroku.com
-[Openshift]: https://www.openshift.com/
 [localhost:8080]: http://localhost:8080
 [Apache License]: http://www.apache.org/licenses/LICENSE-2.0
