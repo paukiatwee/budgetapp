@@ -1,5 +1,5 @@
 
-var budgetApp = angular.module('budgetApp', ['ngRoute', 'ngAnimate', 'wu.masonry', 'ui.bootstrap', 'angular-google-analytics', 'angular-loading-bar', 'angularMoment', 'financeControllers', 'financeServices']);
+var budgetApp = angular.module('budgetApp', ['ngRoute', 'ngAnimate', 'wu.masonry', 'ui.bootstrap', 'angular-loading-bar', 'angularMoment', 'financeControllers', 'financeServices']);
 
 angular.module('budgetApp').constant('angularMomentConfig', {
   timezone: 'utc'
@@ -9,24 +9,32 @@ angular.module('budgetApp').constant('appConfig', {
   version: '1.0.4'
 });
 
-budgetApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'AnalyticsProvider', 'appConfig',
-      function($routeProvider, $httpProvider, $locationProvider, AnalyticsProvider, appConfig) {
+budgetApp.config(['$routeProvider', '$httpProvider', '$locationProvider', '$injector', 'appConfig',
+      function($routeProvider, $httpProvider, $locationProvider, $injector, appConfig) {
         $httpProvider.interceptors.push('TokenInterceptor');
 
-        // initial configuration
-        AnalyticsProvider.setAccount('UA-53663138-1');
+        try {
+          AnalyticsProvider = $injector.get('angular-google-analytics');
 
-        // track all routes (or not)
-        AnalyticsProvider.trackPages(true);
+          // have google analytics
+          // initial configuration
+          AnalyticsProvider.setAccount('UA-53663138-1');
 
-        //Optional set domain (Use 'none' for testing on localhost)
-//        AnalyticsProvider.setDomainName('none');
+          // track all routes (or not)
+          AnalyticsProvider.trackPages(true);
 
-        // Use analytics.js instead of ga.js
-        AnalyticsProvider.useAnalytics(true);
+          //Optional set domain (Use 'none' for testing on localhost)
+          //        AnalyticsProvider.setDomainName('none');
 
-        // change page event name
-        AnalyticsProvider.setPageEvent('$routeChangeStart');
+          // Use analytics.js instead of ga.js
+          AnalyticsProvider.useAnalytics(true);
+
+          // change page event name
+          AnalyticsProvider.setPageEvent('$routeChangeStart');
+        } catch(e) {
+            // no analytics, no sweat
+          console.log("No Google Analytics available. Ignoring.");
+        }
 
         $locationProvider.html5Mode({
           enabled: true,
@@ -108,7 +116,7 @@ budgetApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'Analy
       }]
 );
 
-budgetApp.run(function($rootScope, $location, $window, Analytics, AuthenticationService, UserService) {
+budgetApp.run(function($rootScope, $location, $window, AuthenticationService, UserService) {
   $rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
 
     if(!$rootScope.user && AuthenticationService.anonymous.indexOf(nextRoute.originalPath) == -1) {
