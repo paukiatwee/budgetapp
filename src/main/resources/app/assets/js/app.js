@@ -6,8 +6,26 @@ angular.module('budgetApp').constant('angularMomentConfig', {
 });
 
 angular.module('budgetApp').constant('appConfig', {
-  version: '1.0.4'
+  version: '1.0.4',
+  analyticsAccount: 'UA-53663138-1'
 });
+
+function configureAnalytics(AnalyticsProvider, analyticsAccount) {
+      // initial configuration
+      AnalyticsProvider.setAccount(analyticsAccount);
+
+      // track all routes (or not)
+      AnalyticsProvider.trackPages(true);
+
+      //Optional set domain (Use 'none' for testing on localhost)
+      //        AnalyticsProvider.setDomainName('none');
+
+      // Use analytics.js instead of ga.js
+      AnalyticsProvider.useAnalytics(true);
+
+      // change page event name
+      AnalyticsProvider.setPageEvent('$routeChangeStart');
+}
 
 budgetApp.config(['$routeProvider', '$httpProvider', '$locationProvider', '$injector', 'appConfig',
       function($routeProvider, $httpProvider, $locationProvider, $injector, appConfig) {
@@ -17,20 +35,7 @@ budgetApp.config(['$routeProvider', '$httpProvider', '$locationProvider', '$inje
           AnalyticsProvider = $injector.get('angular-google-analytics');
 
           // have google analytics
-          // initial configuration
-          AnalyticsProvider.setAccount('UA-53663138-1');
-
-          // track all routes (or not)
-          AnalyticsProvider.trackPages(true);
-
-          //Optional set domain (Use 'none' for testing on localhost)
-          //        AnalyticsProvider.setDomainName('none');
-
-          // Use analytics.js instead of ga.js
-          AnalyticsProvider.useAnalytics(true);
-
-          // change page event name
-          AnalyticsProvider.setPageEvent('$routeChangeStart');
+          configureAnalytics(AnalyticsProvider, appConfig.analyticsAccount);
         } catch(e) {
             // no analytics, no sweat
           console.log("No Google Analytics available. Ignoring.");
