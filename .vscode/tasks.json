@@ -1,0 +1,18 @@
+{
+    "version": "0.1.0",
+    "command": "mvn",
+    "isShellCommand": true,
+    "showOutput": "always",
+    "suppressTaskName": true,
+    "tasks": [
+      {
+          "taskName": "build",
+          "args": ["package"]
+      },
+      {
+        "taskName": "clean",
+        "args": ["clean"]
+
+      }
+    ]
+}

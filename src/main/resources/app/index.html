@@ -3,20 +3,37 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Budget App</title>
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
-  <link href="https://cdn.jsdelivr.net/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/fontawesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" />
-  <!--TODO move to jsdeliv-->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/1.5.2/css/ionicons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/bootstrap/3.3/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/fontawesome/4.6/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/jquery.footable/2.0.3/css/footable.core.min.css" rel="stylesheet" />
-  <link href="/app/assets/css/loading-bar.css" rel="stylesheet" />
+
+  <!-- not available on JSDelivr so using Cloudflare -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.css" rel="stylesheet" />
+  <!-- end Cloudflare -->
+
+  <!-- local stylesheets, not available on jsdelivr -->
   <link href="/app/assets/css/style.css" rel="stylesheet" />
 
-  <script src="https://cdn.jsdelivr.net/g/jquery@2.1.1,angularjs@1.4.2(angular.min.js+angular-resource.min.js+angular-route.min.js+angular-cookies.min.js+angular-animate.min.js),momentjs@2.10.6,lodash@3.10.1,angular.bootstrap@0.13.3(ui-bootstrap-tpls.min.js),angular.moment@0.10.2,jquery.footable@2.0.3(footable.min.js+footable.sort.min.js+footable.paginate.min.js),jquery.flot@0.8.3(jquery.flot.min.js+jquery.flot.time.min.js+jquery.flot.categories.min.js+jquery.flot.pie.min.js+jquery.flot.resize.min.js),masonry@3.3.1"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.8.0/loading-bar.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/g/jquery@2.1"></script>
+  <script src="https://cdn.jsdelivr.net/g/angularjs@1.5(angular.js+angular-cookies.js+angular-resource.js+angular-route.js+angular-animate.js)"></script>
+  <script src="https://cdn.jsdelivr.net/g/angular.bootstrap@0.13.3(ui-bootstrap-tpls.min.js)"></script>
+  <script src="https://cdn.jsdelivr.net/g/jquery.flot@0.8(jquery.flot.min.js+jquery.flot.categories.min.js+jquery.flot.time.js+jquery.flot.resize.js+jquery.flot.pie.js)"></script>
+  <script src="https://cdn.jsdelivr.net/g/jquery.footable@2.0(footable.min.js+footable.sort.min.js+footable.paginate.min.js)"></script>
+  <script src="https://cdn.jsdelivr.net/g/momentjs@2.14,lodash@4.15,angular.moment@0.10,masonry@4.1"></script>
+
+  <!-- not available on JSDelivr so using Cloudflare -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.5/moment-timezone-with-data.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js"></script>
+  <!-- end Cloudflare -->
+
   <script src="/app/assets/js/jquery.flot.orderBars.js"></script>
-  <script src="/app/assets/js/angular-masonry.min.js"></script>
-  <script src="/app/assets/js/angular-google-analytics.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/angular.masonry-packed/0.14.5/angular-masonry-packed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-analytics/1.1.7/angular-google-analytics.min.js"></script>
+  <!-- if needed, include the charts using jsdelivr. Remove local version. -->
+  <!--<script src="https://cdn.jsdelivr.net/angular.charts/0.2.7/angular-charts.min.js"></script>-->
   <script src="/app/assets/js/app.js?v=1.0.4"></script>
   <script src="/app/assets/js/services.js?v=1.0.4"></script>
   <script src="/app/assets/js/controllers.js?v=1.0.4"></script>
