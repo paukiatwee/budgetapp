@@ -21,6 +21,9 @@ database:
 
   validationQuery: SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS
 
+server:
+  registerDefaultExceptionMappers: false
+
 # Logging settings.
 logging:
 

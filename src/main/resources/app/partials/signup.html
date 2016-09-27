@@ -4,7 +4,7 @@
       <div class="panel panel-default">
         <div class="panel-heading"><h3 class="panel-title">Sign Up</h3></div>
         <div class="panel-body">
-          <form name="form" novalidate role="form">
+          <form name="form" novalidate role="form" ng-submit="register()">
             <div class="form-group has-feedback" ng-class="errorClass('username')">
               <label for="username" class="control-label">Email</label>
               <input type="email" class="form-control" id="username" name="username" placeholder="Enter Email" ng-model="user.username">
@@ -19,7 +19,7 @@
                 {{errorMessage('password')}}
               </span>
             </div>
-            <button type="submit" class="btn btn-primary" ng-click="register()"><span class="fa fa-heart-o"></span> Sign Up</button>
+            <button type="submit" class="btn btn-primary"><span class="fa fa-heart-o"></span> Sign Up</button>
             or
             <a href="/">Log In</a>
           </form>
