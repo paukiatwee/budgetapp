@@ -3,7 +3,6 @@ package io.budgetapp.configuration;
 import com.bazaarvoice.dropwizard.assets.AssetsBundleConfiguration;
 import com.bazaarvoice.dropwizard.assets.AssetsConfiguration;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.budgetapp.db.CustomDataSourceFactory;
 import io.budgetapp.model.Budget;
 import io.budgetapp.model.Category;
 import io.dropwizard.Configuration;
