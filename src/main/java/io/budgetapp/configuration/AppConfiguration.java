@@ -23,7 +23,7 @@ public class AppConfiguration extends Configuration implements AssetsBundleConfi
 
     @Valid
     @NotNull
-    private CustomDataSourceFactory database = new CustomDataSourceFactory();
+    private DataSourceFactory database = new DataSourceFactory();
 
     @Valid
     @NotNull
@@ -53,7 +53,7 @@ public class AppConfiguration extends Configuration implements AssetsBundleConfi
     }
 
     @JsonProperty("database")
-    public void setDatabase(CustomDataSourceFactory database) {
+    public void setDatabase(DataSourceFactory database) {
         this.database = database;
     }
 

@@ -2,24 +2,24 @@
 database:
 
   # the name of your JDBC driver
-  driverClass: org.hsqldb.jdbcDriver
+  driverClass: ${DB_DRIVER:-org.hsqldb.jdbcDriver}
 
   # the username
-  user: sa
+  user: ${DB_USERNAME:-sa}
 
   # the password
-  password:
+  password: ${DB_PASSWORD:-}
 
   # the JDBC URL
-  url: jdbc:hsqldb:mem:test;sql.syntax_pgs=true
+  url: ${DB_URL:-jdbc:hsqldb:mem:test;sql.syntax_pgs=true}
 
   # any properties specific to JDBC driver:
   properties:
     charSet: UTF-8
-    hibernate.dialect: io.budgetapp.hibernate.dialect.CustomHSQLDialect
+    hibernate.dialect: ${DB_DIALECT:-io.budgetapp.hibernate.dialect.CustomHSQLDialect}
     hibernate.format_sql: true
 
-  validationQuery: SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS
+  validationQuery: ${DB_VALIDATE_QUERY:-SELECT 1}
 
 server:
 #  softNofileLimit: 1000

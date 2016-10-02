@@ -22,6 +22,8 @@ import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.hibernate.UnitOfWorkAwareProxyFactory;
@@ -74,6 +76,15 @@ public class BudgetApplication extends Application<AppConfiguration> {
                 return configuration.getDataSourceFactory();
             }
         };
+
+        // allow using Environment variable in yaml
+        bootstrap.setConfigurationSourceProvider(
+                new SubstitutingSourceProvider(
+                        bootstrap.getConfigurationSourceProvider(),
+                        new EnvironmentVariableSubstitutor(false)
+                )
+        );
+
         bootstrap.addBundle(migrationBundle);
         bootstrap.addBundle(hibernate);
         bootstrap.addBundle(new ConfiguredAssetsBundle("/app", "/app", "index.html"));
