@@ -2,7 +2,7 @@
 
 Budget App is open source personal budgeting application.
 
-### Demo is available [here](https://app.budgetapp.io/)
+### Demo is available [here](https://demo.budgetapp.io/)
 
 **Screenshot**
 
