@@ -30,7 +30,7 @@
         <div class="form-group" ng-show="selected.category.type == 'EXPENDITURE'">
           <label class="col-sm-3 control-label">Actual</label>
           <div class="col-sm-7">
-            <p class="form-control-static">{{selected.actual | currency}}</p>
+            <p class="form-control-static">{{selected.actual | safeCurrency : $root.user.currency }}</p>
           </div>
         </div>
       </div>
@@ -155,15 +155,15 @@
             <li class="budget" ng-repeat="budget in group.budgets">
               <span class="fa fa-pencil icon-edit" title="Edit budget" ng-click="openBudgetModal(budget)"></span> <span class="name" ng-click="openBudgetModal(budget)">{{budget.name}}</span>
               <div class="pull-right">
-                <div class="projected">{{budget.projected | currency}}</div>
-                <div class="actual">{{budget.actual | currency}}</div>
+                <div class="projected">{{budget.projected | safeCurrency : $root.user.currency}}</div>
+                <div class="actual">{{budget.actual | safeCurrency : $root.user.currency}}</div>
               </div>
             </li>
             <li class="budget-footer">
               <span class="total">Total: </span>
               <div class="pull-right">
-                <div class="projected">{{group.projected | currency}}</div>
-                <div class="actual">{{group.actual | currency}}</div>
+                <div class="projected">{{group.projected | safeCurrency : $root.user.currency}}</div>
+                <div class="actual">{{group.actual | safeCurrency : $root.user.currency}}</div>
               </div>
               <div class="clearfix"></div>
             </li>
@@ -195,10 +195,10 @@
               <li class="budget" ng-repeat="budget in group.budgets">
                 <span class="fa fa-pencil icon-edit" title="Edit budget" ng-click="openBudgetModal(budget)"></span> <span class="name" ng-click="openBudgetModal(budget)">{{budget.name}}</span>
                 <div class="pull-right">
-                  <div class="projected">{{budget.projected | currency}}</div>
-                  <div class="actual">{{budget.actual | currency}}</div>
+                  <div class="projected">{{budget.projected | safeCurrency : $root.user.currency}}</div>
+                  <div class="actual">{{budget.actual | safeCurrency : $root.user.currency}}</div>
                   <div class="remaining" ng-class="{overspend: budget.remaining < 0}">
-                    {{budget.remaining | currency}}
+                    {{budget.remaining | safeCurrency : $root.user.currency}}
                   </div>
                   <div class="actions">
                     <span class="fa fa-plus-square-o icon-plus" ng-click="openTransactionModal(budget)" title="Add transaction"></span> <span class="fa fa-list-ul icon-list" ng-click="openTransactionsModal(budget)" title="View transactions"></span>
@@ -208,9 +208,9 @@
               <li class="budget-footer">
                 <span class="total">Total: </span>
                 <div class="pull-right">
-                  <div class="projected">{{group.projected | currency}}</div>
-                  <div class="actual">{{group.actual | currency}}</div>
-                  <div class="remaining" ng-class="{overspend: group.remaining < 0}">{{group.remaining | currency}}</div>
+                  <div class="projected">{{group.projected | safeCurrency : $root.user.currency}}</div>
+                  <div class="actual">{{group.actual | safeCurrency : $root.user.currency }}</div>
+                  <div class="remaining" ng-class="{overspend: group.remaining < 0}">{{group.remaining | safeCurrency : $root.user.currency}}</div>
                 </div>
                 <div class="clearfix"></div>
               </li>

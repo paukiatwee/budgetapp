@@ -33,6 +33,7 @@ public class User implements Principal, Serializable {
     private String password;
     private String name;
     private Date createdAt;
+    private String currency;
 
     // not in DB
     private String token;
@@ -89,6 +90,14 @@ public class User implements Principal, Serializable {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     // not in DB

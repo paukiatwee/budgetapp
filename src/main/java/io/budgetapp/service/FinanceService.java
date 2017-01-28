@@ -107,6 +107,7 @@ public class FinanceService {
 
     public User update(User user, Profile profile) {
         user.setName(profile.getName());
+        user.setCurrency(profile.getCurrency());
         userDAO.update(user);
         return user;
     }

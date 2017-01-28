@@ -4,7 +4,7 @@
       <strong>You got {{recurringTransactions.length}} recurring for today:</strong>
       <ul>
         <li ng-repeat="recurring in recurringTransactions">
-          {{recurring.name}} - {{recurring.amount | currency}}
+          {{recurring.name}} - {{recurring.amount | safeCurrency : $root.user.currency}}
         </li>
       </ul>
     </div>
