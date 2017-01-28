@@ -171,7 +171,6 @@ angular.module('budgetApp').filter('na', function () {
 
 angular.module('budgetApp').filter('safeCurrency', ['$filter', function ($filter) {
   return function (value, symbol) {
-    console.log(symbol);
     if (!symbol) {
       return $filter('currency')(value);
     } else {
