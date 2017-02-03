@@ -201,13 +201,13 @@ financeControllers.controller('ProfileController', function ($scope, UserService
   };
 });
 
-financeControllers.controller('UpdateProfileController', function ($scope, UserService) {
+financeControllers.controller('UpdateProfileController', function ($scope, $rootScope, UserService) {
 
   $scope.loaded = false;
   $scope.errorMessage = errorMessage;
   $scope.errorClass = errorClass;
 
-  $scope.user = UserService.ping(function() {
+  $scope.user = $rootScope.user = UserService.ping(function() {
     $scope.loaded = true;
   });
 

@@ -8,5 +8,6 @@
 
   <include file="migrations/01-init-database.xml" />
   <include file="migrations/02-recurrings-add-remark.xml" />
+  <include file="migrations/03-users-add-currency.xml" />
 
 </databaseChangeLog>

@@ -169,6 +169,16 @@ angular.module('budgetApp').filter('na', function () {
   };
 });
 
+angular.module('budgetApp').filter('safeCurrency', ['$filter', function ($filter) {
+  return function (value, symbol) {
+    if (!symbol) {
+      return $filter('currency')(value);
+    } else {
+      return $filter('currency')(value, symbol);
+    }
+  };
+}]);
+
 // format date, format is 'YYYY-MM'
 angular.module('budgetApp').filter('yearMonth', ['moment', 'amMoment', function (moment, amMoment) {
   return function (value) {

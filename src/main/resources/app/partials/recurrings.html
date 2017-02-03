@@ -48,7 +48,7 @@
             <tbody>
             <tr ng-repeat="recurring in recurrings | filter: filter">
               <td>{{recurring.name}}</td>
-              <td>{{recurring.amount | currency}}</td>
+              <td>{{recurring.amount | safeCurrency : $root.user.currency}}</td>
               <td>{{recurring.recurringTypeDisplay}}</td>
               <td><span title="{{recurring.remark | na }}">{{recurring.remark | na | truncate:true:50 }}</span></td>
               <td>{{recurring.lastRunAt | datetime}}</td>
