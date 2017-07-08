@@ -22,6 +22,11 @@ database:
   validationQuery: SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS
 
 server:
+#  softNofileLimit: 1000
+#  hardNofileLimit: 1000
+  applicationConnectors:
+    - type: http
+      port: 9999
   registerDefaultExceptionMappers: false
 
 # Logging settings.

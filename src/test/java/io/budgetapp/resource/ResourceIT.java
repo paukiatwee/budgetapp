@@ -141,7 +141,7 @@ public abstract class ResourceIT {
     }
 
     protected static String getUrl() {
-        return String.format("http://localhost:8080");
+        return String.format("http://localhost:9999");
     }
 
     protected abstract int getPort();
