@@ -5,10 +5,10 @@ import io.budgetapp.configuration.AppConfiguration;
 import io.budgetapp.model.Category;
 import io.budgetapp.model.User;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +39,6 @@ public class CategoryDAO extends DefaultDAO<Category> {
     public Collection<Category> addDefaultCategories(User user) {
         Collection<Category> categories = new ArrayList<>(configuration.getCategories().size());
         configuration.getCategories()
-                .stream()
                 .forEach(c -> categories.add(addCategory(user, category(c))));
         return categories;
     }
@@ -74,7 +73,7 @@ public class CategoryDAO extends DefaultDAO<Category> {
     }
 
     private Criteria defaultCriteria() {
-        return currentSession().createCriteria(Category.class);
+        return criteria();
     }
 
     private Criteria userCriteria(User user) {
@@ -90,11 +89,11 @@ public class CategoryDAO extends DefaultDAO<Category> {
     public List<String> findSuggestions(User user, String q) {
         q = q == null? "": q.toLowerCase();
 
-        Query query = currentSession().createQuery("SELECT c.name FROM Category c WHERE c.user != :user AND LOWER(c.name) LIKE :q");
+        Query<String> query = currentSession().createQuery("SELECT c.name FROM Category c WHERE c.user != :user AND LOWER(c.name) LIKE :q", String.class);
         query
                 .setParameter("user", user)
                 .setParameter("q", "%" + q + "%");
 
-        return (List<String>)query.list();
+        return query.list();
     }
 }

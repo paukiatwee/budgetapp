@@ -9,12 +9,11 @@ import io.budgetapp.model.User;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +73,7 @@ public class BudgetDAO extends AbstractDAO<Budget> {
     public List<Budget> findBudgets(User user, int month, int year, boolean lazy) {
         LOGGER.debug("Find budgets by user {} by date {}-{}", user, month, year);
         Date yearMonth = Util.yearMonthDate(month, year);
-        Criteria criteria = currentSession().createCriteria(Budget.class);
+        Criteria criteria = criteria();
         if(!lazy) {
             criteria.setFetchMode("category", FetchMode.JOIN);
         }
@@ -86,7 +85,7 @@ public class BudgetDAO extends AbstractDAO<Budget> {
 
     public Date findLatestBudget(User user) {
         LOGGER.debug("Find latest budget by user {}", user);
-        Criteria criteria = currentSession().createCriteria(Budget.class);
+        Criteria criteria = criteria();
         criteria.add(Restrictions.eq("user", user));
         criteria.setProjection(Projections.max("createdAt"));
         criteria.setMaxResults(1);
@@ -135,7 +134,7 @@ public class BudgetDAO extends AbstractDAO<Budget> {
     public List<Budget> findByRange(User user, int startMonth, int startYear, int endMonth, int endYear) {
         Date start = Util.yearMonthDate(startMonth, startYear);
         Date end = Util.yearMonthDate(endMonth, endYear);
-        Query query = currentSession().createQuery("FROM Budget b WHERE b.user = :user AND b.period BETWEEN :start AND :end");
+        Query<Budget> query = query("FROM Budget b WHERE b.user = :user AND b.period BETWEEN :start AND :end");
         query
                 .setParameter("user", user)
                 .setParameter("start", start)
@@ -146,7 +145,7 @@ public class BudgetDAO extends AbstractDAO<Budget> {
 
     public Budget findByBudgetType(Long budgetTypeId) {
         Date now = Util.currentYearMonth();
-        Query query = currentSession().createQuery("FROM Budget b WHERE b.budgetType.id = :budgetTypeId AND b.period = :period");
+        Query<Budget> query = query("FROM Budget b WHERE b.budgetType.id = :budgetTypeId AND b.period = :period");
         query
                 .setParameter("budgetTypeId", budgetTypeId)
                 .setParameter("period", now);
@@ -163,16 +162,16 @@ public class BudgetDAO extends AbstractDAO<Budget> {
     public List<String> findSuggestions(User user, String q) {
         q = q == null? "": q.toLowerCase();
 
-        Query query = currentSession().createQuery("SELECT b.name FROM Budget l WHERE b.user != :user AND LOWER(b.name) LIKE :q");
+        Query<String> query = currentSession().createQuery("SELECT b.name FROM Budget l WHERE b.user != :user AND LOWER(b.name) LIKE :q", String.class);
         query
                 .setParameter("user", user)
                 .setParameter("q", "%" + q + "%");
 
-        return (List<String>)query.list();
+        return query.list();
     }
 
     private Criteria defaultCriteria() {
-        return currentSession().createCriteria(Budget.class);
+        return criteria();
     }
 
     private Criteria userCriteria(User user) {

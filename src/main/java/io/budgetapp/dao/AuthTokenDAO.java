@@ -16,11 +16,8 @@ import java.util.UUID;
  */
 public class AuthTokenDAO extends AbstractDAO<AuthToken> {
 
-    private final SessionFactory sessionFactory;
-
     public AuthTokenDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
-        this.sessionFactory = sessionFactory;
     }
 
     public AuthToken add(User user) {
@@ -31,14 +28,13 @@ public class AuthTokenDAO extends AbstractDAO<AuthToken> {
     }
 
     public Optional<AuthToken> find(String token) {
-        Criteria criteria = currentSession().createCriteria(AuthToken.class);
+        Criteria criteria = criteria();
         criteria.add(Restrictions.eq("token", token));
-        Optional<AuthToken> result = Optional.ofNullable(uniqueResult(criteria));
-        return result;
+        return Optional.ofNullable(uniqueResult(criteria));
     }
 
     public List<AuthToken> findByUser(User user) {
-        Criteria criteria = currentSession().createCriteria(AuthToken.class);
+        Criteria criteria = criteria();
         criteria.add(Restrictions.eq("user", user));
         return list(criteria);
     }

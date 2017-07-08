@@ -47,7 +47,7 @@ public class UserDAO extends AbstractDAO<User> {
     }
 
     public Optional<User> findByUsername(String username) {
-        Criteria criteria = currentSession().createCriteria(User.class);
+        Criteria criteria = criteria();
         criteria.add(Restrictions.eq("username", username).ignoreCase());
         List<User> users = list(criteria);
         if(users.size() == 1) {
