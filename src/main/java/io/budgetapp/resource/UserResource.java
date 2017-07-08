@@ -83,11 +83,7 @@ public class UserResource extends AbstractResource {
     @Path("/auth")
     public Response login(LoginForm login) {
         Optional<User> user = financeService.login(login);
-        if(user.isPresent()) {
-            return ok(user.get());
-        } else {
-            return unauthorized();
-        }
+        return user.map(this::ok).orElseGet(this::unauthorized);
     }
 
     /**

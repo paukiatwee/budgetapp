@@ -86,9 +86,7 @@ public class Category implements Serializable {
 
         Category category = (Category) o;
 
-        if (id != null ? !id.equals(category.id) : category.id != null) return false;
-
-        return true;
+        return id != null ? id.equals(category.id) : category.id == null;
     }
 
     @Override

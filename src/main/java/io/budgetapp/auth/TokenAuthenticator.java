@@ -22,11 +22,6 @@ public class TokenAuthenticator implements Authenticator<String, User> {
     @UnitOfWork
     @Override
     public Optional<User> authenticate(String token) throws AuthenticationException {
-        Optional<User> option = financeService.findUserByToken(token);
-        if(option.isPresent()) {
-            return Optional.of(option.get());
-        } else {
-            return Optional.empty();
-        }
+        return financeService.findUserByToken(token);
     }
 }

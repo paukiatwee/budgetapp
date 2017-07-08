@@ -10,7 +10,7 @@ import io.budgetapp.model.User;
 import io.budgetapp.model.form.SignUpForm;
 import io.budgetapp.model.form.budget.AddBudgetForm;
 import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.filter.LoggingFilter;
+import org.glassfish.jersey.logging.LoggingFeature;
 import org.junit.BeforeClass;
 
 import javax.ws.rs.client.Client;
@@ -22,6 +22,7 @@ import javax.ws.rs.core.Response;
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,6 +32,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public abstract class ResourceIT {
 
+    private static final Logger LOGGER = Logger.getLogger(ResourceIT.class.getName());
+
     protected static Client client;
     protected static User defaultUser;
     protected static Category defaultCategory;
@@ -39,7 +42,7 @@ public abstract class ResourceIT {
     @BeforeClass
     public static void before() {
         ClientConfig clientConfig = new ClientConfig();
-        clientConfig.register(LoggingFilter.class);
+        clientConfig.register(new LoggingFeature(LOGGER, LoggingFeature.Verbosity.PAYLOAD_ANY));
         client = ClientBuilder.newClient(clientConfig);
 
         SignUpForm signUp = new SignUpForm();
@@ -141,7 +144,7 @@ public abstract class ResourceIT {
     }
 
     protected static String getUrl() {
-        return String.format("http://localhost:9999");
+        return "http://localhost:9999";
     }
 
     protected abstract int getPort();

@@ -41,15 +41,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -60,7 +52,6 @@ public class FinanceService {
     private static final Logger LOGGER = LoggerFactory.getLogger(FinanceService.class);
     private static final DateTimeFormatter SUMMARY_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd MMM");
 
-    private final SessionFactory sessionFactory;
     private final UserDAO userDAO;
     private final BudgetDAO budgetDAO;
     private final BudgetTypeDAO budgetTypeDAO;
@@ -71,8 +62,7 @@ public class FinanceService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public FinanceService(SessionFactory sessionFactory, UserDAO userDAO, BudgetDAO budgetDAO, BudgetTypeDAO budgetTypeDAO, CategoryDAO categoryDAO, TransactionDAO transactionDAO, RecurringDAO recurringDAO, AuthTokenDAO authTokenDAO, PasswordEncoder passwordEncoder) {
-        this.sessionFactory = sessionFactory;
+    public FinanceService(UserDAO userDAO, BudgetDAO budgetDAO, BudgetTypeDAO budgetTypeDAO, CategoryDAO categoryDAO, TransactionDAO transactionDAO, RecurringDAO recurringDAO, AuthTokenDAO authTokenDAO, PasswordEncoder passwordEncoder) {
         this.userDAO = userDAO;
         this.budgetDAO = budgetDAO;
         this.budgetTypeDAO = budgetTypeDAO;
@@ -83,11 +73,6 @@ public class FinanceService {
 
         this.passwordEncoder = passwordEncoder;
     }
-
-    public SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
-
 
     //==================================================================
     // USER
@@ -130,11 +115,7 @@ public class FinanceService {
 
         Optional<AuthToken> authToken = authTokenDAO.find(token);
 
-        if(authToken.isPresent()) {
-            return Optional.of(authToken.get().getUser());
-        } else {
-            return Optional.empty();
-        }
+        return authToken.map(AuthToken::getUser);
     }
 
     public Optional<User> login(LoginForm login) {
@@ -193,7 +174,7 @@ public class FinanceService {
             accountSummary.getGroups().add(group);
         }
 
-        Collections.sort(accountSummary.getGroups(), (o1, o2) -> o1.getId().compareTo(o2.getId()));
+        accountSummary.getGroups().sort(Comparator.comparing(Group::getId));
         return accountSummary;
     }
 
@@ -627,7 +608,7 @@ public class FinanceService {
             points.add(point);
         }
 
-        Collections.sort(points, (p1, p2) -> Double.compare(p2.getValue(), p1.getValue()));
+        points.sort((p1, p2) -> Double.compare(p2.getValue(), p1.getValue()));
         return points;
     }
 
