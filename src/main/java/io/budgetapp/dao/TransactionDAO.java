@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -31,6 +32,13 @@ public class TransactionDAO extends AbstractDAO<Transaction> {
     public Transaction addTransaction(Transaction transaction) {
         LOGGER.debug("Add transaction {}", transaction);
         return persist(transaction);
+    }
+
+    public List<Transaction> addTransactions(List<Transaction> transactions) {
+        return transactions
+                .stream()
+                .map(this::addTransaction)
+                .collect(Collectors.toList());
     }
 
     public List<Transaction> find(User user, Integer limit) {

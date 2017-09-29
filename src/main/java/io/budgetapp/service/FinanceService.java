@@ -1,6 +1,8 @@
 package io.budgetapp.service;
 
+import com.google.common.collect.ImmutableList;
 import io.budgetapp.application.DataConstraintException;
+import io.budgetapp.application.NotFoundException;
 import io.budgetapp.crypto.PasswordEncoder;
 import io.budgetapp.dao.AuthTokenDAO;
 import io.budgetapp.dao.CategoryDAO;
@@ -32,7 +34,6 @@ import io.budgetapp.model.form.report.SearchFilter;
 import io.budgetapp.model.form.user.Password;
 import io.budgetapp.model.form.user.Profile;
 import io.budgetapp.util.Util;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -415,51 +416,77 @@ public class FinanceService {
     // TRANSACTION
     //==================================================================
     public Transaction addTransaction(User user, TransactionForm transactionForm) {
+        return addTransactions(user, ImmutableList.of(transactionForm)).get(0);
+    }
 
-        Budget budget = budgetDAO.findById(user, transactionForm.getBudget().getId());
+    public List<Transaction> addTransactions(User user, List<TransactionForm> transactionForms) {
+        Set<Long> budgetIds = transactionForms
+                .stream()
+                .map(TransactionForm::getBudget)
+                .map(Budget::getId)
+                .collect(Collectors.toSet());
+
+        List<Budget> budgets = budgetDAO.findByIds(user, budgetIds);
+
+        Map<Long, Budget> budgetMap = new HashMap<>();
+
+        for (Budget budget : budgets) {
+            budgetMap.put(budget.getId(), budget);
+        }
+
+        List<Transaction> transactions = new ArrayList<>();
 
         // validation
-        if(transactionForm.getAmount() == 0) {
-            throw new DataConstraintException("amount", "Amount is required");
+        for (TransactionForm transactionForm : transactionForms) {
+
+            Budget budget = budgetMap.get(transactionForm.getBudget().getId());
+            if (budget == null) {
+                throw new NotFoundException();
+            }
+
+            if (transactionForm.getAmount() == 0) {
+                throw new DataConstraintException("amount", "Amount is required");
+            }
+
+            if (Boolean.TRUE.equals(transactionForm.getRecurring()) && transactionForm.getRecurringType() == null) {
+                throw new DataConstraintException("recurringType", "Recurring Type is required");
+            }
+
+            Date transactionOn = transactionForm.getTransactionOn();
+            if (!Util.inMonth(transactionOn, budget.getPeriod())) {
+                throw new DataConstraintException("transactionOn", "Transaction Date must within " + Util.toFriendlyMonthDisplay(budget.getPeriod()) + " " + (budget.getPeriod().getYear() + 1900));
+            }
+            // end validation
+
+            budget.setActual(budget.getActual() + transactionForm.getAmount());
+            budgetDAO.update(budget);
+
+            Recurring recurring = new Recurring();
+            if (Boolean.TRUE.equals(transactionForm.getRecurring())) {
+                LOGGER.debug("Add recurring {} by {}", transactionForm, user);
+                recurring.setAmount(transactionForm.getAmount());
+                recurring.setRecurringType(transactionForm.getRecurringType());
+                recurring.setBudgetType(budget.getBudgetType());
+                recurring.setRemark(transactionForm.getRemark());
+                recurring.setLastRunAt(transactionForm.getTransactionOn());
+                recurringDAO.addRecurring(recurring);
+            }
+
+            Transaction transaction = new Transaction();
+            transaction.setName(budget.getName());
+            transaction.setAmount(transactionForm.getAmount());
+            transaction.setRemark(transactionForm.getRemark());
+            transaction.setAuto(Boolean.TRUE.equals(transactionForm.getRecurring()));
+            transaction.setTransactionOn(transactionForm.getTransactionOn());
+            transaction.setBudget(transactionForm.getBudget());
+            if (Boolean.TRUE.equals(transactionForm.getRecurring())) {
+                transaction.setRecurring(recurring);
+            }
+
+            transactions.add(transaction);
         }
 
-        if(Boolean.TRUE.equals(transactionForm.getRecurring()) && transactionForm.getRecurringType() == null) {
-            throw new DataConstraintException("recurringType", "Recurring Type is required");
-        }
-
-        Date transactionOn = transactionForm.getTransactionOn();
-        if(!Util.inMonth(transactionOn, budget.getPeriod())) {
-            throw new DataConstraintException("transactionOn", "Transaction Date must within " + Util.toFriendlyMonthDisplay(budget.getPeriod()) + " " + (budget.getPeriod().getYear() + 1900));
-        }
-        // end validation
-
-
-        budget.setActual(budget.getActual() + transactionForm.getAmount());
-        budgetDAO.update(budget);
-
-        Recurring recurring = new Recurring();
-        if(Boolean.TRUE.equals(transactionForm.getRecurring())) {
-            LOGGER.debug("Add recurring {} by {}", transactionForm, user);
-            recurring.setAmount(transactionForm.getAmount());
-            recurring.setRecurringType(transactionForm.getRecurringType());
-            recurring.setBudgetType(budget.getBudgetType());
-            recurring.setRemark(transactionForm.getRemark());
-            recurring.setLastRunAt(transactionForm.getTransactionOn());
-            recurringDAO.addRecurring(recurring);
-        }
-
-        Transaction transaction = new Transaction();
-        transaction.setName(budget.getName());
-        transaction.setAmount(transactionForm.getAmount());
-        transaction.setRemark(transactionForm.getRemark());
-        transaction.setAuto(Boolean.TRUE.equals(transactionForm.getRecurring()));
-        transaction.setTransactionOn(transactionForm.getTransactionOn());
-        transaction.setBudget(transactionForm.getBudget());
-        if(Boolean.TRUE.equals(transactionForm.getRecurring())) {
-            transaction.setRecurring(recurring);
-        }
-
-        return transactionDAO.addTransaction(transaction);
+        return transactionDAO.addTransactions(transactions);
     }
 
     public boolean deleteTransaction(User user, long transactionId) {
