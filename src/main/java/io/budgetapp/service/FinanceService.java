@@ -144,21 +144,10 @@ public class FinanceService {
 
 
     public AccountSummary findAccountSummaryByUser(User user, Integer month, Integer year) {
-        if(month == null || year == null) {
-            LocalDate now = LocalDate.now();
-            month = now.getMonthValue();
-            year = now.getYear();
-        }
+        List<Budget> budgets = findBudgetByUser(user, month, year);
+
         LOGGER.debug("Find account summary {} {}-{}", user, month, year);
         AccountSummary accountSummary = new AccountSummary();
-        List<Budget> budgets = budgetDAO.findBudgets(user, month, year, true);
-
-        // no budgets, first time access
-        if(budgets.isEmpty()) {
-            LOGGER.debug("First time access budgets {} {}-{}", user, month, year);
-            initCategoriesAndBudgets(user, month, year);
-            budgets = budgetDAO.findBudgets(user, month, year, true);
-        }
         Map<Category, List<Budget>> grouped = budgets
                 .stream()
                 .collect(Collectors.groupingBy(Budget::getCategory));
@@ -276,6 +265,27 @@ public class FinanceService {
 
     public List<Budget> findBudgetsByUser(User user) {
         return budgetDAO.findBudgets(user);
+    }
+
+    public List<Budget> findBudgetByUser(User user, Integer month, Integer year) {
+        LOGGER.debug("Find budget for user {} {}-{}", user, month, year);
+
+        if(month == null || year == null) {
+            LocalDate now = LocalDate.now();
+            month = now.getMonthValue();
+            year = now.getYear();
+        }
+
+        List<Budget> budgets = budgetDAO.findBudgets(user, month, year, false);
+
+        // no budgets, first time access
+        if(budgets.isEmpty()) {
+            LOGGER.debug("First time access budgets {} {}-{}", user, month, year);
+            initCategoriesAndBudgets(user, month, year);
+            budgets = budgetDAO.findBudgets(user, month, year, false);
+        }
+
+        return budgets;
     }
 
     public Budget findBudgetById(User user, long budgetId) {
