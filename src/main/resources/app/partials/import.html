@@ -1,0 +1,151 @@
+<section class="content-header">
+    <h2>Import</h2>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">Upload</h3>
+                </div>
+                <div class="box-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <span class="col-sm-2"></span>
+                            <div class="col-sm-8">
+                                <input type="file" class="form-control" id="minAmount" placeholder="Transaction Min Amount" file-changed="onFileSelected">
+                            </div>
+                            <span class="col-sm-2"></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="showSuccess">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">Success</h3>
+            </div>
+            <div class="panel-body">
+                You successfully imported {{transactionsImportedCount}} transactions
+            </div>
+        </div>
+    </div>
+
+    <div ng-hide="showSuccess">
+        <div class="row" ng-hide="!fileSelected">
+            <div class="col-lg-12">
+                <div class="row" ng-hide="columnsConfirmed">
+                    <div class="col-lg-6">
+                        <button class="btn btn-success btn-block" ng-click="confirmColumns()">Confirm Columns</button>
+                    </div>
+                    <div class="col-lg-6">
+                        <button class="btn btn-danger btn-block" ng-click="resetColumns()">Reset</button>
+                    </div>
+                </div>
+                <div class="row" ng-show="columnsConfirmed">
+                    <div class="col-lg-12">
+                        <button class="btn btn-success btn-block" ng-disabled="submitting" ng-click="submitTransactions()">Submit All</button>
+                    </div>
+                </div>
+                <br/>
+                <div class="box box-primary">
+                    <div class="box-body">
+                        <div ng-hide="transactions.length || !transactionsLoaded" class="no-result">
+                            <h2>No transaction found</h2>
+                        </div>
+                        <table class="table footable" ng-model="transactions" ng-show="transactions.length && transactionsLoaded && !columnsConfirmed">
+                            <thead>
+                            <tr>
+                                <th ng-repeat="s in select">
+                                    <select ng-model="s.value" ng-change="columnChanged($index)">
+                                        <option value="init">Select One</option>
+                                        <option value="amount">Amount</option>
+                                        <option value="remark">Remark</option>
+                                        <option value="date">Transaction Date</option>
+                                        <option value="na">None of the Above</option>
+                                    </select>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="transaction in transactions">
+                                <td ng-repeat="i in range(0, select.length)">
+                                    <span>{{transaction[i]}}</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot class="table-pagination hide-if-no-paging">
+                            <tr>
+                                <td colspan="4">
+                                    <ul class="pagination"></ul>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+
+                        <table class="table footable" ng-model="transactions" ng-show="transactions.length && transactionsLoaded && columnsConfirmed">
+                            <thead>
+                            <tr>
+                                <th>Amount</th>
+                                <th>Remark</th>
+                                <th>Transaction Date</th>
+                                <th>Name</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat-start="transaction in parsedTransactions" ng-class="{'invalid': transaction.errors.length != 0}">
+                                <td>
+                                    <span class="clickable" ng-click="openEditTransactionModal(transaction, 'amount', dataTypes.INT)">
+                                      <span class="fa fa-pencil icon-edit" title="Edit name"></span>
+                                      {{transaction.amount | safeCurrency : $root.user.currency}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="clickable" ng-click="openEditTransactionModal(transaction, 'remark', dataTypes.STRING)">
+                                      <span class="fa fa-pencil icon-edit" title="Edit name"></span>
+                                      {{transaction.remark}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="clickable" ng-click="openEditTransactionModal(transaction, 'transactionOn', dataTypes.DATE)">
+                                      <span class="fa fa-pencil icon-edit" title="Edit name"></span>
+                                      {{transaction.transactionOn | date}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="clickable" ng-click="openChooseBudgetModal(transaction, 'budget', dataTypes.BUDGET)">
+                                      <span class="fa fa-pencil icon-edit" title="Edit name"></span>
+                                      {{ transaction.budget.name || "Uncategorized"}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button type="submit" class="btn btn-danger" ng-click="removeTransaction($index)">
+                                        <span class="fa fa-trash-o" ng-hide="transaction.loading"></span>
+                                        Remove
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr ng-repeat="error in transaction.errors" ng-repeat-end>
+                                <td></td>
+                                <td>{{error}}</td>
+                            </tr>
+                            </tbody>
+                            <tfoot class="table-pagination hide-if-no-paging">
+                            <tr>
+                                <td colspan="4">
+                                    <ul class="pagination"></ul>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,6 +1,12 @@
 
 var financeControllers = angular.module('financeControllers', []);
 
+var dataTypes = {
+  INT: "int",
+  DATE: "date",
+  STRING: "string"
+};
+
 financeControllers.controller('LoginController', function ($scope, $rootScope, $window, $routeParams, AuthenticationService, $http, $location, auth) {
 
   $scope.success = $routeParams.signup || false;
@@ -754,6 +760,279 @@ financeControllers.controller('ReportsController', function ($scope, ReportServi
     })
   };
 
+});
+
+
+function getErrors(transaction) {
+ var errors = [];
+
+ if (isNaN(transaction.amount)) {
+   errors.push("Invalid amount");
+ }
+
+ if (!transaction.transactionOn || isNaN(transaction.transactionOn.getTime())) {
+   errors.push("Invalid Date");
+ }
+
+ if (!transaction.budget || (!transaction.budget.id && transaction.budget.id != 0)) {
+   errors.push("Transaction must be categorized");
+ }
+
+ return errors;
+}
+
+var modifyTransactionController = function ($scope, $modalInstance, transaction, prop, dataType) {
+  $scope.transaction = transaction;
+  $scope.dataType = dataType;
+  $scope.dataTypes = dataTypes;
+  $scope.value = transaction[prop];
+  $scope.validBudgets = [];
+  $scope.monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                       'July', 'August', 'September', 'October', 'November', 'December'];
+
+  $scope.valueChanged = function(value) {
+    $scope.value = value;
+  }
+
+  $scope.cancel = function() {
+    $modalInstance.dismiss('cancel');
+  }
+
+  $scope.ok = function() {
+    if (dataType == dataTypes.DATE) {
+      if ($scope.transaction[prop].getMonth() != $scope.value.getMonth() ||
+          $scope.transaction[prop].getYear() != $scope.value.getYear()) {
+
+        $scope.transaction.budget = null; // if month changes, budget is invalid
+
+      }
+    }
+    $scope.transaction[prop] = $scope.value;
+    $scope.transaction.errors = getErrors($scope.transaction);
+    $modalInstance.dismiss('cancel');
+  }
+}
+
+var chooseBudgetController = function ($scope, $modalInstance, transaction, CategoryService, BudgetService) {
+  $scope.transaction = transaction;
+  $scope.validBudgets = [];
+
+  $scope.categoryChanged = function(category) {
+    $scope.validBudgets = $scope.getValidBudgets(category);
+    $scope.category = category;
+  }
+
+  $scope.budgetChanged = function(budget) {
+    if (!budget) { return; }
+    $scope.budget = budget;
+    $scope.category = budget.category;
+    $scope.categoryChanged($scope.category);
+  }
+
+  $scope.getValidBudgets = function(category) {
+   return $scope.budgets.filter(function(budget) {
+     return category == null || budget.category.id == category.id;
+   });
+  }
+
+  $scope.cancel = function() {
+    $modalInstance.dismiss('cancel');
+  }
+
+  $scope.ok = function() {
+    $scope.transaction.budget = $scope.budget;
+    $scope.transaction.errors = getErrors($scope.transaction);
+    $modalInstance.dismiss('cancel');
+  }
+
+
+  var date = $scope.transaction.transactionOn;
+  //  https://stackoverflow.com/a/16048201/1612991
+  date.setTime( date.getTime() + date.getTimezoneOffset()*60*1000 );
+
+  if (!date || isNaN(date.getDate())) {
+    $scope.invalidDate = true;
+  }
+
+  var month = date.getMonth() + 1;
+  var year = date.getYear() + 1900;
+  BudgetService.monthly({month: month, year: year}, function(response) {
+    $scope.budgets = response;
+    $scope.validBudgets = $scope.getValidBudgets($scope.category);
+  });
+
+  CategoryService.query(function(response) {
+    $scope.categories = response;
+    $scope.budgetChanged($scope.value);
+  });
+}
+
+financeControllers.controller('ImportController', function($scope, $modal, CSV, TransactionService) {
+  var getInitSelect = function() {
+    var select = [];
+    for (var i = 0; i < 4; i++) {
+      select.push({
+        value: "init"
+      })
+    };
+    return select;
+  }
+
+  var initVars = function() {
+    $scope.transactionsLoaded = false;
+    $scope.fileSelected = false;
+    $scope.columnsConfirmed = false;
+    $scope.dataTypes = dataTypes;
+    $scope.showSuccess = false;
+    $scope.transactionsImportedCount = 0;
+    $scope.columnsConfirmed = false;
+    $scope.parsedTransactions = null;
+    $scope.submitting = false;
+    $scope.select = getInitSelect();
+  }
+
+  initVars();
+
+  $scope.onFileSelected = function(event) {
+    initVars(); // reset vars
+
+    var reader = new FileReader();
+    reader.onload = function (loadEvent) {
+      var objs = CSV.CSVToArray(loadEvent.target.result);
+      var lasts = objs.map(obj => obj[obj.length - 1]);
+
+      $scope.$apply(function() {
+        $scope.fileSelected = true;
+        $scope.transactionsLoaded = true;
+        $scope.transactions = objs;
+        $scope.transactionsArray = _.cloneDeep(objs);
+      });
+    }
+    reader.readAsText(event.target.files[0]);
+  }
+
+  $scope.columnChanged = function(i) {
+    if ($scope.select[i].value == "na") {
+      var longest = 0;
+      for (var n = 0; n < $scope.transactions.length; n++) {
+        $scope.transactions[n].splice(i, 1);
+        longest = Math.max(longest, $scope.transactions[n].length);
+      }
+      $scope.select.splice(i, 1);
+      if (longest > $scope.select.length) {
+        $scope.select.push({value: "init"});
+      }
+    }
+  }
+
+  $scope.confirmColumns = function() {
+    var values = $scope.select.map(function (s) {
+      return s.value;
+    });
+
+    var indices = {
+      date: values.indexOf("date"),
+      remark: values.indexOf("remark"),
+      amount: values.indexOf("amount")
+    };
+
+    var t = $scope.transactions.map(function(transaction) {
+      var amount = Math.abs(parseFloat(transaction[indices.amount]));
+      if (isNaN(amount)) { amount = "Error"; }
+
+      var date = new Date(transaction[indices.date]);
+
+      var remark = transaction[indices.remark];
+
+      return {
+        amount: amount,
+        transactionOn: date,
+        remark: remark,
+        errors: [] // only check for validity upon submission
+      };
+    });
+
+    $scope.columnsConfirmed = true;
+    $scope.parsedTransactions = t;
+  }
+
+  $scope.resetColumns = function() {
+    $scope.transactions = _.cloneDeep($scope.transactionsArray);
+    $scope.select = getInitSelect();
+  }
+
+  $scope.removeTransaction = function(index) {
+    $scope.parsedTransactions.splice(index, 1);
+  }
+
+  $scope.submitTransactions = function() {
+    var errorCount = 0;
+    for (var i = 0; i < $scope.parsedTransactions.length; i++) {
+      var t = $scope.parsedTransactions[i];
+      t.errors = getErrors(t);
+      if (t.errors.length != 0) { errorCount++; }
+    }
+
+    if (errorCount != 0) { return; }
+
+    $scope.submitting = true;
+    TransactionService.saveBatch($scope.parsedTransactions).$promise.then(function() {
+          $scope.submitting = false;
+          $scope.showSuccess = true;
+          $scope.transactionsImportedCount = $scope.parsedTransactions.length;
+        }, function(response) {
+        });
+  }
+
+
+  $scope.range = function(start, end) {
+    var arr = [];
+    for (var i = start; i < end; i++) {
+      arr.push(i);
+    }
+    return arr;
+  }
+
+
+  $scope.openEditTransactionModal = function(transaction, prop, dataType) {
+    var modalInstance = $modal.open({
+      templateUrl: '/app/partials/modifyTransactionModal.html',
+      controller: modifyTransactionController,
+      resolve: {
+        transaction: function() {
+          return transaction;
+        },
+        prop: function() {
+          return prop;
+        },
+        dataType: function() {
+          return dataType;
+        }
+      }
+    });
+  }
+
+  $scope.openChooseBudgetModal = function(transaction) {
+    var modalInstance = $modal.open({
+      templateUrl: '/app/partials/chooseBudgetModal.html',
+      controller: chooseBudgetController,
+      resolve: {
+        transaction: function() {
+          return transaction;
+        }
+      }
+    });
+  }
+});
+
+financeControllers.directive('fileChanged', function() {
+  return {
+    restrict: 'A',
+    link: function (scope, element, attrs) {
+      var onChangeHandler = scope.$eval(attrs.fileChanged);
+      element.bind('change', onChangeHandler);
+    }
+  };
 });
 
 
