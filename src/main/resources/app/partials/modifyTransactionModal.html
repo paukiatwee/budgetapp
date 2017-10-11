@@ -1,0 +1,32 @@
+<div class="modal-header">
+  <h3 class="modal-title">Categorize</h3>
+</div>
+
+<div class="modal-body">
+  <form class="form-group row" ng-if="dataType == dataTypes.INT" ng-submit="ok()">
+    <label class="col-sm-3 control-label">Amount</label>
+    <div class="col-sm-7">
+      <input type="number" step=".01" ng-model="value" class="form-control ng-pristine ng-touched" placeholder="Amount" ng-change="valueChanged(value)">
+    </div>
+  </form>
+
+  <form class="form-group row" ng-if="dataType == dataTypes.STRING" ng-submit="ok()">
+    <label class="col-sm-3 control-label">Remark</label>
+    <div class="col-sm-7">
+      <input type="text" class="form-control ng-pristine ng-touched" placeholder="Text" ng-model="value" ng-change="valueChanged(value)">
+    </div>
+  </form>
+
+  <form class="form-group row" ng-if="dataType == dataTypes.DATE" ng-submit="ok()">
+    <label class="col-sm-3 control-label">Amount</label>
+    <div class="col-sm-7">
+      <input type="date" class="form-control ng-pristine ng-valid ng-empty ng-touched" placeholder="Enter Transaction Date (yyyy-mm-dd)" ng-model-options="{ timezone: 'UTC' }" ng-model="value" ng-change="valueChanged(value)">
+    </div>
+  </form>
+
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+  <button type="submit" class="btn btn-success" ng-click="ok()">Confirm</button>
+</div>

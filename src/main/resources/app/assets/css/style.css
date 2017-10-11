@@ -1867,3 +1867,11 @@ button .ng-hide-remove {
 .clearfix:after {
   clear: both;
 }
+
+.clickable {
+  cursor: pointer;
+}
+
+.invalid {
+  background-color: pink;
+}

@@ -103,6 +103,10 @@ budgetApp.config(['$routeProvider', '$httpProvider', '$locationProvider', '$inje
               templateUrl: '/app/partials/reports.html?' + appConfig.version,
               controller: 'ReportsController'
             }).
+            when('/import', {
+              templateUrl: '/app/partials/import.html?' + appConfig.version,
+              controller: 'ImportController'
+            }).
             when('/help', {
               templateUrl: '/app/partials/help.html?' + appConfig.version,
               controller: 'HelpController'
