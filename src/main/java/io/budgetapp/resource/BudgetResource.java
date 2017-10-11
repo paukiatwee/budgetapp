@@ -48,6 +48,13 @@ public class BudgetResource extends AbstractResource {
         return financeService.findBudgetsByUser(user);
     }
 
+    @GET
+    @UnitOfWork
+    @Path("/{month}/{year}")
+    public List<Budget> getBudgets(@Auth User user, @PathParam("month") int month, @PathParam("year") int year) {
+        return financeService.findBudgetByUser(user, month, year);
+    }
+
     @POST
     @UnitOfWork
     public Response add(@Auth User user, @Valid AddBudgetForm budgetForm) {

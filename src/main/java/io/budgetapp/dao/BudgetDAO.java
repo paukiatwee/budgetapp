@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -93,6 +94,18 @@ public class BudgetDAO extends AbstractDAO<Budget> {
     }
 
     /**
+     * Throws an error if the budget does not belong to the user
+     * @param user
+     * @param budget
+     * @throws AccessDeniedException
+     */
+    private void checkBudget(User user, Budget budget) throws AccessDeniedException {
+        if(!Objects.equals(user.getId(), budget.getUser().getId())) {
+            throw new AccessDeniedException();
+        }
+    }
+
+    /**
      * find budget by given id
      * @param budgetId
      * @return
@@ -114,10 +127,33 @@ public class BudgetDAO extends AbstractDAO<Budget> {
      */
     public Budget findById(User user, Long budgetId) {
         Budget budget = findById(budgetId);
-        if(!Objects.equals(user.getId(), budget.getUser().getId())) {
-            throw new AccessDeniedException();
-        }
+        checkBudget(user, budget);
         return budget;
+    }
+
+    /**
+     * find all budgets for given ids
+     * @param budgetIds
+     * @return
+     */
+    public List<Budget> findByIds(Collection<Long> budgetIds) {
+        Criteria criteria = criteria();
+        criteria.add(Restrictions.in("id", budgetIds));
+        return list(criteria);
+    }
+
+    /**
+     * find all budgets for given user and ids
+     * @param user
+     * @param budgetIds
+     * @return
+     */
+    public List<Budget> findByIds(User user, Collection<Long> budgetIds) {
+        List<Budget> budgets = findByIds(budgetIds);
+        for (Budget budget : budgets) {
+            checkBudget(user, budget);
+        }
+        return budgets;
     }
 
     public void update(Budget budget) {
