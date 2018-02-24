@@ -80,7 +80,7 @@ public class FinanceServiceTest {
     }
 
     @Test(expected=DataConstraintException.class)
-    public void changePasswordInconsistentPasswordTest(){
+    public void changePasswordInconsistentPasswordTestConfirm(){
         FinanceService financeService = new FinanceService(userDAOMock, budgetDAOMock, budgetTypeDAOMock, categoryDAOMock, transactionDAOMock, recurringDAOMock, authTokenDAOMock, passwordEncoderMock);
         User user = new User();
         Password password = new Password();
@@ -94,6 +94,21 @@ public class FinanceServiceTest {
         assertTrue(!(password.getPassword().equals(password.getConfirm())));
     }
 
-    
+    @Test(expected=DataConstraintException.class)
+    public void changePasswordInconsistentPasswordTestOriginal(){
+        FinanceService financeService = new FinanceService(userDAOMock, budgetDAOMock, budgetTypeDAOMock, categoryDAOMock, transactionDAOMock, recurringDAOMock, authTokenDAOMock, passwordEncoderMock);
+        User user = new User();
+        Password password = new Password();
+        password.setPassword("test");
+        password.setConfirm("test");
+        password.setOriginal("fail");
+
+        //when
+        when(passwordEncoderMock.matches(password.getOriginal(), password.getPassword())).thenReturn(false);
+        financeService.changePassword(user, password);
+
+        //then exception is caught via the @Test annotation
+        assertTrue(!(password.getOriginal().equals(password.getPassword())));
+    }
 
 }
