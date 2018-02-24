@@ -91,7 +91,7 @@ public class FinanceServiceTest {
         financeService.changePassword(user, password);
 
         //then exception is caught via the @Test annotation
-        assertTrue(!(password.getPassword().equals(password.getConfirm())));
+        assertFalse(password.getPassword().equals(password.getConfirm()));
     }
 
     @Test(expected=DataConstraintException.class)
@@ -109,7 +109,7 @@ public class FinanceServiceTest {
 
         //then exception is caught via the @Test annotation
         assertTrue(password.getPassword().equals(password.getConfirm()));
-        assertTrue(!(password.getOriginal().equals(password.getPassword())));
+        assertFalse(password.getOriginal().equals(password.getPassword()));
     }
 
     @Test
