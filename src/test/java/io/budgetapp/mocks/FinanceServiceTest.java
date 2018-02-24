@@ -5,9 +5,13 @@ import io.budgetapp.crypto.PasswordEncoder;
 import io.budgetapp.dao.*;
 import io.budgetapp.model.User;
 import io.budgetapp.model.form.SignUpForm;
+import io.budgetapp.model.form.user.Password;
+import io.budgetapp.model.form.user.Profile;
 import io.budgetapp.service.FinanceService;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
@@ -57,5 +61,39 @@ public class FinanceServiceTest {
 
         //then exception is caught via the @Test annotation
     }
+
+    @Test
+    public void updateTest(){
+        FinanceService financeService = new FinanceService(userDAOMock, budgetDAOMock, budgetTypeDAOMock, categoryDAOMock, transactionDAOMock, recurringDAOMock, authTokenDAOMock, passwordEncoderMock);
+        User user = new User();
+        Profile profile = new Profile();
+        profile.setName("testName");
+        profile.setCurrency("cad");
+
+        //action
+        User updatedUser = financeService.update(user, profile);
+
+        //result
+        verify(userDAOMock).update(user);
+        assertEquals(updatedUser.getName(), profile.getName());
+        assertEquals(updatedUser.getCurrency(), profile.getCurrency());
+    }
+
+    @Test(expected=DataConstraintException.class)
+    public void changePasswordInconsistentPasswordTest(){
+        FinanceService financeService = new FinanceService(userDAOMock, budgetDAOMock, budgetTypeDAOMock, categoryDAOMock, transactionDAOMock, recurringDAOMock, authTokenDAOMock, passwordEncoderMock);
+        User user = new User();
+        Password password = new Password();
+        password.setPassword("test");
+        password.setConfirm("fail");
+
+        //when
+        financeService.changePassword(user, password);
+
+        //then exception is caught via the @Test annotation
+        assertTrue(!(password.getPassword().equals(password.getConfirm())));
+    }
+
+    
 
 }
