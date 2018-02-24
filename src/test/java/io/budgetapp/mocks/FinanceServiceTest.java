@@ -108,7 +108,25 @@ public class FinanceServiceTest {
         financeService.changePassword(user, password);
 
         //then exception is caught via the @Test annotation
+        assertTrue(password.getPassword().equals(password.getConfirm()));
         assertTrue(!(password.getOriginal().equals(password.getPassword())));
     }
 
+    @Test
+    public void changePasswordConsistentPasswordTest(){
+        FinanceService financeService = new FinanceService(userDAOMock, budgetDAOMock, budgetTypeDAOMock, categoryDAOMock, transactionDAOMock, recurringDAOMock, authTokenDAOMock, passwordEncoderMock);
+        User user = new User();
+        Password password = new Password();
+        password.setPassword("test");
+        password.setConfirm("test");
+        password.setOriginal("test");
+
+        //when
+        financeService.changePassword(user, password);
+
+        //then exception is caught via the @Test annotation
+        assertTrue(password.getPassword().equals(password.getConfirm()));
+        assertTrue(password.getOriginal().equals(password.getPassword()));
+        verify(userDAOMock).update(user);
+    }
 }
