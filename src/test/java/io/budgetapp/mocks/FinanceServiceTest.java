@@ -101,7 +101,7 @@ public class FinanceServiceTest {
         Password password = new Password();
         password.setPassword("test");
         password.setConfirm("test");
-        password.setOriginal("fail");
+        password.setOriginal("fail"); 
 
         //when
         when(passwordEncoderMock.matches(password.getOriginal(), password.getPassword())).thenReturn(false);
