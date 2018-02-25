@@ -1,4 +1,4 @@
-# Budget App [![Build Status](https://travis-ci.org/paukiatwee/budgetapp.svg?branch=master)](https://travis-ci.org/paukiatwee/budgetapp)
+# Budget App For SOEN345 [![CircleCI](https://circleci.com/gh/Earthii/budgetapp.svg?style=svg)](https://circleci.com/gh/Earthii/budgetapp)
 
 Budget App is open source personal budgeting application.
 
