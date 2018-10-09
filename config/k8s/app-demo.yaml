@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: demo-budgetapp
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: demo-budgetapp
+    spec:
+      containers:
+      - name: demo-budgetapp
+        image: paukiatwee/budgetapp
+        env:
+        - name: user.timezone
+          value: "UTC"
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-budgetapp
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: demo-budgetapp
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: demo-budgetapp
+spec:
+  rules:
+  - host: demo.budgetapp.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: demo-budgetapp
+          servicePort: http
