@@ -22,7 +22,7 @@
       <!--compile-->
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.5.1</version>
+        <version>3.8.0</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -32,7 +32,7 @@
       <!--tests-->
       <plugin>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <version>2.19.1</version>
+        <version>3.0.0-M3</version>
         <executions>
           <execution>
             <goals>
@@ -44,13 +44,13 @@
       </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.19.1</version>
+        <version>3.0.0-M3</version>
       </plugin>
 
       <!--package-->
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>2.4.3</version>
+        <version>3.2.1</version>
         <configuration>
           <createDependencyReducedPom>true</createDependencyReducedPom>
           <filters>
@@ -84,7 +84,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.6</version>
+        <version>3.1.1</version>
         <configuration>
           <archive>
             <manifest>
@@ -96,7 +96,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.10</version>
+        <version>3.1.1</version>
         <executions>
           <execution>
             <id>build-classpath</id>
