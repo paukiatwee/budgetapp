@@ -1,10 +1,11 @@
-var less = require('gulp-less'),
-    cssmin = require('gulp-minify-css'),
-    gulp = require('gulp');
+const { src, dest, series, watch } = require('gulp');
+const less = require('gulp-less');
+const cssmin = require('gulp-minify-css');
 
-gulp.task('default', function() {
+function defaultTask(cb) {
   // place code for your default task here
-});
+  cb();
+}
 
 var paths = {
   run: 'src/run.js',
@@ -23,23 +24,26 @@ var paths = {
 };
 
 // compile LESS
-gulp.task('compile-less', function() {
-  return gulp.src(paths.less.files)
-      .pipe(less())
-      .pipe(gulp.dest(paths.dest));
-});
+function compileLess() {
+  return src(paths.css.files)
+      .pipe(less({root: paths.css.root}))
+      .pipe(dest(paths.dest));
+}
 
 // concat and minify CSS files
-gulp.task('minify-css', function() {
-  return gulp.src(paths.css.files)
-      .pipe(cssmin({root:paths.css.root}))
-      .pipe(gulp.dest(paths.dest));
-});
+function minifyCss() {
+  return src(paths.css.files)
+      .pipe(cssmin({root: paths.css.root}))
+      .pipe(dest(paths.dest));
+}
 
 // watch task
-gulp.task('watch', function () {
-  gulp.watch(paths.watch.files, ['build']);
-});
+function watchFiles() {
+  watch(paths.watch.files, series(compileLess))
+}
 
-gulp.task('build', ['compile-less', 'minify-css'], function(){ });
-
+exports.default = defaultTask
+exports.compileLess = compileLess
+exports.minifyCss = minifyCss
+exports.watch = watchFiles
+exports.build = series(compileLess)
