@@ -11,6 +11,7 @@
   "dependencies": {},
   "devDependencies": {
     "bower": "1.8.8",
+    "clean-css": ">=4.1.11",
     "gulp": "^4.0.2",
     "gulp-bower-src": "0.1.0",
     "gulp-cram": "0.2.0",
